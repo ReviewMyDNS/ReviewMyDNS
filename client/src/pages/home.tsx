@@ -1,0 +1,312 @@
+import { useState } from "react";
+import { DnsLookupForm } from "@/components/dns-lookup-form";
+import { PropagationMap } from "@/components/propagation-map";
+import { ResultsTable } from "@/components/results-table";
+import { PerformanceChart } from "@/components/performance-chart";
+import { DnsToolsGrid } from "@/components/dns-tools-grid";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
+import { Globe, History, Heart, User, Menu, Lock, BarChart3, Zap } from "lucide-react";
+import type { DnsLookupWithResults } from "@shared/schema";
+
+export default function Home() {
+  const [lookupResults, setLookupResults] = useState<DnsLookupWithResults | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleLookupComplete = (results: DnsLookupWithResults) => {
+    setLookupResults(results);
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <header className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            {/* Logo and Brand */}
+            <div className="flex items-center">
+              <div className="flex-shrink-0 flex items-center">
+                <Lock className="h-8 w-8 text-blue-600 mr-2" />
+                <h1 className="text-xl font-bold text-gray-900">ReviewMyDNS</h1>
+              </div>
+            </div>
+            
+            {/* Navigation Links */}
+            <nav className="hidden md:flex space-x-8">
+              <a href="#" className="text-blue-600 hover:text-blue-800 px-3 py-2 text-sm font-medium border-b-2 border-blue-600">
+                DNS Checker
+              </a>
+              <a href="#" className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">
+                Tools
+              </a>
+              <a href="#" className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">
+                API
+              </a>
+              <a href="#" className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">
+                Documentation
+              </a>
+            </nav>
+            
+            {/* User Actions */}
+            <div className="flex items-center space-x-4">
+              <Button variant="ghost" size="icon">
+                <History className="h-5 w-5" />
+              </Button>
+              <Button variant="ghost" size="icon">
+                <Heart className="h-5 w-5" />
+              </Button>
+              <Button>Sign In</Button>
+              
+              {/* Mobile menu button */}
+              <div className="md:hidden">
+                <Button variant="ghost" size="icon">
+                  <Menu className="h-5 w-5" />
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {/* Main Content */}
+      <main>
+        {/* Main Search Section */}
+        <section className="bg-white shadow-sm border-b border-gray-100">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div className="text-center mb-8">
+              <h2 className="text-3xl font-bold text-gray-900 mb-2">
+                Global DNS Propagation Checker
+              </h2>
+              <p className="text-gray-600">
+                Check DNS records and propagation status across 50+ worldwide servers
+              </p>
+            </div>
+            
+            <DnsLookupForm 
+              onLookupComplete={handleLookupComplete}
+              isLoading={isLoading}
+              setIsLoading={setIsLoading}
+            />
+          </div>
+        </section>
+
+        {/* Results Section */}
+        {lookupResults && (
+          <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            {/* Results Header */}
+            <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-6">
+              <div>
+                <h3 className="text-2xl font-bold text-gray-900 mb-2">Propagation Results</h3>
+                <div className="flex items-center space-x-4 text-sm text-gray-600">
+                  <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                    <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
+                    {lookupResults.stats.resolvedCount} Resolved
+                  </Badge>
+                  <Badge variant="outline" className="bg-red-50 text-red-700 border-red-200">
+                    <div className="w-2 h-2 bg-red-500 rounded-full mr-2"></div>
+                    {lookupResults.stats.unresolvedCount} Failed
+                  </Badge>
+                  <span className="text-gray-600">
+                    Last updated: {new Date(lookupResults.createdAt).toLocaleTimeString()}
+                  </span>
+                </div>
+              </div>
+              
+              <div className="flex items-center space-x-3 mt-4 lg:mt-0">
+                <Button variant="outline" size="sm">
+                  <BarChart3 className="h-4 w-4 mr-2" />
+                  Refresh
+                </Button>
+                <Button variant="outline" size="sm">
+                  <Zap className="h-4 w-4 mr-2" />
+                  Export
+                </Button>
+                <Button size="sm">
+                  <Globe className="h-4 w-4 mr-2" />
+                  Monitor
+                </Button>
+              </div>
+            </div>
+
+            {/* Interactive World Map */}
+            <Card className="mb-8">
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <Globe className="h-5 w-5 mr-2" />
+                  Global Propagation Map
+                </CardTitle>
+                <CardDescription>
+                  Interactive visualization of DNS propagation status worldwide
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <PropagationMap results={lookupResults.results} />
+              </CardContent>
+            </Card>
+
+            {/* Results Grid */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+              {/* Detailed Results Table */}
+              <div className="lg:col-span-2">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center">
+                      <Lock className="h-5 w-5 mr-2" />
+                      DNS Server Results
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <ResultsTable results={lookupResults.results} />
+                  </CardContent>
+                </Card>
+              </div>
+              
+              {/* Quick Stats */}
+              <div className="space-y-6">
+                {/* Propagation Status Card */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-sm font-medium">Propagation Status</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm text-gray-600">Global Coverage</span>
+                        <span className="text-lg font-semibold text-green-600">
+                          {lookupResults.stats.globalCoverage}%
+                        </span>
+                      </div>
+                      
+                      <div className="w-full bg-gray-200 rounded-full h-2">
+                        <div 
+                          className="bg-green-500 h-2 rounded-full transition-all duration-500" 
+                          style={{ width: `${lookupResults.stats.globalCoverage}%` }}
+                        />
+                      </div>
+                      
+                      <div className="flex justify-between text-xs text-gray-600">
+                        <span>{lookupResults.stats.resolvedCount} of {lookupResults.stats.totalServers} servers</span>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+                
+                {/* Average Response Time */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-sm font-medium">Average Response Time</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-3xl font-bold text-blue-600 mb-2">
+                      {lookupResults.stats.averageResponseTime}ms
+                    </div>
+                    <div className="flex items-center">
+                      <Zap className="h-4 w-4 text-green-500 mr-1" />
+                      <span className="text-sm text-green-500">Performance optimal</span>
+                    </div>
+                  </CardContent>
+                </Card>
+                
+                {/* Record Details */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-sm font-medium">Record Details</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-2 text-sm">
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Type:</span>
+                        <span className="font-mono font-medium">{lookupResults.recordType}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Domain:</span>
+                        <span className="font-mono text-xs">{lookupResults.domain}</span>
+                      </div>
+                      {lookupResults.expectedValue && (
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Expected:</span>
+                          <span className="font-mono text-xs">{lookupResults.expectedValue}</span>
+                        </div>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+
+            {/* Performance Chart */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <BarChart3 className="h-5 w-5 mr-2" />
+                  Performance Metrics
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <PerformanceChart results={lookupResults.results} />
+              </CardContent>
+            </Card>
+          </section>
+        )}
+
+        {/* DNS Tools Section */}
+        <DnsToolsGrid />
+
+        {/* Footer */}
+        <footer className="bg-gray-800 text-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+              {/* Brand */}
+              <div className="md:col-span-2">
+                <div className="flex items-center mb-4">
+                  <Lock className="h-8 w-8 text-blue-500 mr-2" />
+                  <h3 className="text-xl font-bold">ReviewMyDNS</h3>
+                </div>
+                <p className="text-gray-300 mb-4 max-w-md">
+                  Professional DNS propagation checking and analysis tools used by developers and system administrators worldwide.
+                </p>
+              </div>
+              
+              {/* Tools */}
+              <div>
+                <h4 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">DNS Tools</h4>
+                <ul className="space-y-2">
+                  <li><a href="#" className="text-gray-300 hover:text-white text-sm">DNS Checker</a></li>
+                  <li><a href="#" className="text-gray-300 hover:text-white text-sm">Bulk Lookup</a></li>
+                  <li><a href="#" className="text-gray-300 hover:text-white text-sm">DNS Comparison</a></li>
+                  <li><a href="#" className="text-gray-300 hover:text-white text-sm">Historical Tracking</a></li>
+                </ul>
+              </div>
+              
+              {/* Resources */}
+              <div>
+                <h4 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">Resources</h4>
+                <ul className="space-y-2">
+                  <li><a href="#" className="text-gray-300 hover:text-white text-sm">Documentation</a></li>
+                  <li><a href="#" className="text-gray-300 hover:text-white text-sm">API Reference</a></li>
+                  <li><a href="#" className="text-gray-300 hover:text-white text-sm">DNS Guide</a></li>
+                  <li><a href="#" className="text-gray-300 hover:text-white text-sm">Status Page</a></li>
+                </ul>
+              </div>
+            </div>
+            
+            <Separator className="my-8 bg-gray-700" />
+            
+            <div className="flex flex-col md:flex-row justify-between items-center">
+              <div className="text-gray-300 text-sm">
+                © 2025 ReviewMyDNS. All rights reserved.
+              </div>
+              <div className="flex space-x-6 mt-4 md:mt-0">
+                <a href="#" className="text-gray-300 hover:text-white text-sm">Privacy Policy</a>
+                <a href="#" className="text-gray-300 hover:text-white text-sm">Terms of Service</a>
+                <a href="#" className="text-gray-300 hover:text-white text-sm">Contact</a>
+              </div>
+            </div>
+          </div>
+        </footer>
+      </main>
+    </div>
+  );
+}

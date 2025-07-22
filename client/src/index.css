@@ -1,0 +1,178 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: hsl(0, 0%, 100%);
+  --foreground: hsl(222, 84%, 4.9%);
+  --muted: hsl(210, 40%, 98%);
+  --muted-foreground: hsl(215, 16%, 46.9%);
+  --popover: hsl(0, 0%, 100%);
+  --popover-foreground: hsl(222, 84%, 4.9%);
+  --card: hsl(0, 0%, 100%);
+  --card-foreground: hsl(222, 84%, 4.9%);
+  --border: hsl(214, 32%, 91.2%);
+  --input: hsl(214, 32%, 91.2%);
+  --primary: hsl(221, 83%, 53%);
+  --primary-foreground: hsl(210, 40%, 98%);
+  --secondary: hsl(210, 40%, 96%);
+  --secondary-foreground: hsl(222, 84%, 4.9%);
+  --accent: hsl(210, 40%, 96%);
+  --accent-foreground: hsl(222, 84%, 4.9%);
+  --destructive: hsl(0, 84%, 60%);
+  --destructive-foreground: hsl(210, 40%, 98%);
+  --ring: hsl(221, 83%, 53%);
+  --radius: 0.5rem;
+  --chart-1: hsl(221, 83%, 53%);
+  --chart-2: hsl(212, 95%, 68%);
+  --chart-3: hsl(216, 92%, 60%);
+  --chart-4: hsl(210, 98%, 78%);
+  --chart-5: hsl(212, 97%, 87%);
+}
+
+.dark {
+  --background: hsl(222, 84%, 4.9%);
+  --foreground: hsl(210, 40%, 98%);
+  --muted: hsl(217, 32%, 17.5%);
+  --muted-foreground: hsl(215, 20%, 65%);
+  --popover: hsl(222, 84%, 4.9%);
+  --popover-foreground: hsl(210, 40%, 98%);
+  --card: hsl(222, 84%, 4.9%);
+  --card-foreground: hsl(210, 40%, 98%);
+  --border: hsl(217, 32%, 17.5%);
+  --input: hsl(217, 32%, 17.5%);
+  --primary: hsl(221, 83%, 53%);
+  --primary-foreground: hsl(210, 40%, 98%);
+  --secondary: hsl(217, 32%, 17.5%);
+  --secondary-foreground: hsl(210, 40%, 98%);
+  --accent: hsl(217, 32%, 17.5%);
+  --accent-foreground: hsl(210, 40%, 98%);
+  --destructive: hsl(0, 62%, 30%);
+  --destructive-foreground: hsl(210, 40%, 98%);
+  --ring: hsl(221, 83%, 53%);
+  --chart-1: hsl(220, 70%, 50%);
+  --chart-2: hsl(160, 60%, 45%);
+  --chart-3: hsl(30, 80%, 55%);
+  --chart-4: hsl(280, 65%, 60%);
+  --chart-5: hsl(340, 75%, 55%);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+}
+
+/* Custom styles for DNS components */
+.dns-legend {
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.dns-marker-popup-container .leaflet-popup-content-wrapper {
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.dns-marker-popup {
+  font-family: system-ui, -apple-system, sans-serif;
+  line-height: 1.4;
+}
+
+.custom-dns-marker {
+  background: transparent !important;
+  border: none !important;
+}
+
+/* Leaflet map overrides */
+.leaflet-container {
+  font-family: inherit;
+}
+
+.leaflet-popup-content {
+  margin: 8px 12px;
+}
+
+.leaflet-popup-tip-container {
+  display: none;
+}
+
+/* Chart.js responsive container */
+.chartjs-render-monitor {
+  animation: chartjs-render-animation 0.001s;
+}
+
+/* Custom scrollbar for results table */
+.results-table-container {
+  scrollbar-width: thin;
+  scrollbar-color: hsl(214, 32%, 91.2%) transparent;
+}
+
+.results-table-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.results-table-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.results-table-container::-webkit-scrollbar-thumb {
+  background-color: hsl(214, 32%, 91.2%);
+  border-radius: 3px;
+}
+
+.results-table-container::-webkit-scrollbar-thumb:hover {
+  background-color: hsl(214, 32%, 81.2%);
+}
+
+/* Loading animation for DNS lookup */
+@keyframes dns-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.dns-loading {
+  animation: dns-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* DNS status indicators */
+.status-resolved {
+  @apply bg-green-100 text-green-800 border-green-200;
+}
+
+.status-failed {
+  @apply bg-red-100 text-red-800 border-red-200;
+}
+
+.status-timeout {
+  @apply bg-yellow-100 text-yellow-800 border-yellow-200;
+}
+
+/* Performance indicators */
+.perf-excellent {
+  @apply text-green-600;
+}
+
+.perf-good {
+  @apply text-lime-600;
+}
+
+.perf-fair {
+  @apply text-yellow-600;
+}
+
+.perf-slow {
+  @apply text-orange-600;
+}
+
+.perf-very-slow {
+  @apply text-red-600;
+}
