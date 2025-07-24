@@ -46,7 +46,7 @@ export default function Home() {
                 API
               </Link>
               <Link href="/documentation" className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">
-                Documentation
+                Terminology
               </Link>
             </nav>
             
