@@ -26,7 +26,7 @@ const tools = [
     icon: History,
     color: "text-purple-600",
     path: "/history",
-    active: false
+    active: true
   },
   {
     title: "Developer API",
@@ -42,7 +42,7 @@ const tools = [
     icon: Zap,
     color: "text-yellow-600",
     path: "/monitor",
-    active: false
+    active: true
   },
   {
     title: "Global Coverage",
@@ -58,7 +58,7 @@ const tools = [
     icon: Shield,
     color: "text-red-600",
     path: "/security",
-    active: false
+    active: true
   },
   {
     title: "DNS Analytics",
@@ -66,7 +66,7 @@ const tools = [
     icon: Database,
     color: "text-teal-600",
     path: "/analytics",
-    active: false
+    active: true
   }
 ];
 
