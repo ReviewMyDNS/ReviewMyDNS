@@ -107,9 +107,14 @@ export default function Pricing() {
                 <h1 className="text-xl font-bold text-gray-900">ReviewMyDNS</h1>
               </div>
             </div>
-            <Link href="/signin">
-              <Button>Sign In</Button>
-            </Link>
+            <div className="flex items-center space-x-2">
+              <Link href="/signin">
+                <Button variant="ghost">Sign In</Button>
+              </Link>
+              <Link href="/signin?tab=signup">
+                <Button>Sign Up</Button>
+              </Link>
+            </div>
           </div>
         </div>
       </header>
@@ -195,14 +200,16 @@ export default function Pricing() {
                 </CardHeader>
                 
                 <CardContent>
-                  <Button 
-                    className={`w-full mb-6 ${
-                      plan.popular ? 'bg-blue-600 hover:bg-blue-700' : ''
-                    }`}
-                    variant={plan.buttonVariant}
-                  >
-                    {plan.buttonText}
-                  </Button>
+                  <Link href={plan.name === "Enterprise" ? "/contact" : "/signin?tab=signup"}>
+                    <Button 
+                      className={`w-full mb-6 ${
+                        plan.popular ? 'bg-blue-600 hover:bg-blue-700' : ''
+                      }`}
+                      variant={plan.buttonVariant}
+                    >
+                      {plan.buttonText}
+                    </Button>
+                  </Link>
                   
                   <div className="space-y-3">
                     {plan.features.map((feature, index) => (

@@ -56,7 +56,10 @@ export default function Home() {
                 <Button variant="ghost">Pricing</Button>
               </Link>
               <Link href="/signin">
-                <Button>Sign In</Button>
+                <Button variant="ghost">Sign In</Button>
+              </Link>
+              <Link href="/signin?tab=signup">
+                <Button>Sign Up</Button>
               </Link>
               
               {/* Mobile menu button */}
