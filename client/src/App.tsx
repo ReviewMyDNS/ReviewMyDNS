@@ -9,6 +9,9 @@ import ApiDocs from "@/pages/api-docs";
 import Documentation from "@/pages/documentation";
 import BulkLookup from "@/pages/bulk-lookup";
 import DnsCompare from "@/pages/dns-compare";
+import Monitor from "@/pages/monitor";
+import History from "@/pages/history";
+import Analytics from "@/pages/analytics";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -20,6 +23,9 @@ function Router() {
       <Route path="/documentation" component={Documentation} />
       <Route path="/bulk-lookup" component={BulkLookup} />
       <Route path="/compare" component={DnsCompare} />
+      <Route path="/monitor" component={Monitor} />
+      <Route path="/history" component={History} />
+      <Route path="/analytics" component={Analytics} />
       <Route component={NotFound} />
     </Switch>
   );

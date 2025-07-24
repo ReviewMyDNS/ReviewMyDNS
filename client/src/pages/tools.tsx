@@ -41,21 +41,21 @@ const toolCategories = [
         name: "Response Time Monitor",
         description: "Track DNS response times globally",
         icon: Zap,
-        status: "Coming Soon",
+        status: "Active",
         path: "/monitor"
       },
       {
         name: "Historical Tracking",
         description: "Monitor DNS changes over time",
         icon: History,
-        status: "Coming Soon",
+        status: "Active",
         path: "/history"
       },
       {
         name: "Performance Analytics",
         description: "Detailed DNS performance reports",
         icon: Database,
-        status: "Coming Soon",
+        status: "Active",
         path: "/analytics"
       }
     ]
