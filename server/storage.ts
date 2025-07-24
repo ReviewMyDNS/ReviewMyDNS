@@ -1,4 +1,6 @@
 import { dnsLookups, dnsServers, dnsResults, type DnsLookup, type DnsServer, type DnsResult, type InsertDnsLookup, type InsertDnsServer, type InsertDnsResult, type DnsLookupWithResults } from "@shared/schema";
+import { db } from "./db";
+import { eq } from "drizzle-orm";
 
 export interface IStorage {
   // DNS Lookups
@@ -16,27 +18,19 @@ export interface IStorage {
   getDnsResultsByLookupId(lookupId: number): Promise<DnsResult[]>;
 }
 
-export class MemStorage implements IStorage {
-  private dnsLookups: Map<number, DnsLookup>;
-  private dnsServers: Map<number, DnsServer>;
-  private dnsResults: Map<number, DnsResult>;
-  private currentLookupId: number;
-  private currentServerId: number;
-  private currentResultId: number;
-
+export class DatabaseStorage implements IStorage {
   constructor() {
-    this.dnsLookups = new Map();
-    this.dnsServers = new Map();
-    this.dnsResults = new Map();
-    this.currentLookupId = 1;
-    this.currentServerId = 1;
-    this.currentResultId = 1;
-    
     // Initialize with default DNS servers
     this.initializeDefaultDnsServers();
   }
 
   private async initializeDefaultDnsServers() {
+    // Check if servers already exist
+    const existingServers = await db.select().from(dnsServers);
+    if (existingServers.length > 0) {
+      return; // Already initialized
+    }
+
     const defaultServers: InsertDnsServer[] = [
       { name: "Google DNS", ip: "8.8.8.8", location: "Mountain View, CA", country: "US", provider: "Google", latitude: "37.4056", longitude: "-122.0775", active: true },
       { name: "Cloudflare DNS", ip: "1.1.1.1", location: "San Francisco, CA", country: "US", provider: "Cloudflare", latitude: "37.7749", longitude: "-122.4194", active: true },
@@ -66,30 +60,36 @@ export class MemStorage implements IStorage {
   }
 
   async createDnsLookup(insertLookup: InsertDnsLookup): Promise<DnsLookup> {
-    const id = this.currentLookupId++;
-    const lookup: DnsLookup = {
-      ...insertLookup,
-      id,
-      createdAt: new Date(),
-    };
-    this.dnsLookups.set(id, lookup);
+    const [lookup] = await db
+      .insert(dnsLookups)
+      .values(insertLookup)
+      .returning();
     return lookup;
   }
 
   async getDnsLookup(id: number): Promise<DnsLookup | undefined> {
-    return this.dnsLookups.get(id);
+    const [lookup] = await db.select().from(dnsLookups).where(eq(dnsLookups.id, id));
+    return lookup || undefined;
   }
 
   async getDnsLookupWithResults(id: number): Promise<DnsLookupWithResults | undefined> {
-    const lookup = this.dnsLookups.get(id);
+    const [lookup] = await db.select().from(dnsLookups).where(eq(dnsLookups.id, id));
     if (!lookup) return undefined;
 
-    const results = Array.from(this.dnsResults.values())
-      .filter(result => result.lookupId === id)
-      .map(result => {
-        const server = this.dnsServers.get(result.serverId);
-        return { ...result, server: server! };
-      });
+    const results = await db
+      .select({
+        id: dnsResults.id,
+        lookupId: dnsResults.lookupId,
+        serverId: dnsResults.serverId,
+        status: dnsResults.status,
+        response: dnsResults.response,
+        responseTime: dnsResults.responseTime,
+        timestamp: dnsResults.timestamp,
+        server: dnsServers,
+      })
+      .from(dnsResults)
+      .innerJoin(dnsServers, eq(dnsResults.serverId, dnsServers.id))
+      .where(eq(dnsResults.lookupId, id));
 
     const resolvedCount = results.filter(r => r.status === 'resolved').length;
     const totalServers = results.length;
@@ -111,34 +111,32 @@ export class MemStorage implements IStorage {
   }
 
   async getAllDnsServers(): Promise<DnsServer[]> {
-    return Array.from(this.dnsServers.values());
+    return await db.select().from(dnsServers);
   }
 
   async getActiveDnsServers(): Promise<DnsServer[]> {
-    return Array.from(this.dnsServers.values()).filter(server => server.active);
+    return await db.select().from(dnsServers).where(eq(dnsServers.active, true));
   }
 
   async createDnsServer(insertServer: InsertDnsServer): Promise<DnsServer> {
-    const id = this.currentServerId++;
-    const server: DnsServer = { ...insertServer, id };
-    this.dnsServers.set(id, server);
+    const [server] = await db
+      .insert(dnsServers)
+      .values(insertServer)
+      .returning();
     return server;
   }
 
   async createDnsResult(insertResult: InsertDnsResult): Promise<DnsResult> {
-    const id = this.currentResultId++;
-    const result: DnsResult = {
-      ...insertResult,
-      id,
-      timestamp: new Date(),
-    };
-    this.dnsResults.set(id, result);
+    const [result] = await db
+      .insert(dnsResults)
+      .values(insertResult)
+      .returning();
     return result;
   }
 
   async getDnsResultsByLookupId(lookupId: number): Promise<DnsResult[]> {
-    return Array.from(this.dnsResults.values()).filter(result => result.lookupId === lookupId);
+    return await db.select().from(dnsResults).where(eq(dnsResults.lookupId, lookupId));
   }
 }
 
-export const storage = new MemStorage();
+export const storage = new DatabaseStorage();

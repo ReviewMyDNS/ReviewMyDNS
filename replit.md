@@ -2,7 +2,7 @@
 
 ## Overview
 
-ReviewMyDNS is a modern DNS lookup and analysis web application built with a React frontend and Express backend. The application allows users to perform DNS lookups across multiple global DNS servers, providing detailed analysis, performance metrics, and geographical insights into DNS resolution.
+ReviewMyDNS is a comprehensive DNS lookup and analysis web application that competes with DNSChecker.org. Built with a React frontend and Express backend, the application performs DNS lookups across 20+ global DNS servers, providing detailed analysis, performance metrics, and geographical insights into DNS resolution. The platform includes an interactive world map, detailed results tables, and performance charts.
 
 ## User Preferences
 
@@ -17,19 +17,29 @@ Preferred communication style: Simple, everyday language.
 - **State Management**: TanStack Query (React Query) for server state management
 - **Styling**: Tailwind CSS with shadcn/ui component library
 - **Form Management**: React Hook Form with Zod validation
+- **Visualization**: Leaflet.js for interactive maps, Chart.js for performance metrics
 
 ### Backend Architecture
 - **Framework**: Express.js with TypeScript
 - **Runtime**: Node.js with ES modules
-- **Database**: PostgreSQL with Drizzle ORM
+- **Database**: PostgreSQL with Drizzle ORM (migrated from memory storage)
 - **Database Provider**: Neon Database (serverless PostgreSQL)
 - **Development Server**: Custom Vite integration for hot reloading
 
 ### Database Schema
-The application uses three main tables:
+The application uses three main tables with proper relations:
 - `dns_lookups`: Stores DNS query requests with domain, record type, and expected values
-- `dns_servers`: Contains information about global DNS servers including geographical data
+- `dns_servers`: Contains information about 20+ global DNS servers including geographical data
 - `dns_results`: Stores the results of DNS queries with status, response, and timing data
+
+## Recent Changes
+
+**January 24, 2025 - Database Integration**
+- Migrated from memory-based storage to PostgreSQL database
+- Implemented DatabaseStorage class replacing MemStorage
+- Added proper database schema with Drizzle ORM
+- Configured Neon serverless PostgreSQL connection
+- Successfully pushed schema to database and initialized with global DNS servers
 
 ## Key Components
 
