@@ -16,6 +16,7 @@ import Security from "@/pages/security";
 import DNSSEC from "@/pages/dnssec";
 import SignIn from "@/pages/signin";
 import Pricing from "@/pages/pricing";
+import Dashboard from "@/pages/dashboard";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -34,6 +35,7 @@ function Router() {
       <Route path="/dnssec" component={DNSSEC} />
       <Route path="/signin" component={SignIn} />
       <Route path="/pricing" component={Pricing} />
+      <Route path="/dashboard" component={Dashboard} />
       <Route component={NotFound} />
     </Switch>
   );

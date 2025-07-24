@@ -32,12 +32,16 @@ export default function SignIn() {
     e.preventDefault();
     // Handle sign in logic here
     console.log("Sign in:", { email, password });
+    // Simulate successful login - redirect to dashboard
+    window.location.href = "/dashboard";
   };
 
   const handleSignUp = (e: React.FormEvent) => {
     e.preventDefault();
     // Handle sign up logic here
     console.log("Sign up:", { firstName, lastName, email, company, password });
+    // Simulate successful signup - redirect to dashboard
+    window.location.href = "/dashboard";
   };
 
   return (
