@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { Globe, History, Heart, User, Menu, Lock, BarChart3, Zap } from "lucide-react";
+import { Globe, User, Menu, Lock, BarChart3, Zap } from "lucide-react";
 import { Link } from "wouter";
 import type { DnsLookupWithResults } from "@shared/schema";
 
@@ -52,12 +52,6 @@ export default function Home() {
             
             {/* User Actions */}
             <div className="flex items-center space-x-4">
-              <Button variant="ghost" size="icon">
-                <History className="h-5 w-5" />
-              </Button>
-              <Button variant="ghost" size="icon">
-                <Heart className="h-5 w-5" />
-              </Button>
               <Button>Sign In</Button>
               
               {/* Mobile menu button */}
