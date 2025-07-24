@@ -189,8 +189,12 @@ export default function Tools() {
             Request specific functionality or suggest improvements.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button>Request a Tool</Button>
-            <Button variant="outline">View API Documentation</Button>
+            <Button onClick={() => window.open('mailto:support@reviewmydns.com?subject=Tool Request', '_blank')}>
+              Request a Tool
+            </Button>
+            <Link href="/api-docs">
+              <Button variant="outline">View API Documentation</Button>
+            </Link>
           </div>
         </div>
       </main>
