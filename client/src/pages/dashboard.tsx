@@ -192,7 +192,7 @@ export default function Dashboard() {
                       <span className="text-sm">DNS Lookup</span>
                     </Button>
                   </Link>
-                  <Link href="/bulk">
+                  <Link href="/bulk-lookup">
                     <Button variant="outline" className="h-20 flex flex-col space-y-2">
                       <BarChart3 className="h-6 w-6" />
                       <span className="text-sm">Bulk Lookup</span>
