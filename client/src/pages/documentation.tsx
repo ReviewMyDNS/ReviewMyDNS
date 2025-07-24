@@ -108,7 +108,7 @@ export default function Documentation() {
                   Back to DNS Checker
                 </Button>
               </Link>
-              <h1 className="text-xl font-bold text-gray-900">Documentation</h1>
+              <h1 className="text-xl font-bold text-gray-900">Terminology</h1>
             </div>
           </div>
         </div>
@@ -119,10 +119,10 @@ export default function Documentation() {
         {/* Hero Section */}
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold text-gray-900 mb-4">
-            DNS Guide & Documentation
+            DNS Guide & Terminology
           </h2>
           <p className="text-gray-600 max-w-2xl mx-auto">
-            Learn about DNS concepts, record types, troubleshooting, and best practices. 
+            Learn about DNS terminology, record types, troubleshooting, and best practices. 
             Everything you need to understand and optimize your DNS configuration.
           </p>
         </div>
