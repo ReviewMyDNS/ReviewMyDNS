@@ -21,14 +21,14 @@ const toolCategories = [
         name: "Bulk DNS Lookup",
         description: "Check multiple domains simultaneously",
         icon: List,
-        status: "Coming Soon",
+        status: "Active",
         path: "/bulk-lookup"
       },
       {
         name: "DNS Comparison Tool",
         description: "Compare DNS records between providers",
         icon: GitCompare,
-        status: "Coming Soon",
+        status: "Active",
         path: "/compare"
       }
     ]

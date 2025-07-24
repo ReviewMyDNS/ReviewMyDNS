@@ -1,0 +1,346 @@
+import { useState } from "react";
+import { useMutation } from "@tanstack/react-query";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
+import { ArrowLeft, GitCompare, CheckCircle, XCircle, AlertTriangle } from "lucide-react";
+import { Link } from "wouter";
+import { apiRequest } from "@/lib/queryClient";
+
+interface ComparisonResult {
+  domain: string;
+  recordType: string;
+  providers: {
+    name: string;
+    results: any[];
+    resolvedCount: number;
+    responses: string[];
+  }[];
+  differences: {
+    type: 'missing' | 'different' | 'extra';
+    provider: string;
+    details: string;
+  }[];
+}
+
+const dnsProviders = [
+  { name: "Google DNS", servers: ["8.8.8.8", "8.8.4.4"] },
+  { name: "Cloudflare", servers: ["1.1.1.1", "1.0.0.1"] },
+  { name: "OpenDNS", servers: ["208.67.222.222", "208.67.220.220"] },
+  { name: "Quad9", servers: ["9.9.9.9", "149.112.112.112"] }
+];
+
+export default function DnsCompare() {
+  const [domain, setDomain] = useState("");
+  const [recordType, setRecordType] = useState("A");
+  const [selectedProviders, setSelectedProviders] = useState<string[]>(["Google DNS", "Cloudflare"]);
+  const [comparisonResult, setComparisonResult] = useState<ComparisonResult | null>(null);
+
+  const compareMutation = useMutation({
+    mutationFn: async (data: { domain: string; recordType: string; providers: string[] }) => {
+      const providerResults: {
+        name: string;
+        results: any[];
+        resolvedCount: number;
+        responses: string[];
+      }[] = [];
+      
+      for (const providerName of data.providers) {
+        try {
+          const response = await apiRequest('POST', '/api/dns/lookup', {
+            domain: data.domain,
+            recordType: data.recordType
+          });
+          
+          const responseData = await response.json();
+          
+          // Filter results for this provider
+          const provider = dnsProviders.find(p => p.name === providerName);
+          const providerServerResults = responseData.results.filter((result: any) => 
+            provider?.servers.includes(result.server.ip)
+          );
+          
+          const resolvedResults = providerServerResults.filter((r: any) => r.status === 'resolved');
+          const responses = resolvedResults.map((r: any) => r.response).filter(Boolean);
+          
+          providerResults.push({
+            name: providerName,
+            results: providerServerResults,
+            resolvedCount: resolvedResults.length,
+            responses: Array.from(new Set(responses)) // Remove duplicates
+          });
+        } catch (error) {
+          providerResults.push({
+            name: providerName,
+            results: [],
+            resolvedCount: 0,
+            responses: []
+          });
+        }
+      }
+      
+      // Analyze differences
+      const differences: {
+        type: 'missing' | 'different' | 'extra';
+        provider: string;
+        details: string;
+      }[] = [];
+      const allResponses = new Set<string>();
+      
+      providerResults.forEach(provider => {
+        provider.responses.forEach(response => allResponses.add(response));
+      });
+      
+      // Check for missing responses
+      providerResults.forEach(provider => {
+        Array.from(allResponses).forEach(response => {
+          if (!provider.responses.includes(response)) {
+            differences.push({
+              type: 'missing' as const,
+              provider: provider.name,
+              details: `Missing response: ${response}`
+            });
+          }
+        });
+      });
+      
+      // Check for provider-specific responses
+      providerResults.forEach(provider => {
+        provider.responses.forEach(response => {
+          const otherProvidersHaveThis = providerResults
+            .filter(p => p.name !== provider.name)
+            .some(p => p.responses.includes(response));
+          
+          if (!otherProvidersHaveThis && providerResults.length > 1) {
+            differences.push({
+              type: 'extra' as const,
+              provider: provider.name,
+              details: `Unique response: ${response}`
+            });
+          }
+        });
+      });
+      
+      return {
+        domain: data.domain,
+        recordType: data.recordType,
+        providers: providerResults,
+        differences
+      };
+    },
+    onSuccess: (result) => {
+      setComparisonResult(result);
+    }
+  });
+
+  const handleCompare = () => {
+    if (!domain.trim() || selectedProviders.length < 2) return;
+    compareMutation.mutate({ domain: domain.trim(), recordType, providers: selectedProviders });
+  };
+
+  const toggleProvider = (providerName: string) => {
+    setSelectedProviders(prev => 
+      prev.includes(providerName)
+        ? prev.filter(p => p !== providerName)
+        : [...prev, providerName]
+    );
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <header className="bg-white shadow-sm border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            <div className="flex items-center">
+              <Link href="/tools">
+                <Button variant="ghost" size="sm" className="mr-4">
+                  <ArrowLeft className="h-4 w-4 mr-2" />
+                  Back to Tools
+                </Button>
+              </Link>
+              <h1 className="text-xl font-bold text-gray-900">DNS Provider Comparison</h1>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {/* Main Content */}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Input Section */}
+        <Card className="mb-8">
+          <CardHeader>
+            <CardTitle>Compare DNS Providers</CardTitle>
+            <CardDescription>
+              Compare DNS responses between different providers to identify inconsistencies
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+              <Input
+                placeholder="Enter domain (e.g., example.com)"
+                value={domain}
+                onChange={(e) => setDomain(e.target.value)}
+              />
+              
+              <Select value={recordType} onValueChange={setRecordType}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="A">A Record</SelectItem>
+                  <SelectItem value="AAAA">AAAA Record</SelectItem>
+                  <SelectItem value="CNAME">CNAME Record</SelectItem>
+                  <SelectItem value="MX">MX Record</SelectItem>
+                  <SelectItem value="NS">NS Record</SelectItem>
+                  <SelectItem value="TXT">TXT Record</SelectItem>
+                </SelectContent>
+              </Select>
+              
+              <div className="md:col-span-2">
+                <p className="text-sm font-medium text-gray-700 mb-2">Select Providers to Compare:</p>
+                <div className="flex flex-wrap gap-2">
+                  {dnsProviders.map(provider => (
+                    <Button
+                      key={provider.name}
+                      variant={selectedProviders.includes(provider.name) ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => toggleProvider(provider.name)}
+                    >
+                      {provider.name}
+                    </Button>
+                  ))}
+                </div>
+              </div>
+            </div>
+            
+            <Button 
+              onClick={handleCompare}
+              disabled={!domain.trim() || selectedProviders.length < 2 || compareMutation.isPending}
+              className="w-full md:w-auto"
+            >
+              <GitCompare className="h-4 w-4 mr-2" />
+              {compareMutation.isPending ? "Comparing..." : "Compare Providers"}
+            </Button>
+          </CardContent>
+        </Card>
+
+        {/* Results Section */}
+        {comparisonResult && (
+          <div className="space-y-6">
+            {/* Summary */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Comparison Summary</CardTitle>
+                <CardDescription>
+                  DNS comparison for {comparisonResult.domain} ({comparisonResult.recordType} record)
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="text-center p-4 bg-blue-50 rounded-lg">
+                    <p className="text-2xl font-bold text-blue-600">{comparisonResult.providers.length}</p>
+                    <p className="text-sm text-gray-600">Providers Tested</p>
+                  </div>
+                  <div className="text-center p-4 bg-green-50 rounded-lg">
+                    <p className="text-2xl font-bold text-green-600">
+                      {comparisonResult.providers.filter(p => p.resolvedCount > 0).length}
+                    </p>
+                    <p className="text-sm text-gray-600">Responding</p>
+                  </div>
+                  <div className="text-center p-4 bg-yellow-50 rounded-lg">
+                    <p className="text-2xl font-bold text-yellow-600">{comparisonResult.differences.length}</p>
+                    <p className="text-sm text-gray-600">Differences Found</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Provider Results */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {comparisonResult.providers.map((provider, index) => (
+                <Card key={index}>
+                  <CardHeader>
+                    <div className="flex items-center justify-between">
+                      <CardTitle className="text-lg">{provider.name}</CardTitle>
+                      <Badge variant={provider.resolvedCount > 0 ? "default" : "destructive"}>
+                        {provider.resolvedCount > 0 ? "Responding" : "No Response"}
+                      </Badge>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    {provider.resolvedCount > 0 ? (
+                      <div className="space-y-3">
+                        <div>
+                          <p className="text-sm font-medium text-gray-700 mb-2">Responses:</p>
+                          {provider.responses.map((response, idx) => (
+                            <div key={idx} className="p-2 bg-gray-50 rounded text-sm font-mono">
+                              {response}
+                            </div>
+                          ))}
+                        </div>
+                        <p className="text-xs text-gray-500">
+                          {provider.resolvedCount} of {provider.results.length} servers responded
+                        </p>
+                      </div>
+                    ) : (
+                      <div className="text-center py-4 text-gray-500">
+                        <XCircle className="h-8 w-8 mx-auto mb-2 text-gray-300" />
+                        <p className="text-sm">No responses received</p>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+
+            {/* Differences Analysis */}
+            {comparisonResult.differences.length > 0 && (
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center">
+                    <AlertTriangle className="h-5 w-5 mr-2 text-yellow-500" />
+                    Detected Differences
+                  </CardTitle>
+                  <CardDescription>
+                    Inconsistencies found between DNS providers
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    {comparisonResult.differences.map((diff, index) => (
+                      <div key={index} className="flex items-start space-x-3 p-3 border rounded-lg">
+                        <div className="flex-shrink-0 mt-0.5">
+                          {diff.type === 'missing' && <XCircle className="h-4 w-4 text-red-500" />}
+                          {diff.type === 'extra' && <CheckCircle className="h-4 w-4 text-blue-500" />}
+                          {diff.type === 'different' && <AlertTriangle className="h-4 w-4 text-yellow-500" />}
+                        </div>
+                        <div>
+                          <p className="font-medium text-gray-900">{diff.provider}</p>
+                          <p className="text-sm text-gray-600">{diff.details}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+          </div>
+        )}
+
+        {/* No Results State */}
+        {!comparisonResult && !compareMutation.isPending && (
+          <Card>
+            <CardContent className="text-center py-12">
+              <GitCompare className="h-12 w-12 mx-auto mb-4 text-gray-300" />
+              <p className="text-gray-500">Enter a domain and select providers to start comparison</p>
+            </CardContent>
+          </Card>
+        )}
+      </main>
+    </div>
+  );
+}

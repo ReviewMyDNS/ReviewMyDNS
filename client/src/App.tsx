@@ -7,6 +7,8 @@ import Home from "@/pages/home";
 import Tools from "@/pages/tools";
 import ApiDocs from "@/pages/api-docs";
 import Documentation from "@/pages/documentation";
+import BulkLookup from "@/pages/bulk-lookup";
+import DnsCompare from "@/pages/dns-compare";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -16,6 +18,8 @@ function Router() {
       <Route path="/tools" component={Tools} />
       <Route path="/api-docs" component={ApiDocs} />
       <Route path="/documentation" component={Documentation} />
+      <Route path="/bulk-lookup" component={BulkLookup} />
+      <Route path="/compare" component={DnsCompare} />
       <Route component={NotFound} />
     </Switch>
   );
