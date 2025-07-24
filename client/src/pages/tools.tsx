@@ -68,14 +68,14 @@ const toolCategories = [
         name: "DNS Security Check",
         description: "Validate DNS security configurations",
         icon: Shield,
-        status: "Coming Soon",
+        status: "Active",
         path: "/security"
       },
       {
         name: "DNSSEC Validator",
         description: "Check DNSSEC implementation",
         icon: Shield,
-        status: "Coming Soon",
+        status: "Active",
         path: "/dnssec"
       }
     ]

@@ -12,6 +12,8 @@ import DnsCompare from "@/pages/dns-compare";
 import Monitor from "@/pages/monitor";
 import History from "@/pages/history";
 import Analytics from "@/pages/analytics";
+import Security from "@/pages/security";
+import DNSSEC from "@/pages/dnssec";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -26,6 +28,8 @@ function Router() {
       <Route path="/monitor" component={Monitor} />
       <Route path="/history" component={History} />
       <Route path="/analytics" component={Analytics} />
+      <Route path="/security" component={Security} />
+      <Route path="/dnssec" component={DNSSEC} />
       <Route component={NotFound} />
     </Switch>
   );
