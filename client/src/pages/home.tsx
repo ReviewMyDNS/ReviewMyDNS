@@ -110,7 +110,7 @@ export default function Home() {
                     {lookupResults.stats.unresolvedCount} Failed
                   </Badge>
                   <span className="text-gray-600">
-                    Last updated: {new Date(lookupResults.createdAt).toLocaleTimeString()}
+                    Last updated: {lookupResults.createdAt ? new Date(lookupResults.createdAt).toLocaleTimeString() : 'Just now'}
                   </span>
                 </div>
               </div>

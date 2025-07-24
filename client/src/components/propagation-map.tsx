@@ -88,9 +88,9 @@ export function PropagationMap({ results }: PropagationMapProps) {
       });
 
       // Add legend
-      const legend = L.control({ position: 'bottomright' });
+      const legend = (L as any).control({ position: 'bottomright' });
       legend.onAdd = function() {
-        const div = L.DomUtil.create('div', 'dns-legend');
+        const div = (L as any).DomUtil.create('div', 'dns-legend');
         div.innerHTML = `
           <div style="background: white; padding: 10px; border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); font-size: 12px;">
             <div style="margin-bottom: 4px; font-weight: bold;">DNS Status</div>

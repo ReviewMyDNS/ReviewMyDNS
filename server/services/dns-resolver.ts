@@ -20,77 +20,13 @@ export class DnsResolver {
     const startTime = Date.now();
     
     try {
-      let response: string;
+      // Set timeout for DNS queries (3 seconds)
+      const timeoutPromise = new Promise<never>((_, reject) => {
+        setTimeout(() => reject(new Error('DNS query timeout')), 3000);
+      });
       
-      switch (recordType) {
-        case 'A':
-          const aRecords = await this.resolver.resolve4(domain);
-          response = aRecords.join(', ');
-          break;
-          
-        case 'AAAA':
-          const aaaaRecords = await this.resolver.resolve6(domain);
-          response = aaaaRecords.join(', ');
-          break;
-          
-        case 'CNAME':
-          const cnameRecords = await this.resolver.resolveCname(domain);
-          response = cnameRecords.join(', ');
-          break;
-          
-        case 'MX':
-          const mxRecords = await this.resolver.resolveMx(domain);
-          response = mxRecords
-            .sort((a, b) => a.priority - b.priority)
-            .map(record => `${record.priority} ${record.exchange}`)
-            .join(', ');
-          break;
-          
-        case 'NS':
-          const nsRecords = await this.resolver.resolveNs(domain);
-          response = nsRecords.join(', ');
-          break;
-          
-        case 'TXT':
-          const txtRecords = await this.resolver.resolveTxt(domain);
-          response = txtRecords.map(record => record.join('')).join(', ');
-          break;
-          
-        case 'SOA':
-          const soaRecord = await this.resolver.resolveSoa(domain);
-          response = `${soaRecord.nsname} ${soaRecord.hostmaster} ${soaRecord.serial} ${soaRecord.refresh} ${soaRecord.retry} ${soaRecord.expire} ${soaRecord.minttl}`;
-          break;
-          
-        case 'PTR':
-          const ptrRecords = await this.resolver.resolvePtr(domain);
-          response = ptrRecords.join(', ');
-          break;
-          
-        case 'SRV':
-          const srvRecords = await this.resolver.resolveSrv(domain);
-          response = srvRecords
-            .map(record => `${record.priority} ${record.weight} ${record.port} ${record.name}`)
-            .join(', ');
-          break;
-          
-        case 'CAA':
-          const caaRecords = await this.resolver.resolveCaa(domain);
-          response = caaRecords
-            .map(record => `${record.critical} ${record.issue || record.issuewild || 'unknown'} ${record.value}`)
-            .join(', ');
-          break;
-          
-        default:
-          // For DS and DNSKEY, we'll use a generic resolve
-          try {
-            const anyRecords = await this.resolver.resolveAny(domain);
-            const filteredRecords = anyRecords.filter(record => record.type === recordType);
-            response = filteredRecords.length > 0 ? JSON.stringify(filteredRecords) : 'No records found';
-          } catch {
-            response = 'Record type not supported';
-          }
-          break;
-      }
+      const queryPromise = this.performQuery(domain, recordType);
+      const response = await Promise.race([queryPromise, timeoutPromise]);
       
       const responseTime = Date.now() - startTime;
       return {
@@ -98,7 +34,6 @@ export class DnsResolver {
         response,
         responseTime
       };
-      
     } catch (error: any) {
       const responseTime = Date.now() - startTime;
       return {
@@ -106,6 +41,67 @@ export class DnsResolver {
         error: error.message || 'DNS query failed',
         responseTime
       };
+    }
+  }
+
+  private async performQuery(domain: string, recordType: DnsRecordType): Promise<string> {
+    switch (recordType) {
+      case 'A':
+        const aRecords = await this.resolver.resolve4(domain);
+        return aRecords.join(', ');
+        
+      case 'AAAA':
+        const aaaaRecords = await this.resolver.resolve6(domain);
+        return aaaaRecords.join(', ');
+        
+      case 'CNAME':
+        const cnameRecords = await this.resolver.resolveCname(domain);
+        return cnameRecords.join(', ');
+        
+      case 'MX':
+        const mxRecords = await this.resolver.resolveMx(domain);
+        return mxRecords
+          .sort((a, b) => a.priority - b.priority)
+          .map(record => `${record.priority} ${record.exchange}`)
+          .join(', ');
+        
+      case 'NS':
+        const nsRecords = await this.resolver.resolveNs(domain);
+        return nsRecords.join(', ');
+        
+      case 'TXT':
+        const txtRecords = await this.resolver.resolveTxt(domain);
+        return txtRecords.map(record => record.join('')).join(', ');
+        
+      case 'SOA':
+        const soaRecord = await this.resolver.resolveSoa(domain);
+        return `${soaRecord.nsname} ${soaRecord.hostmaster} ${soaRecord.serial} ${soaRecord.refresh} ${soaRecord.retry} ${soaRecord.expire} ${soaRecord.minttl}`;
+        
+      case 'PTR':
+        const ptrRecords = await this.resolver.resolvePtr(domain);
+        return ptrRecords.join(', ');
+        
+      case 'SRV':
+        const srvRecords = await this.resolver.resolveSrv(domain);
+        return srvRecords
+          .map(record => `${record.priority} ${record.weight} ${record.port} ${record.name}`)
+          .join(', ');
+        
+      case 'CAA':
+        const caaRecords = await this.resolver.resolveCaa(domain);
+        return caaRecords
+          .map(record => `${record.critical} ${record.issue || record.issuewild || 'unknown'} ${record.value}`)
+          .join(', ');
+        
+      default:
+        // For DS and DNSKEY, we'll use a generic resolve
+        try {
+          const anyRecords = await this.resolver.resolveAny(domain);
+          const filteredRecords = anyRecords.filter((record: any) => record.type === recordType);
+          return filteredRecords.length > 0 ? JSON.stringify(filteredRecords) : 'No records found';
+        } catch {
+          return 'Record type not supported';
+        }
     }
   }
 }

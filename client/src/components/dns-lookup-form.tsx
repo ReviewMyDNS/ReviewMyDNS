@@ -153,7 +153,12 @@ export function DnsLookupForm({ onLookupComplete, isLoading, setIsLoading }: Dns
                           <FormControl>
                             <Input
                               placeholder="Optional: Expected IP or value"
-                              {...field}
+                              value={field.value || ""}
+                              onChange={field.onChange}
+                              onBlur={field.onBlur}
+                              name={field.name}
+                              ref={field.ref}
+                              disabled={field.disabled}
                             />
                           </FormControl>
                           <FormMessage />
@@ -167,7 +172,7 @@ export function DnsLookupForm({ onLookupComplete, isLoading, setIsLoading }: Dns
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Match Type</FormLabel>
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <Select onValueChange={field.onChange} defaultValue={field.value || "exact"}>
                             <FormControl>
                               <SelectTrigger>
                                 <SelectValue />
