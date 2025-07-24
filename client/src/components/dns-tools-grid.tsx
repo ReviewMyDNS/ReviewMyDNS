@@ -98,12 +98,12 @@ export function DnsToolsGrid() {
                   <p className="text-sm text-gray-600 mb-4">{tool.description}</p>
                   {tool.active ? (
                     <Link href={tool.path}>
-                      <Button variant="ghost" size="sm" className="text-blue-600 hover:text-blue-800 p-0 h-auto font-medium">
+                      <Button variant="ghost" size="sm" className="text-blue-600 hover:text-blue-800 p-0 h-auto font-medium w-full text-left">
                         {tool.title.includes('API') ? 'View Docs' : 'Try Tool'} →
                       </Button>
                     </Link>
                   ) : (
-                    <Button variant="ghost" size="sm" disabled className="text-gray-400 p-0 h-auto font-medium">
+                    <Button variant="ghost" size="sm" disabled className="text-gray-400 p-0 h-auto font-medium w-full text-left">
                       Coming Soon
                     </Button>
                   )}

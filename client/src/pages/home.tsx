@@ -276,8 +276,8 @@ export default function Home() {
                 <ul className="space-y-2">
                   <li><Link href="/" className="text-gray-300 hover:text-white text-sm">DNS Checker</Link></li>
                   <li><Link href="/tools" className="text-gray-300 hover:text-white text-sm">All Tools</Link></li>
-                  <li><a href="#" className="text-gray-300 hover:text-white text-sm">Bulk Lookup</a></li>
-                  <li><a href="#" className="text-gray-300 hover:text-white text-sm">Historical Tracking</a></li>
+                  <li><Link href="/bulk-lookup" className="text-gray-300 hover:text-white text-sm">Bulk Lookup</Link></li>
+                  <li><Link href="/tools" className="text-gray-300 hover:text-white text-sm">Historical Tracking</Link></li>
                 </ul>
               </div>
               
@@ -288,7 +288,7 @@ export default function Home() {
                   <li><Link href="/documentation" className="text-gray-300 hover:text-white text-sm">Documentation</Link></li>
                   <li><Link href="/api-docs" className="text-gray-300 hover:text-white text-sm">API Reference</Link></li>
                   <li><Link href="/documentation" className="text-gray-300 hover:text-white text-sm">DNS Guide</Link></li>
-                  <li><a href="#" className="text-gray-300 hover:text-white text-sm">Status Page</a></li>
+                  <li><Link href="/tools" className="text-gray-300 hover:text-white text-sm">Status Page</Link></li>
                 </ul>
               </div>
             </div>
@@ -300,9 +300,9 @@ export default function Home() {
                 © 2025 ReviewMyDNS. All rights reserved.
               </div>
               <div className="flex space-x-6 mt-4 md:mt-0">
-                <a href="#" className="text-gray-300 hover:text-white text-sm">Privacy Policy</a>
-                <a href="#" className="text-gray-300 hover:text-white text-sm">Terms of Service</a>
-                <a href="#" className="text-gray-300 hover:text-white text-sm">Contact</a>
+                <Link href="/documentation" className="text-gray-300 hover:text-white text-sm">Privacy Policy</Link>
+                <Link href="/documentation" className="text-gray-300 hover:text-white text-sm">Terms of Service</Link>
+                <a href="mailto:support@reviewmydns.com" className="text-gray-300 hover:text-white text-sm">Contact</a>
               </div>
             </div>
           </div>
