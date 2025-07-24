@@ -240,6 +240,14 @@ export default function SignIn() {
                 </div>
               </div>
             </div>
+            
+            <div className="mt-6 pt-4 border-t border-gray-200">
+              <Link href="/pricing">
+                <Button variant="outline" className="w-full">
+                  View Pricing Plans
+                </Button>
+              </Link>
+            </div>
           </CardContent>
         </Card>
       </div>

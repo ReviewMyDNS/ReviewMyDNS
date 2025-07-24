@@ -52,6 +52,9 @@ export default function Home() {
             
             {/* User Actions */}
             <div className="flex items-center space-x-4">
+              <Link href="/pricing">
+                <Button variant="ghost">Pricing</Button>
+              </Link>
               <Link href="/signin">
                 <Button>Sign In</Button>
               </Link>
