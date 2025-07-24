@@ -52,7 +52,9 @@ export default function Home() {
             
             {/* User Actions */}
             <div className="flex items-center space-x-4">
-              <Button>Sign In</Button>
+              <Link href="/signin">
+                <Button>Sign In</Button>
+              </Link>
               
               {/* Mobile menu button */}
               <div className="md:hidden">

@@ -14,6 +14,7 @@ import History from "@/pages/history";
 import Analytics from "@/pages/analytics";
 import Security from "@/pages/security";
 import DNSSEC from "@/pages/dnssec";
+import SignIn from "@/pages/signin";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -30,6 +31,7 @@ function Router() {
       <Route path="/analytics" component={Analytics} />
       <Route path="/security" component={Security} />
       <Route path="/dnssec" component={DNSSEC} />
+      <Route path="/signin" component={SignIn} />
       <Route component={NotFound} />
     </Switch>
   );
