@@ -1,6 +1,38 @@
+/* Leaflet CSS */
+@import 'leaflet/dist/leaflet.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Custom styles for DNS markers */
+.custom-dns-marker {
+  background: transparent !important;
+  border: none !important;
+}
+
+.dns-marker-popup-container .leaflet-popup-content-wrapper {
+  border-radius: 8px;
+}
+
+.dns-legend {
+  font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
+}
+
+/* Ensure Leaflet map displays properly */
+.leaflet-container {
+  height: 100% !important;
+  width: 100% !important;
+  z-index: 1;
+}
+
+.leaflet-control-zoom {
+  z-index: 1000;
+}
+
+.leaflet-control-attribution {
+  z-index: 1000;
+}
 
 :root {
   --background: hsl(0, 0%, 100%);
