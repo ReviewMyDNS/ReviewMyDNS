@@ -9,6 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Globe, History, Heart, User, Menu, Lock, BarChart3, Zap } from "lucide-react";
+import { Link } from "wouter";
 import type { DnsLookupWithResults } from "@shared/schema";
 
 export default function Home() {
@@ -35,18 +36,18 @@ export default function Home() {
             
             {/* Navigation Links */}
             <nav className="hidden md:flex space-x-8">
-              <a href="#" className="text-blue-600 hover:text-blue-800 px-3 py-2 text-sm font-medium border-b-2 border-blue-600">
+              <Link href="/" className="text-blue-600 hover:text-blue-800 px-3 py-2 text-sm font-medium border-b-2 border-blue-600">
                 DNS Checker
-              </a>
-              <a href="#" className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">
+              </Link>
+              <Link href="/tools" className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">
                 Tools
-              </a>
-              <a href="#" className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">
+              </Link>
+              <Link href="/api-docs" className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">
                 API
-              </a>
-              <a href="#" className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">
+              </Link>
+              <Link href="/documentation" className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">
                 Documentation
-              </a>
+              </Link>
             </nav>
             
             {/* User Actions */}
@@ -273,9 +274,9 @@ export default function Home() {
               <div>
                 <h4 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">DNS Tools</h4>
                 <ul className="space-y-2">
-                  <li><a href="#" className="text-gray-300 hover:text-white text-sm">DNS Checker</a></li>
+                  <li><Link href="/" className="text-gray-300 hover:text-white text-sm">DNS Checker</Link></li>
+                  <li><Link href="/tools" className="text-gray-300 hover:text-white text-sm">All Tools</Link></li>
                   <li><a href="#" className="text-gray-300 hover:text-white text-sm">Bulk Lookup</a></li>
-                  <li><a href="#" className="text-gray-300 hover:text-white text-sm">DNS Comparison</a></li>
                   <li><a href="#" className="text-gray-300 hover:text-white text-sm">Historical Tracking</a></li>
                 </ul>
               </div>
@@ -284,9 +285,9 @@ export default function Home() {
               <div>
                 <h4 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">Resources</h4>
                 <ul className="space-y-2">
-                  <li><a href="#" className="text-gray-300 hover:text-white text-sm">Documentation</a></li>
-                  <li><a href="#" className="text-gray-300 hover:text-white text-sm">API Reference</a></li>
-                  <li><a href="#" className="text-gray-300 hover:text-white text-sm">DNS Guide</a></li>
+                  <li><Link href="/documentation" className="text-gray-300 hover:text-white text-sm">Documentation</Link></li>
+                  <li><Link href="/api-docs" className="text-gray-300 hover:text-white text-sm">API Reference</Link></li>
+                  <li><Link href="/documentation" className="text-gray-300 hover:text-white text-sm">DNS Guide</Link></li>
                   <li><a href="#" className="text-gray-300 hover:text-white text-sm">Status Page</a></li>
                 </ul>
               </div>
