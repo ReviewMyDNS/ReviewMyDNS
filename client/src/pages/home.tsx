@@ -51,20 +51,29 @@ export default function Home() {
             </nav>
             
             {/* User Actions */}
-            <div className="flex items-center space-x-4">
-              <Link href="/pricing">
-                <Button variant="ghost">Pricing</Button>
-              </Link>
-              <Link href="/signin">
-                <Button variant="ghost">Sign In</Button>
-              </Link>
-              <Link href="/signin?tab=signup">
-                <Button>Sign Up</Button>
-              </Link>
+            <div className="flex items-center space-x-2">
+              {/* Desktop Actions */}
+              <div className="hidden md:flex items-center space-x-4">
+                <Link href="/pricing">
+                  <Button variant="ghost">Pricing</Button>
+                </Link>
+                <Link href="/signin">
+                  <Button variant="ghost">Sign In</Button>
+                </Link>
+                <Link href="/signin?tab=signup">
+                  <Button>Sign Up</Button>
+                </Link>
+              </div>
               
-              {/* Mobile menu button */}
-              <div className="md:hidden">
-                <Button variant="ghost" size="icon">
+              {/* Mobile Actions */}
+              <div className="md:hidden flex items-center space-x-2">
+                <Link href="/signin">
+                  <Button variant="ghost" size="sm">Sign In</Button>
+                </Link>
+                <Link href="/signin?tab=signup">
+                  <Button size="sm">Sign Up</Button>
+                </Link>
+                <Button variant="ghost" size="icon" className="ml-2">
                   <Menu className="h-5 w-5" />
                 </Button>
               </div>
@@ -79,10 +88,10 @@ export default function Home() {
         <section className="bg-white shadow-sm border-b border-gray-100">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <div className="text-center mb-8">
-              <h2 className="text-3xl font-bold text-gray-900 mb-2">
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
                 Global DNS Propagation Checker
               </h2>
-              <p className="text-gray-600">
+              <p className="text-gray-600 text-sm md:text-base">
                 Check DNS records and propagation status across 50+ worldwide servers
               </p>
             </div>

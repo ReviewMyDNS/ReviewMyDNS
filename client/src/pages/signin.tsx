@@ -68,9 +68,9 @@ export default function SignIn() {
 
       {/* Main Content */}
       <div className="sm:mx-auto sm:w-full sm:max-w-md px-4">
-        <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">Welcome to ReviewMyDNS</h2>
-          <p className="text-gray-600">Access advanced DNS monitoring and analytics</p>
+        <div className="text-center mb-6 md:mb-8">
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Welcome to ReviewMyDNS</h2>
+          <p className="text-gray-600 text-sm md:text-base">Access advanced DNS monitoring and analytics</p>
         </div>
 
         <Card>

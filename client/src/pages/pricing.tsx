@@ -108,12 +108,22 @@ export default function Pricing() {
               </div>
             </div>
             <div className="flex items-center space-x-2">
-              <Link href="/signin">
-                <Button variant="ghost">Sign In</Button>
-              </Link>
-              <Link href="/signin?tab=signup">
-                <Button>Sign Up</Button>
-              </Link>
+              <div className="hidden sm:flex items-center space-x-2">
+                <Link href="/signin">
+                  <Button variant="ghost">Sign In</Button>
+                </Link>
+                <Link href="/signin?tab=signup">
+                  <Button>Sign Up</Button>
+                </Link>
+              </div>
+              <div className="sm:hidden flex items-center space-x-1">
+                <Link href="/signin">
+                  <Button variant="ghost" size="sm">Sign In</Button>
+                </Link>
+                <Link href="/signin?tab=signup">
+                  <Button size="sm">Sign Up</Button>
+                </Link>
+              </div>
             </div>
           </div>
         </div>
@@ -123,10 +133,10 @@ export default function Pricing() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Header Section */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
             Simple, Transparent Pricing
           </h1>
-          <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
+          <p className="text-lg md:text-xl text-gray-600 mb-8 max-w-3xl mx-auto px-4">
             Choose the perfect plan for your DNS monitoring needs. Start free and upgrade as you grow.
           </p>
           
@@ -150,7 +160,7 @@ export default function Pricing() {
         </div>
 
         {/* Pricing Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 mb-16">
           {plans.map((plan) => {
             const Icon = plan.icon;
             const price = isYearly ? plan.yearlyPrice : plan.monthlyPrice;
