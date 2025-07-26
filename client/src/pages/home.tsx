@@ -177,6 +177,21 @@ export default function Home() {
               
               {/* Quick Stats */}
               <div className="space-y-6">
+                {/* Sponsor Ad Slot */}
+                <Card className="border-yellow-200 bg-yellow-50">
+                  <CardContent className="p-4">
+                    <div className="text-center">
+                      <span className="text-xs text-gray-500 mb-2 block">Ad</span>
+                      <div className="bg-white rounded p-3 border border-gray-200">
+                        <h4 className="text-sm font-semibold text-gray-900 mb-1">Cloud Infrastructure</h4>
+                        <p className="text-xs text-gray-600 mb-2">Deploy your apps with 99.9% uptime</p>
+                        <Button size="sm" variant="outline" className="text-xs">
+                          Try Free
+                        </Button>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
                 {/* Propagation Status Card */}
                 <Card>
                   <CardHeader>
@@ -262,6 +277,26 @@ export default function Home() {
             </Card>
           </section>
         )}
+
+        {/* Sponsored Content Section */}
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 bg-white">
+          <div className="text-center mb-6">
+            <span className="text-xs text-gray-500 uppercase tracking-wide">Sponsored</span>
+          </div>
+          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-6 border border-blue-100">
+            <div className="flex flex-col md:flex-row items-center justify-between">
+              <div className="mb-4 md:mb-0">
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">Professional DNS Hosting</h3>
+                <p className="text-gray-600 text-sm">Get enterprise-grade DNS hosting with 99.99% uptime SLA. Perfect for production workloads.</p>
+              </div>
+              <div className="flex-shrink-0">
+                <Button variant="outline" className="bg-white hover:bg-gray-50">
+                  Learn More →
+                </Button>
+              </div>
+            </div>
+          </div>
+        </section>
 
         {/* DNS Tools Section */}
         <DnsToolsGrid />

@@ -243,6 +243,47 @@ export default function Pricing() {
           })}
         </div>
 
+        {/* Sponsored Section */}
+        <div className="mb-16">
+          <div className="text-center mb-8">
+            <span className="text-xs text-gray-500 uppercase tracking-wide">Our Partners</span>
+          </div>
+          <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-8 border border-indigo-200">
+            <div className="max-w-4xl mx-auto">
+              <div className="text-center mb-8">
+                <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                  Trusted by Leading Companies
+                </h3>
+                <p className="text-gray-600">
+                  Join thousands of developers and organizations using ReviewMyDNS
+                </p>
+              </div>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-8 items-center opacity-60">
+                <div className="text-center">
+                  <div className="bg-white rounded-lg p-4 shadow-sm">
+                    <div className="text-lg font-bold text-gray-400">TechCorp</div>
+                  </div>
+                </div>
+                <div className="text-center">
+                  <div className="bg-white rounded-lg p-4 shadow-sm">
+                    <div className="text-lg font-bold text-gray-400">StartupXYZ</div>
+                  </div>
+                </div>
+                <div className="text-center">
+                  <div className="bg-white rounded-lg p-4 shadow-sm">
+                    <div className="text-lg font-bold text-gray-400">DevCo</div>
+                  </div>
+                </div>
+                <div className="text-center">
+                  <div className="bg-white rounded-lg p-4 shadow-sm">
+                    <div className="text-lg font-bold text-gray-400">CloudInc</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Feature Comparison */}
         <div className="mb-16">
           <h2 className="text-3xl font-bold text-gray-900 text-center mb-8">

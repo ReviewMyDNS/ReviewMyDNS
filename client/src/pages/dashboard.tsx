@@ -186,6 +186,23 @@ export default function Dashboard() {
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  {/* Sponsored Quick Action */}
+                  <div className="col-span-2 md:col-span-4 mb-4">
+                    <Card className="border-orange-200 bg-orange-50">
+                      <CardContent className="p-4">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <span className="text-xs text-gray-500 mb-1 block">Sponsored</span>
+                            <h4 className="text-sm font-semibold text-gray-900">Upgrade Your DNS</h4>
+                            <p className="text-xs text-gray-600">Professional DNS hosting starting at $5/month</p>
+                          </div>
+                          <Button size="sm" variant="outline">
+                            View Plans
+                          </Button>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </div>
                   <Link href="/">
                     <Button variant="outline" className="h-20 flex flex-col space-y-2">
                       <Globe className="h-6 w-6" />
