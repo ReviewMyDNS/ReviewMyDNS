@@ -198,14 +198,14 @@ export default function Contact() {
                   <Mail className="h-5 w-5 text-blue-600 mt-0.5" />
                   <div>
                     <div className="font-medium">Email</div>
-                    <div className="text-sm text-gray-600">enterprise@reviewmydns.com</div>
+                    <div className="text-sm text-gray-600">info@reviewmydns.com</div>
                   </div>
                 </div>
                 <div className="flex items-start space-x-3">
-                  <Phone className="h-5 w-5 text-blue-600 mt-0.5" />
+                  <MapPin className="h-5 w-5 text-blue-600 mt-0.5" />
                   <div>
-                    <div className="font-medium">Phone</div>
-                    <div className="text-sm text-gray-600">+1 (555) 123-4567</div>
+                    <div className="font-medium">Address</div>
+                    <div className="text-sm text-gray-600">312 W 2nd St, Unit 2867<br />Casper, WY 82601</div>
                   </div>
                 </div>
                 <div className="flex items-start space-x-3">

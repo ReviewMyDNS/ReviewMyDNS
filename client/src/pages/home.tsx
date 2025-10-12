@@ -348,7 +348,7 @@ export default function Home() {
               <div className="flex space-x-6 mt-4 md:mt-0">
                 <Link href="/documentation" className="text-gray-300 hover:text-white text-sm">Privacy Policy</Link>
                 <Link href="/documentation" className="text-gray-300 hover:text-white text-sm">Terms of Service</Link>
-                <a href="mailto:support@reviewmydns.com" className="text-gray-300 hover:text-white text-sm">Contact</a>
+                <a href="mailto:info@reviewmydns.com" className="text-gray-300 hover:text-white text-sm">Contact</a>
               </div>
             </div>
           </div>
