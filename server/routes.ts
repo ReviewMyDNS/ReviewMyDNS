@@ -161,7 +161,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         customerId = customer.id;
       }
 
-      // Create subscription
+      // Create subscription with payment intent
       const subscription = await stripe.subscriptions.create({
         customer: customerId,
         items: [{
@@ -173,23 +173,29 @@ export async function registerRoutes(app: Express): Promise<Server> {
         metadata: {
           plan: plan,
         },
+        automatic_tax: { enabled: false },
       });
 
-      // Update user with Stripe info
-      await storage.updateUserStripeInfo(userId, customerId, subscription.id);
+      console.log("[Stripe] Subscription created:", subscription.id);
 
       const latestInvoice: any = subscription.latest_invoice;
       const paymentIntent: any = latestInvoice?.payment_intent;
 
-      console.log("[Stripe] Subscription created:", subscription.id);
       console.log("[Stripe] Latest invoice:", latestInvoice?.id);
       console.log("[Stripe] Payment intent:", paymentIntent?.id);
-      console.log("[Stripe] Client secret:", paymentIntent?.client_secret);
+      console.log("[Stripe] Client secret exists:", !!paymentIntent?.client_secret);
 
       if (!paymentIntent?.client_secret) {
-        console.error("[Stripe] No client secret - this usually means the price ID is invalid or not configured correctly");
-        throw new Error("Unable to initialize payment. Please verify your Stripe configuration.");
+        console.error("[Stripe] No payment intent created. Invoice details:", {
+          invoiceId: latestInvoice?.id,
+          status: latestInvoice?.status,
+          amount: latestInvoice?.amount_due,
+        });
+        throw new Error("Unable to initialize payment. The subscription was created but requires manual configuration.");
       }
+
+      // Update user with Stripe info
+      await storage.updateUserStripeInfo(userId, customerId, subscription.id);
 
       res.send({
         subscriptionId: subscription.id,
