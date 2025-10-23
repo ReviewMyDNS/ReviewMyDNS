@@ -32,7 +32,53 @@ The application uses three main tables with proper relations:
 - `dns_servers`: Contains information about 20+ global DNS servers including geographical data
 - `dns_results`: Stores the results of DNS queries with status, response, and timing data
 
+## Stripe Configuration
+
+### Authentication System
+- **Email/Password Authentication**: Users sign up with email and password (bcrypt hashing)
+- **Session Management**: Express-session with PostgreSQL storage (connect-pg-simple)
+- **Protected Routes**: Pricing page and dashboard require authentication
+- **Auth Endpoints**: /api/auth/signup, /api/auth/login, /api/auth/logout, /api/auth/user
+
+### Subscription Plans & Pricing
+
+**Test Mode (Development)**
+- Pro Plan: $19/month - `price_1SLCZcJeS2vWG8pbb9zBK4jr`
+- Enterprise Plan: $49/month - `price_1SLDruJeS2vWG8pbuw4Cc5lW`
+- API Keys: `TESTING_STRIPE_SECRET_KEY`, `TESTING_VITE_STRIPE_PUBLIC_KEY`
+
+**Live Mode (Production)**
+- Pro Plan: $19/month - `price_1SLDyoQxClCOXM9XTqZKZ2hc`
+- Enterprise Plan: $49/month - `price_1SLDuLQxClCOXM9XjxZpCGEr`
+- API Keys: `STRIPE_SECRET_KEY` (sk_live_...), `VITE_STRIPE_PUBLIC_KEY` (pk_live_...)
+
+### Environment Variables
+- `STRIPE_SECRET_KEY`: Stripe secret key (currently Test mode)
+- `VITE_STRIPE_PUBLIC_KEY`: Stripe publishable key (currently Test mode)
+- `STRIPE_PRICE_ID`: Pro plan price ID
+- `STRIPE_ENTERPRISE_PRICE_ID`: Enterprise plan price ID
+- `STRIPE_WEBHOOK_SECRET`: (Optional) Webhook signing secret for enhanced security
+
+### Switching to Live Mode
+To enable real payments, update these secrets in Replit:
+1. `STRIPE_SECRET_KEY` → Your Live secret key (sk_live_...)
+2. `VITE_STRIPE_PUBLIC_KEY` → Your Live publishable key (pk_live_...)
+3. `STRIPE_PRICE_ID` → `price_1SLDyoQxClCOXM9XTqZKZ2hc`
+4. `STRIPE_ENTERPRISE_PRICE_ID` → `price_1SLDuLQxClCOXM9XjxZpCGEr`
+5. Configure webhook in Stripe Dashboard pointing to: `https://yourdomain.replit.app/api/stripe/webhook`
+6. Add `STRIPE_WEBHOOK_SECRET` with your webhook signing secret
+
 ## Recent Changes
+
+**October 23, 2025 - Email/Password Authentication & Stripe Integration**
+- ✅ Removed Replit Auth, implemented email/password authentication system
+- ✅ Added bcrypt password hashing and PostgreSQL session storage
+- ✅ Created auth endpoints for signup, login, logout, and user management
+- ✅ Integrated Stripe checkout with Pro ($19/month) and Enterprise ($49/month) plans
+- ✅ Implemented webhook handler for subscription updates
+- ✅ Added session verification for post-checkout subscription activation
+- ✅ Configured for both Test Mode and Live Mode operations
+- ✅ Protected routes require authentication before accessing premium features
 
 **August 20, 2025 - PLATFORM DEPLOYED - Live Production Launch**
 - ✅ ReviewMyDNS successfully deployed to production environment
