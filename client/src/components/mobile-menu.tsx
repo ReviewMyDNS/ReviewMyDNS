@@ -59,7 +59,7 @@ export function MobileMenu() {
 
           {/* Authentication Buttons */}
           <div className="p-4 border-t space-y-3">
-            <a href="/api/login">
+            <Link href="/signin">
               <Button
                 variant="outline"
                 className="w-full"
@@ -67,15 +67,15 @@ export function MobileMenu() {
               >
                 Sign In
               </Button>
-            </a>
-            <a href="/api/login">
+            </Link>
+            <Link href="/signin?tab=signup">
               <Button
                 className="w-full"
                 onClick={() => setIsOpen(false)}
               >
                 Sign Up
               </Button>
-            </a>
+            </Link>
           </div>
         </div>
       </SheetContent>

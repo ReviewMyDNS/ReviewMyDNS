@@ -57,22 +57,22 @@ export default function Home() {
                 <Link href="/pricing">
                   <Button variant="ghost">Pricing</Button>
                 </Link>
-                <a href="/api/login">
+                <Link href="/signin">
                   <Button variant="ghost">Sign In</Button>
-                </a>
-                <a href="/api/login">
+                </Link>
+                <Link href="/signin?tab=signup">
                   <Button>Sign Up</Button>
-                </a>
+                </Link>
               </div>
               
               {/* Mobile Actions */}
               <div className="md:hidden flex items-center space-x-2">
-                <a href="/api/login">
+                <Link href="/signin">
                   <Button variant="ghost" size="sm">Sign In</Button>
-                </a>
-                <a href="/api/login">
+                </Link>
+                <Link href="/signin?tab=signup">
                   <Button size="sm">Sign Up</Button>
-                </a>
+                </Link>
                 <Button variant="ghost" size="icon" className="ml-2">
                   <Menu className="h-5 w-5" />
                 </Button>
