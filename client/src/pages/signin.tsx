@@ -1,16 +1,20 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "wouter";
+import { useMutation } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
-import { ArrowLeft, Lock, Mail, User, Eye, EyeOff, CheckCircle } from "lucide-react";
+import { ArrowLeft, Lock, Mail, User, Eye, EyeOff, CheckCircle, AlertCircle } from "lucide-react";
 import { Link } from "wouter";
+import { apiRequest, queryClient } from "@/lib/queryClient";
+import { useToast } from "@/hooks/use-toast";
 
 export default function SignIn() {
-  const [location] = useLocation();
+  const [location, setLocation] = useLocation();
+  const { toast } = useToast();
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -18,6 +22,7 @@ export default function SignIn() {
   const [lastName, setLastName] = useState("");
   const [company, setCompany] = useState("");
   const [activeTab, setActiveTab] = useState("signin");
+  const [error, setError] = useState("");
 
   // Check URL params to determine which tab to show
   useEffect(() => {
@@ -28,20 +33,69 @@ export default function SignIn() {
     }
   }, [location]);
 
+  const signinMutation = useMutation({
+    mutationFn: async (data: { email: string; password: string }) => {
+      const result = await apiRequest("POST", "/api/auth/login", data);
+      return result;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/auth/user"] });
+      toast({
+        title: "Welcome back!",
+        description: "You've successfully signed in.",
+      });
+      setLocation("/pricing");
+    },
+    onError: (error: any) => {
+      const message = error.message || "Failed to sign in";
+      setError(message);
+      toast({
+        title: "Sign in failed",
+        description: message,
+        variant: "destructive",
+      });
+    },
+  });
+
+  const signupMutation = useMutation({
+    mutationFn: async (data: { email: string; password: string; firstName?: string; lastName?: string }) => {
+      const result = await apiRequest("POST", "/api/auth/signup", data);
+      return result;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/auth/user"] });
+      toast({
+        title: "Account created!",
+        description: "Welcome to ReviewMyDNS.",
+      });
+      setLocation("/pricing");
+    },
+    onError: (error: any) => {
+      const message = error.message || "Failed to create account";
+      setError(message);
+      toast({
+        title: "Sign up failed",
+        description: message,
+        variant: "destructive",
+      });
+    },
+  });
+
   const handleSignIn = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle sign in logic here
-    console.log("Sign in:", { email, password });
-    // Simulate successful login - redirect to dashboard
-    window.location.href = "/dashboard";
+    setError("");
+    signinMutation.mutate({ email, password });
   };
 
   const handleSignUp = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle sign up logic here
-    console.log("Sign up:", { firstName, lastName, email, company, password });
-    // Simulate successful signup - redirect to dashboard
-    window.location.href = "/dashboard";
+    setError("");
+    signupMutation.mutate({
+      email,
+      password,
+      firstName: firstName || undefined,
+      lastName: lastName || undefined,
+    });
   };
 
   return (
@@ -83,15 +137,23 @@ export default function SignIn() {
               
               <TabsContent value="signin" className="space-y-4 mt-6">
                 <form onSubmit={handleSignIn} className="space-y-4">
+                  {error && activeTab === "signin" && (
+                    <div className="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-md flex items-start gap-2">
+                      <AlertCircle className="h-5 w-5 flex-shrink-0 mt-0.5" />
+                      <p className="text-sm" data-testid="error-signin">{error}</p>
+                    </div>
+                  )}
                   <div>
                     <Label htmlFor="signin-email">Email</Label>
                     <Input
                       id="signin-email"
+                      data-testid="input-signin-email"
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="your@email.com"
                       required
+                      disabled={signinMutation.isPending}
                     />
                   </div>
                   
@@ -100,11 +162,13 @@ export default function SignIn() {
                     <div className="relative">
                       <Input
                         id="signin-password"
+                        data-testid="input-signin-password"
                         type={showPassword ? "text" : "password"}
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         placeholder="Enter your password"
                         required
+                        disabled={signinMutation.isPending}
                       />
                       <Button
                         type="button"
@@ -112,14 +176,20 @@ export default function SignIn() {
                         size="sm"
                         className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
                         onClick={() => setShowPassword(!showPassword)}
+                        disabled={signinMutation.isPending}
                       >
                         {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                       </Button>
                     </div>
                   </div>
                   
-                  <Button type="submit" className="w-full">
-                    Sign In
+                  <Button 
+                    type="submit" 
+                    className="w-full" 
+                    data-testid="button-signin"
+                    disabled={signinMutation.isPending}
+                  >
+                    {signinMutation.isPending ? "Signing in..." : "Sign In"}
                   </Button>
                   
                   <div className="text-center">
@@ -132,25 +202,33 @@ export default function SignIn() {
               
               <TabsContent value="signup" className="space-y-4 mt-6">
                 <form onSubmit={handleSignUp} className="space-y-4">
+                  {error && activeTab === "signup" && (
+                    <div className="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-md flex items-start gap-2">
+                      <AlertCircle className="h-5 w-5 flex-shrink-0 mt-0.5" />
+                      <p className="text-sm" data-testid="error-signup">{error}</p>
+                    </div>
+                  )}
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <Label htmlFor="first-name">First Name</Label>
                       <Input
                         id="first-name"
+                        data-testid="input-signup-firstname"
                         value={firstName}
                         onChange={(e) => setFirstName(e.target.value)}
                         placeholder="John"
-                        required
+                        disabled={signupMutation.isPending}
                       />
                     </div>
                     <div>
                       <Label htmlFor="last-name">Last Name</Label>
                       <Input
                         id="last-name"
+                        data-testid="input-signup-lastname"
                         value={lastName}
                         onChange={(e) => setLastName(e.target.value)}
                         placeholder="Doe"
-                        required
+                        disabled={signupMutation.isPending}
                       />
                     </div>
                   </div>
@@ -159,11 +237,13 @@ export default function SignIn() {
                     <Label htmlFor="signup-email">Email</Label>
                     <Input
                       id="signup-email"
+                      data-testid="input-signup-email"
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="your@email.com"
                       required
+                      disabled={signupMutation.isPending}
                     />
                   </div>
                   
@@ -171,9 +251,11 @@ export default function SignIn() {
                     <Label htmlFor="company">Company (Optional)</Label>
                     <Input
                       id="company"
+                      data-testid="input-signup-company"
                       value={company}
                       onChange={(e) => setCompany(e.target.value)}
                       placeholder="Your Company"
+                      disabled={signupMutation.isPending}
                     />
                   </div>
                   
@@ -182,11 +264,13 @@ export default function SignIn() {
                     <div className="relative">
                       <Input
                         id="signup-password"
+                        data-testid="input-signup-password"
                         type={showPassword ? "text" : "password"}
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        placeholder="Create a password"
+                        placeholder="Create a password (min 8 characters)"
                         required
+                        disabled={signupMutation.isPending}
                       />
                       <Button
                         type="button"
@@ -194,14 +278,20 @@ export default function SignIn() {
                         size="sm"
                         className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
                         onClick={() => setShowPassword(!showPassword)}
+                        disabled={signupMutation.isPending}
                       >
                         {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                       </Button>
                     </div>
                   </div>
                   
-                  <Button type="submit" className="w-full">
-                    Create Account
+                  <Button 
+                    type="submit" 
+                    className="w-full" 
+                    data-testid="button-signup"
+                    disabled={signupMutation.isPending}
+                  >
+                    {signupMutation.isPending ? "Creating account..." : "Create Account"}
                   </Button>
                 </form>
               </TabsContent>
