@@ -50,7 +50,7 @@ const SubscribeForm = () => {
     <form onSubmit={handleSubmit} className="space-y-6">
       <PaymentElement />
       <Button type="submit" disabled={!stripe || isProcessing} className="w-full" size="lg" data-testid="button-subscribe">
-        {isProcessing ? "Processing..." : "Subscribe to Pro Plan"}
+        {isProcessing ? "Processing..." : "Subscribe Now"}
       </Button>
     </form>
   );
@@ -60,6 +60,10 @@ export default function Subscribe() {
   const [clientSecret, setClientSecret] = useState("");
   const { user, isLoading, isAuthenticated } = useAuth();
   const { toast } = useToast();
+  
+  // Get plan from URL query parameter (default to 'pro')
+  const urlParams = new URLSearchParams(window.location.search);
+  const plan = urlParams.get('plan') || 'pro';
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
@@ -75,7 +79,7 @@ export default function Subscribe() {
     }
 
     if (isAuthenticated && !clientSecret) {
-      apiRequest("POST", "/api/create-subscription")
+      apiRequest("POST", "/api/create-subscription", { plan })
         .then((res) => res.json())
         .then((data) => {
           setClientSecret(data.clientSecret);
@@ -89,7 +93,7 @@ export default function Subscribe() {
           console.error("Subscription error:", error);
         });
     }
-  }, [isAuthenticated, isLoading, clientSecret, toast]);
+  }, [isAuthenticated, isLoading, clientSecret, toast, plan]);
 
   if (isLoading) {
     return (
@@ -107,6 +111,34 @@ export default function Subscribe() {
     );
   }
 
+  const planDetails = plan === 'enterprise' ? {
+    name: 'Enterprise',
+    price: '$49',
+    features: [
+      "Unlimited DNS lookups",
+      "50+ global DNS servers",
+      "Real-time propagation monitoring",
+      "Historical DNS tracking",
+      "Performance analytics",
+      "Email notifications",
+      "API access (unlimited)",
+      "Dedicated support"
+    ]
+  } : {
+    name: 'Pro',
+    price: '$19',
+    features: [
+      "Unlimited DNS lookups",
+      "50+ global DNS servers",
+      "Real-time propagation monitoring",
+      "Historical DNS tracking",
+      "Performance analytics",
+      "Email notifications",
+      "API access (5,000 requests/month)",
+      "Priority support"
+    ]
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -119,7 +151,7 @@ export default function Subscribe() {
                 Back to Pricing
               </Button>
             </Link>
-            <h1 className="text-xl font-bold text-gray-900">Subscribe to ReviewMyDNS Pro</h1>
+            <h1 className="text-xl font-bold text-gray-900">Subscribe to ReviewMyDNS {planDetails.name}</h1>
             <div className="w-24"></div>
           </div>
         </div>
@@ -153,23 +185,16 @@ export default function Subscribe() {
           <div className="space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle>Pro Plan - $19/month</CardTitle>
+                <CardTitle>{planDetails.name} Plan - {planDetails.price}/month</CardTitle>
                 <CardDescription>
-                  Everything you need for professional DNS monitoring
+                  {plan === 'enterprise' 
+                    ? 'Complete DNS monitoring for organizations and large teams'
+                    : 'Everything you need for professional DNS monitoring'}
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  {[
-                    "Unlimited DNS lookups",
-                    "50+ global DNS servers",
-                    "Real-time propagation monitoring",
-                    "Historical DNS tracking",
-                    "Performance analytics",
-                    "Email notifications",
-                    "API access (5,000 requests/month)",
-                    "Priority support"
-                  ].map((feature, index) => (
+                  {planDetails.features.map((feature, index) => (
                     <div key={index} className="flex items-center space-x-2">
                       <CheckCircle2 className="h-5 w-5 text-green-600" />
                       <span className="text-sm">{feature}</span>

@@ -84,8 +84,8 @@ export default function Pricing() {
         { name: "Team collaboration (unlimited)", included: true },
         { name: "Dedicated support", included: true },
       ],
-      buttonText: "Contact Sales",
-      buttonVariant: "outline" as const,
+      buttonText: "Start Enterprise Trial",
+      buttonVariant: "default" as const,
     },
   ];
 
@@ -212,8 +212,8 @@ export default function Pricing() {
                 <CardContent>
                   <Link href={
                     plan.name === "Free" ? "/api/login" :
-                    plan.name === "Enterprise" ? "/contact" :
-                    "/subscribe"
+                    plan.name === "Enterprise" ? "/subscribe?plan=enterprise" :
+                    "/subscribe?plan=pro"
                   }>
                     <Button 
                       className={`w-full mb-6 ${

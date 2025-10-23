@@ -13,6 +13,9 @@ if (!process.env.STRIPE_SECRET_KEY) {
 if (!process.env.STRIPE_PRICE_ID) {
   throw new Error('Missing required Stripe secret: STRIPE_PRICE_ID');
 }
+if (!process.env.STRIPE_ENTERPRISE_PRICE_ID) {
+  throw new Error('Missing required Stripe secret: STRIPE_ENTERPRISE_PRICE_ID');
+}
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
   apiVersion: "2025-06-30.basil",
 });
@@ -115,7 +118,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Stripe subscription endpoint
   app.post('/api/create-subscription', isAuthenticated, async (req: any, res) => {
     try {
-      console.log("[Stripe] STRIPE_PRICE_ID:", process.env.STRIPE_PRICE_ID);
+      const { plan = 'pro' } = req.body;
+      const priceId = plan === 'enterprise' 
+        ? process.env.STRIPE_ENTERPRISE_PRICE_ID 
+        : process.env.STRIPE_PRICE_ID;
+      
+      console.log("[Stripe] Creating subscription for plan:", plan, "priceId:", priceId);
       
       const userId = req.user.claims.sub;
       let user = await storage.getUser(userId);
@@ -157,11 +165,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const subscription = await stripe.subscriptions.create({
         customer: customerId,
         items: [{
-          price: process.env.STRIPE_PRICE_ID,
+          price: priceId,
         }],
         payment_behavior: 'default_incomplete',
         payment_settings: { save_default_payment_method: 'on_subscription' },
         expand: ['latest_invoice.payment_intent'],
+        metadata: {
+          plan: plan,
+        },
       });
 
       // Update user with Stripe info
