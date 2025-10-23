@@ -210,12 +210,17 @@ export default function Pricing() {
                 </CardHeader>
                 
                 <CardContent>
-                  <Link href={plan.name === "Enterprise" ? "/contact" : "/signin?tab=signup"}>
+                  <Link href={
+                    plan.name === "Free" ? "/api/login" :
+                    plan.name === "Enterprise" ? "/contact" :
+                    "/subscribe"
+                  }>
                     <Button 
                       className={`w-full mb-6 ${
                         plan.popular ? 'bg-blue-600 hover:bg-blue-700' : ''
                       }`}
                       variant={plan.buttonVariant}
+                      data-testid={`button-${plan.name.toLowerCase()}-plan`}
                     >
                       {plan.buttonText}
                     </Button>

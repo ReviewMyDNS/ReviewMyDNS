@@ -1,4 +1,4 @@
-import { dnsLookups, dnsServers, dnsResults, type DnsLookup, type DnsServer, type DnsResult, type InsertDnsLookup, type InsertDnsServer, type InsertDnsResult, type DnsLookupWithResults } from "@shared/schema";
+import { dnsLookups, dnsServers, dnsResults, users, type DnsLookup, type DnsServer, type DnsResult, type InsertDnsLookup, type InsertDnsServer, type InsertDnsResult, type DnsLookupWithResults, type User, type UpsertUser } from "@shared/schema";
 import { db } from "./db";
 import { eq } from "drizzle-orm";
 
@@ -16,6 +16,11 @@ export interface IStorage {
   // DNS Results
   createDnsResult(result: InsertDnsResult): Promise<DnsResult>;
   getDnsResultsByLookupId(lookupId: number): Promise<DnsResult[]>;
+  
+  // User operations (required for Replit Auth + Stripe)
+  getUser(id: string): Promise<User | undefined>;
+  upsertUser(user: UpsertUser): Promise<User>;
+  updateUserStripeInfo(userId: string, stripeCustomerId: string, stripeSubscriptionId: string): Promise<User>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -136,6 +141,41 @@ export class DatabaseStorage implements IStorage {
 
   async getDnsResultsByLookupId(lookupId: number): Promise<DnsResult[]> {
     return await db.select().from(dnsResults).where(eq(dnsResults.lookupId, lookupId));
+  }
+
+  // User operations (required for Replit Auth + Stripe)
+  async getUser(id: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.id, id));
+    return user;
+  }
+
+  async upsertUser(userData: UpsertUser): Promise<User> {
+    const [user] = await db
+      .insert(users)
+      .values(userData)
+      .onConflictDoUpdate({
+        target: users.id,
+        set: {
+          ...userData,
+          updatedAt: new Date(),
+        },
+      })
+      .returning();
+    return user;
+  }
+
+  async updateUserStripeInfo(userId: string, stripeCustomerId: string, stripeSubscriptionId: string): Promise<User> {
+    const [user] = await db
+      .update(users)
+      .set({
+        stripeCustomerId,
+        stripeSubscriptionId,
+        subscriptionStatus: 'active',
+        updatedAt: new Date(),
+      })
+      .where(eq(users.id, userId))
+      .returning();
+    return user;
   }
 }
 

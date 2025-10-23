@@ -4,8 +4,19 @@ import { storage } from "./storage";
 import { performDnsLookup } from "./services/dns-resolver";
 import { insertDnsLookupSchema } from "@shared/schema";
 import { ZodError } from "zod";
+import { setupAuth, isAuthenticated } from "./replitAuth";
+import Stripe from "stripe";
+
+if (!process.env.STRIPE_SECRET_KEY) {
+  throw new Error('Missing required Stripe secret: STRIPE_SECRET_KEY');
+}
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
+  apiVersion: "2025-06-30.basil",
+});
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Setup Replit Auth
+  await setupAuth(app);
   // DNS Lookup endpoint
   app.post("/api/dns/lookup", async (req, res) => {
     try {
@@ -86,6 +97,84 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
+  // Auth routes
+  app.get('/api/auth/user', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      res.json(user);
+    } catch (error) {
+      console.error("Error fetching user:", error);
+      res.status(500).json({ message: "Failed to fetch user" });
+    }
+  });
+
+  // Stripe subscription endpoint
+  app.post('/api/create-subscription', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      let user = await storage.getUser(userId);
+
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      // If user already has an active subscription, return existing
+      if (user.stripeSubscriptionId) {
+        const subscription = await stripe.subscriptions.retrieve(user.stripeSubscriptionId, {
+          expand: ['latest_invoice.payment_intent'],
+        });
+        if (subscription.status === 'active' || subscription.status === 'trialing') {
+          const latestInvoice: any = subscription.latest_invoice;
+          const paymentIntent: any = latestInvoice?.payment_intent;
+          
+          return res.send({
+            subscriptionId: subscription.id,
+            clientSecret: paymentIntent?.client_secret,
+          });
+        }
+      }
+
+      // Create or get Stripe customer
+      let customerId = user.stripeCustomerId;
+      if (!customerId) {
+        const customer = await stripe.customers.create({
+          email: user.email || undefined,
+          name: `${user.firstName || ''} ${user.lastName || ''}`.trim() || undefined,
+          metadata: {
+            userId: user.id,
+          },
+        });
+        customerId = customer.id;
+      }
+
+      // Create subscription
+      const subscription = await stripe.subscriptions.create({
+        customer: customerId,
+        items: [{
+          price: process.env.STRIPE_PRICE_ID,
+        }],
+        payment_behavior: 'default_incomplete',
+        payment_settings: { save_default_payment_method: 'on_subscription' },
+        expand: ['latest_invoice.payment_intent'],
+      });
+
+      // Update user with Stripe info
+      await storage.updateUserStripeInfo(userId, customerId, subscription.id);
+
+      const latestInvoice: any = subscription.latest_invoice;
+      const paymentIntent: any = latestInvoice?.payment_intent;
+
+      res.send({
+        subscriptionId: subscription.id,
+        clientSecret: paymentIntent?.client_secret,
+      });
+    } catch (error: any) {
+      console.error("Stripe subscription error:", error);
+      return res.status(400).send({ error: { message: error.message } });
+    }
+  });
+
   // Health check endpoint
   app.get("/api/health", (req, res) => {
     res.json({ status: "ok", timestamp: new Date().toISOString() });

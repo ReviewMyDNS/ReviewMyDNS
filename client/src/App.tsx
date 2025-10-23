@@ -18,6 +18,7 @@ import SignIn from "@/pages/signin";
 import Pricing from "@/pages/pricing";
 import Dashboard from "@/pages/dashboard";
 import Contact from "@/pages/contact";
+import Subscribe from "@/pages/subscribe";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -36,6 +37,7 @@ function Router() {
       <Route path="/dnssec" component={DNSSEC} />
       <Route path="/signin" component={SignIn} />
       <Route path="/pricing" component={Pricing} />
+      <Route path="/subscribe" component={Subscribe} />
       <Route path="/dashboard" component={Dashboard} />
       <Route path="/contact" component={Contact} />
       <Route component={NotFound} />
