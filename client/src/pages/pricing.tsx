@@ -65,8 +65,8 @@ export default function Pricing() {
     {
       name: "Enterprise",
       description: "For organizations and large teams",
-      monthlyPrice: 99,
-      yearlyPrice: 990,
+      monthlyPrice: 49,
+      yearlyPrice: 490,
       icon: Crown,
       color: "text-purple-600",
       bgColor: "bg-purple-50",
