@@ -10,6 +10,9 @@ import Stripe from "stripe";
 if (!process.env.STRIPE_SECRET_KEY) {
   throw new Error('Missing required Stripe secret: STRIPE_SECRET_KEY');
 }
+if (!process.env.STRIPE_PRICE_ID) {
+  throw new Error('Missing required Stripe secret: STRIPE_PRICE_ID');
+}
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
   apiVersion: "2025-06-30.basil",
 });
@@ -112,6 +115,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Stripe subscription endpoint
   app.post('/api/create-subscription', isAuthenticated, async (req: any, res) => {
     try {
+      console.log("[Stripe] STRIPE_PRICE_ID:", process.env.STRIPE_PRICE_ID);
+      
       const userId = req.user.claims.sub;
       let user = await storage.getUser(userId);
 
@@ -171,7 +176,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
     } catch (error: any) {
       console.error("Stripe subscription error:", error);
-      return res.status(400).send({ error: { message: error.message } });
+      const message = error.code === 'resource_missing' && error.param === 'items[0][price]'
+        ? 'Subscription configuration error. Please contact support.'
+        : error.message;
+      return res.status(400).send({ error: { message } });
     }
   });
 
