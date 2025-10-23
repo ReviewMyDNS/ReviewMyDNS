@@ -2,9 +2,9 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { performDnsLookup } from "./services/dns-resolver";
-import { insertDnsLookupSchema } from "@shared/schema";
+import { insertDnsLookupSchema, signupSchema, signinSchema } from "@shared/schema";
 import { ZodError } from "zod";
-import { setupAuth, isAuthenticated } from "./replitAuth";
+import { createSessionMiddleware, requireAuth, hashPassword, verifyPassword, sanitizeUser } from "./auth";
 import Stripe from "stripe";
 
 if (!process.env.STRIPE_SECRET_KEY) {
@@ -21,8 +21,85 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
 });
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // Setup Replit Auth
-  await setupAuth(app);
+  // Setup session middleware
+  app.use(createSessionMiddleware());
+
+  // Auth endpoints
+  app.post('/api/auth/signup', async (req, res) => {
+    try {
+      const validatedData = signupSchema.parse(req.body);
+      
+      // Check if user already exists
+      const existingUser = await storage.getUserByEmail(validatedData.email);
+      if (existingUser) {
+        return res.status(400).json({ error: 'Email already registered' });
+      }
+      
+      // Hash password and create user
+      const passwordHash = await hashPassword(validatedData.password);
+      const user = await storage.createUser(
+        validatedData.email,
+        passwordHash,
+        validatedData.firstName,
+        validatedData.lastName
+      );
+      
+      // Create session
+      req.session.userId = user.id;
+      
+      res.json({ user: sanitizeUser(user) });
+    } catch (error) {
+      if (error instanceof ZodError) {
+        return res.status(400).json({ error: 'Validation error', details: error.errors });
+      }
+      console.error("Signup error:", error);
+      res.status(500).json({ error: 'Failed to create account' });
+    }
+  });
+
+  app.post('/api/auth/login', async (req, res) => {
+    try {
+      const validatedData = signinSchema.parse(req.body);
+      
+      // Find user by email
+      const user = await storage.getUserByEmail(validatedData.email);
+      if (!user) {
+        return res.status(401).json({ error: 'Invalid email or password' });
+      }
+      
+      // Verify password
+      const isValid = await verifyPassword(validatedData.password, user.passwordHash);
+      if (!isValid) {
+        return res.status(401).json({ error: 'Invalid email or password' });
+      }
+      
+      // Create session
+      req.session.userId = user.id;
+      
+      res.json({ user: sanitizeUser(user) });
+    } catch (error) {
+      if (error instanceof ZodError) {
+        return res.status(400).json({ error: 'Validation error', details: error.errors });
+      }
+      console.error("Login error:", error);
+      res.status(500).json({ error: 'Failed to log in' });
+    }
+  });
+
+  app.post('/api/auth/logout', (req, res) => {
+    req.session.destroy((err) => {
+      if (err) {
+        console.error("Logout error:", err);
+        return res.status(500).json({ error: 'Failed to log out' });
+      }
+      res.json({ message: 'Logged out successfully' });
+    });
+  });
+
+  app.get('/api/auth/user', requireAuth, async (req, res) => {
+    res.json({ user: sanitizeUser(req.user!) });
+  });
+
   // DNS Lookup endpoint
   app.post("/api/dns/lookup", async (req, res) => {
     try {
@@ -103,20 +180,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
-  // Auth routes
-  app.get('/api/auth/user', isAuthenticated, async (req: any, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const user = await storage.getUser(userId);
-      res.json(user);
-    } catch (error) {
-      console.error("Error fetching user:", error);
-      res.status(500).json({ message: "Failed to fetch user" });
-    }
-  });
-
   // Stripe checkout session endpoint
-  app.post('/api/create-checkout-session', isAuthenticated, async (req: any, res) => {
+  app.post('/api/create-checkout-session', requireAuth, async (req, res) => {
     try {
       const { plan = 'pro' } = req.body;
       const priceId = plan === 'enterprise' 
@@ -125,7 +190,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       console.log("[Stripe] Creating checkout session for plan:", plan, "priceId:", priceId);
       
-      const userId = req.user.claims.sub;
+      const userId = req.user!.id;
       let user = await storage.getUser(userId);
 
       if (!user) {
