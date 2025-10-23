@@ -115,37 +115,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Stripe subscription endpoint
-  app.post('/api/create-subscription', isAuthenticated, async (req: any, res) => {
+  // Stripe checkout session endpoint
+  app.post('/api/create-checkout-session', isAuthenticated, async (req: any, res) => {
     try {
       const { plan = 'pro' } = req.body;
       const priceId = plan === 'enterprise' 
         ? process.env.STRIPE_ENTERPRISE_PRICE_ID 
         : process.env.STRIPE_PRICE_ID;
       
-      console.log("[Stripe] Creating subscription for plan:", plan, "priceId:", priceId);
+      console.log("[Stripe] Creating checkout session for plan:", plan, "priceId:", priceId);
       
       const userId = req.user.claims.sub;
       let user = await storage.getUser(userId);
 
       if (!user) {
         return res.status(404).json({ message: "User not found" });
-      }
-
-      // If user already has an active subscription, return existing
-      if (user.stripeSubscriptionId) {
-        const subscription = await stripe.subscriptions.retrieve(user.stripeSubscriptionId, {
-          expand: ['latest_invoice.payment_intent'],
-        });
-        if (subscription.status === 'active' || subscription.status === 'trialing') {
-          const latestInvoice: any = subscription.latest_invoice;
-          const paymentIntent: any = latestInvoice?.payment_intent;
-          
-          return res.send({
-            subscriptionId: subscription.id,
-            clientSecret: paymentIntent?.client_secret,
-          });
-        }
       }
 
       // Create or get Stripe customer
@@ -159,51 +143,34 @@ export async function registerRoutes(app: Express): Promise<Server> {
           },
         });
         customerId = customer.id;
+        await storage.updateUserStripeInfo(userId, customerId, null);
       }
 
-      // Create subscription with payment intent
-      const subscription = await stripe.subscriptions.create({
+      // Create Checkout Session
+      const session = await stripe.checkout.sessions.create({
         customer: customerId,
-        items: [{
+        mode: 'subscription',
+        line_items: [{
           price: priceId,
+          quantity: 1,
         }],
-        payment_behavior: 'default_incomplete',
-        payment_settings: { save_default_payment_method: 'on_subscription' },
-        expand: ['latest_invoice.payment_intent'],
+        success_url: `${req.headers.origin}/dashboard?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${req.headers.origin}/pricing`,
         metadata: {
+          userId: user.id,
           plan: plan,
         },
-        automatic_tax: { enabled: false },
       });
 
-      console.log("[Stripe] Subscription created:", subscription.id);
-
-      const latestInvoice: any = subscription.latest_invoice;
-      const paymentIntent: any = latestInvoice?.payment_intent;
-
-      console.log("[Stripe] Latest invoice:", latestInvoice?.id);
-      console.log("[Stripe] Payment intent:", paymentIntent?.id);
-      console.log("[Stripe] Client secret exists:", !!paymentIntent?.client_secret);
-
-      if (!paymentIntent?.client_secret) {
-        console.error("[Stripe] No payment intent created. Invoice details:", {
-          invoiceId: latestInvoice?.id,
-          status: latestInvoice?.status,
-          amount: latestInvoice?.amount_due,
-        });
-        throw new Error("Unable to initialize payment. The subscription was created but requires manual configuration.");
-      }
-
-      // Update user with Stripe info
-      await storage.updateUserStripeInfo(userId, customerId, subscription.id);
+      console.log("[Stripe] Checkout session created:", session.id);
 
       res.send({
-        subscriptionId: subscription.id,
-        clientSecret: paymentIntent.client_secret,
+        sessionId: session.id,
+        url: session.url,
       });
     } catch (error: any) {
-      console.error("Stripe subscription error:", error);
-      const message = error.code === 'resource_missing' && error.param === 'items[0][price]'
+      console.error("Stripe checkout error:", error);
+      const message = error.code === 'resource_missing' && error.param === 'line_items[0][price]'
         ? 'Subscription configuration error. Please contact support.'
         : error.message;
       return res.status(400).send({ error: { message } });

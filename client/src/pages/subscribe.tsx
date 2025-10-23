@@ -1,63 +1,14 @@
-import { useStripe, Elements, PaymentElement, useElements } from '@stripe/react-stripe-js';
-import { loadStripe } from '@stripe/stripe-js';
 import { useEffect, useState } from 'react';
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, CheckCircle2 } from "lucide-react";
+import { ArrowLeft, CheckCircle2, Loader2 } from "lucide-react";
 import { Link } from "wouter";
 
-if (!import.meta.env.VITE_STRIPE_PUBLIC_KEY) {
-  throw new Error('Missing required Stripe key: VITE_STRIPE_PUBLIC_KEY');
-}
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
-
-const SubscribeForm = () => {
-  const stripe = useStripe();
-  const elements = useElements();
-  const { toast } = useToast();
-  const [isProcessing, setIsProcessing] = useState(false);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!stripe || !elements) {
-      return;
-    }
-
-    setIsProcessing(true);
-
-    const { error } = await stripe.confirmPayment({
-      elements,
-      confirmParams: {
-        return_url: window.location.origin + "/dashboard",
-      },
-    });
-
-    if (error) {
-      toast({
-        title: "Payment Failed",
-        description: error.message,
-        variant: "destructive",
-      });
-      setIsProcessing(false);
-    }
-  };
-
-  return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      <PaymentElement />
-      <Button type="submit" disabled={!stripe || isProcessing} className="w-full" size="lg" data-testid="button-subscribe">
-        {isProcessing ? "Processing..." : "Subscribe Now"}
-      </Button>
-    </form>
-  );
-};
-
 export default function Subscribe() {
-  const [clientSecret, setClientSecret] = useState("");
+  const [isRedirecting, setIsRedirecting] = useState(false);
   const { user, isLoading, isAuthenticated } = useAuth();
   const { toast } = useToast();
   
@@ -75,34 +26,32 @@ export default function Subscribe() {
       setTimeout(() => {
         window.location.href = "/api/login";
       }, 1000);
-      return;
     }
+  }, [isAuthenticated, isLoading, toast]);
 
-    if (isAuthenticated && !clientSecret) {
-      console.log("Creating subscription for plan:", plan);
-      apiRequest("POST", "/api/create-subscription", { plan })
-        .then((res) => {
-          console.log("Subscription response status:", res.status);
-          return res.json();
-        })
-        .then((data) => {
-          console.log("Subscription data:", data);
-          if (data.clientSecret) {
-            setClientSecret(data.clientSecret);
-          } else {
-            throw new Error("No client secret returned");
-          }
-        })
-        .catch((error) => {
-          console.error("Subscription error:", error);
-          toast({
-            title: "Error",
-            description: error.message || "Failed to initialize checkout. Please try again.",
-            variant: "destructive",
-          });
-        });
+  const handleCheckout = async () => {
+    setIsRedirecting(true);
+    
+    try {
+      const res = await apiRequest("POST", "/api/create-checkout-session", { plan });
+      const data = await res.json();
+      
+      if (data.url) {
+        // Redirect to Stripe Checkout
+        window.location.href = data.url;
+      } else {
+        throw new Error("No checkout URL returned");
+      }
+    } catch (error: any) {
+      console.error("Checkout error:", error);
+      toast({
+        title: "Error",
+        description: error.message || "Failed to start checkout. Please try again.",
+        variant: "destructive",
+      });
+      setIsRedirecting(false);
     }
-  }, [isAuthenticated, isLoading, clientSecret, toast, plan]);
+  };
 
   if (isLoading) {
     return (
@@ -112,7 +61,7 @@ export default function Subscribe() {
     );
   }
 
-  if (!clientSecret) {
+  if (!isAuthenticated) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="animate-spin w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full" aria-label="Loading"/>
@@ -169,25 +118,49 @@ export default function Subscribe() {
       {/* Main Content */}
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Payment Form */}
+          {/* Checkout Button */}
           <div>
             <Card>
               <CardHeader>
-                <CardTitle>Payment Information</CardTitle>
+                <CardTitle>Ready to subscribe?</CardTitle>
                 <CardDescription>
-                  Enter your payment details to complete your subscription
+                  You'll be redirected to Stripe's secure checkout page to complete your payment
                 </CardDescription>
               </CardHeader>
-              <CardContent>
-                <Elements stripe={stripePromise} options={{ clientSecret }}>
-                  <SubscribeForm />
-                </Elements>
+              <CardContent className="space-y-4">
+                <Button 
+                  onClick={handleCheckout} 
+                  disabled={isRedirecting} 
+                  className="w-full" 
+                  size="lg"
+                  data-testid="button-checkout"
+                >
+                  {isRedirecting ? (
+                    <>
+                      <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                      Redirecting to Checkout...
+                    </>
+                  ) : (
+                    "Continue to Checkout"
+                  )}
+                </Button>
+                
+                <div className="text-sm text-gray-600 space-y-2">
+                  <p className="flex items-center">
+                    <CheckCircle2 className="h-4 w-4 mr-2 text-green-600" />
+                    Secure payment with Stripe
+                  </p>
+                  <p className="flex items-center">
+                    <CheckCircle2 className="h-4 w-4 mr-2 text-green-600" />
+                    Cancel anytime
+                  </p>
+                  <p className="flex items-center">
+                    <CheckCircle2 className="h-4 w-4 mr-2 text-green-600" />
+                    30-day money-back guarantee
+                  </p>
+                </div>
               </CardContent>
             </Card>
-
-            <p className="mt-4 text-sm text-gray-500 text-center">
-              Secure payment powered by Stripe. Cancel anytime.
-            </p>
           </div>
 
           {/* Plan Summary */}
