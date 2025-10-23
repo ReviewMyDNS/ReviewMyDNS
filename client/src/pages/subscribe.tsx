@@ -24,7 +24,7 @@ export default function Subscribe() {
         variant: "destructive",
       });
       setTimeout(() => {
-        window.location.href = "/api/login";
+        window.location.href = "/signin";
       }, 1000);
     }
   }, [isAuthenticated, isLoading, toast]);
