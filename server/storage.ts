@@ -17,8 +17,10 @@ export interface IStorage {
   createDnsResult(result: InsertDnsResult): Promise<DnsResult>;
   getDnsResultsByLookupId(lookupId: number): Promise<DnsResult[]>;
   
-  // User operations (required for Replit Auth + Stripe)
+  // User operations (email/password auth + Stripe)
   getUser(id: string): Promise<User | undefined>;
+  getUserByEmail(email: string): Promise<User | undefined>;
+  createUser(email: string, passwordHash: string, firstName?: string, lastName?: string): Promise<User>;
   upsertUser(user: UpsertUser): Promise<User>;
   updateUserStripeInfo(userId: string, stripeCustomerId: string, stripeSubscriptionId: string): Promise<User>;
 }
@@ -143,9 +145,27 @@ export class DatabaseStorage implements IStorage {
     return await db.select().from(dnsResults).where(eq(dnsResults.lookupId, lookupId));
   }
 
-  // User operations (required for Replit Auth + Stripe)
+  // User operations (email/password auth + Stripe)
   async getUser(id: string): Promise<User | undefined> {
     const [user] = await db.select().from(users).where(eq(users.id, id));
+    return user;
+  }
+
+  async getUserByEmail(email: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.email, email));
+    return user;
+  }
+
+  async createUser(email: string, passwordHash: string, firstName?: string, lastName?: string): Promise<User> {
+    const [user] = await db
+      .insert(users)
+      .values({
+        email,
+        passwordHash,
+        firstName,
+        lastName,
+      })
+      .returning();
     return user;
   }
 
