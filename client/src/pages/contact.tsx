@@ -50,10 +50,10 @@ export default function Contact() {
               </div>
             </div>
             <div className="flex items-center space-x-2">
-              <Link href="/signin">
+              <Link href="/api/login">
                 <Button variant="ghost">Sign In</Button>
               </Link>
-              <Link href="/signin?tab=signup">
+              <Link href="/api/login">
                 <Button>Sign Up</Button>
               </Link>
             </div>
