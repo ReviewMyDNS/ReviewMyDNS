@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -19,16 +19,66 @@ import {
   Users
 } from "lucide-react";
 import { Link } from "wouter";
+import { useAuth } from "@/hooks/useAuth";
+import { useToast } from "@/hooks/use-toast";
+import { useQuery } from "@tanstack/react-query";
 
 export default function Dashboard() {
-  // Mock user data - in real app, this would come from authentication
-  const user = {
-    name: "John Doe",
-    email: "john@example.com",
-    plan: "Free",
+  const { user: authUser, isLoading: authLoading, logout } = useAuth();
+  const { toast } = useToast();
+  const [isVerifying, setIsVerifying] = useState(false);
+
+  // Check for Stripe session_id in URL
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const sessionId = urlParams.get('session_id');
+    
+    if (sessionId && authUser && !isVerifying) {
+      setIsVerifying(true);
+      fetch(`/api/stripe/verify-session/${sessionId}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            toast({
+              title: "Subscription activated!",
+              description: `Welcome to the ${data.plan.charAt(0).toUpperCase() + data.plan.slice(1)} plan!`,
+            });
+            // Reload to update user data
+            window.location.href = '/dashboard';
+          }
+        })
+        .catch(error => {
+          console.error('Session verification error:', error);
+        })
+        .finally(() => {
+          setIsVerifying(false);
+        });
+    }
+  }, [authUser, toast, isVerifying]);
+
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="animate-spin w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full" />
+      </div>
+    );
+  }
+
+  // Fallback to mock data if no authenticated user (shouldn't happen)
+  const user = authUser ? {
+    name: `${authUser.firstName || ''} ${authUser.lastName || ''}`.trim() || authUser.email,
+    email: authUser.email,
+    plan: authUser.subscriptionPlan || "Free",
     queriesUsed: 23,
+    queriesLimit: authUser.subscriptionPlan ? 999999 : 50,
+    joinDate: new Date(authUser.createdAt || Date.now()).toLocaleDateString()
+  } : {
+    name: "Guest",
+    email: "guest@example.com",
+    plan: "Free",
+    queriesUsed: 0,
     queriesLimit: 50,
-    joinDate: "2025-01-15"
+    joinDate: new Date().toLocaleDateString()
   };
 
   const recentQueries = [
@@ -62,10 +112,10 @@ export default function Dashboard() {
               </Link>
             </div>
             <div className="flex items-center space-x-4">
-              <Badge variant="outline" className="text-blue-600 border-blue-600">
+              <Badge variant="outline" className="text-blue-600 border-blue-600" data-testid="badge-plan">
                 {user.plan} Plan
               </Badge>
-              <Button variant="ghost" size="sm">
+              <Button variant="ghost" size="sm" onClick={() => logout()} data-testid="button-signout">
                 Sign Out
               </Button>
             </div>
@@ -120,9 +170,9 @@ export default function Dashboard() {
               <Crown className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{user.plan}</div>
+              <div className="text-2xl font-bold" data-testid="text-current-plan">{user.plan}</div>
               <Link href="/pricing">
-                <Button variant="outline" size="sm" className="mt-2">
+                <Button variant="outline" size="sm" className="mt-2" data-testid="button-upgrade">
                   Upgrade Plan
                 </Button>
               </Link>

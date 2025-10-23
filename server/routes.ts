@@ -2,10 +2,12 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { performDnsLookup } from "./services/dns-resolver";
-import { insertDnsLookupSchema, signupSchema, signinSchema } from "@shared/schema";
+import { insertDnsLookupSchema, signupSchema, signinSchema, users } from "@shared/schema";
 import { ZodError } from "zod";
 import { createSessionMiddleware, requireAuth, hashPassword, verifyPassword, sanitizeUser } from "./auth";
 import Stripe from "stripe";
+import { db } from "./db";
+import { eq } from "drizzle-orm";
 
 if (!process.env.STRIPE_SECRET_KEY) {
   throw new Error('Missing required Stripe secret: STRIPE_SECRET_KEY');
@@ -239,6 +241,99 @@ export async function registerRoutes(app: Express): Promise<Server> {
         ? 'Subscription configuration error. Please contact support.'
         : error.message;
       return res.status(400).send({ error: { message } });
+    }
+  });
+
+  // Verify Stripe checkout session (for when user returns from checkout)
+  app.get('/api/stripe/verify-session/:sessionId', requireAuth, async (req, res) => {
+    try {
+      const sessionId = req.params.sessionId;
+      const session = await stripe.checkout.sessions.retrieve(sessionId);
+      
+      if (session.metadata?.userId !== req.user!.id) {
+        return res.status(403).json({ error: 'Unauthorized' });
+      }
+
+      if (session.payment_status === 'paid' && session.subscription) {
+        const plan = session.metadata?.plan || 'pro';
+        
+        await storage.updateUserStripeInfo(
+          req.user!.id,
+          session.customer as string,
+          session.subscription as string
+        );
+
+        await db
+          .update(users)
+          .set({
+            subscriptionPlan: plan,
+            subscriptionStatus: 'active',
+            updatedAt: new Date(),
+          })
+          .where(eq(users.id, req.user!.id));
+
+        res.json({ success: true, plan });
+      } else {
+        res.json({ success: false, payment_status: session.payment_status });
+      }
+    } catch (error: any) {
+      console.error('Session verification error:', error);
+      res.status(500).json({ error: 'Failed to verify session' });
+    }
+  });
+
+  // Stripe webhook endpoint
+  app.post('/api/stripe/webhook', async (req, res) => {
+    try {
+      const sig = req.headers['stripe-signature'];
+      if (!sig) {
+        return res.status(400).send('No signature');
+      }
+
+      let event;
+      try {
+        event = stripe.webhooks.constructEvent(
+          req.body,
+          sig,
+          process.env.STRIPE_WEBHOOK_SECRET || ''
+        );
+      } catch (err: any) {
+        console.error('Webhook signature verification failed:', err.message);
+        return res.status(400).send(`Webhook Error: ${err.message}`);
+      }
+
+      if (event.type === 'checkout.session.completed') {
+        const session = event.data.object as any;
+        const userId = session.metadata?.userId;
+        const plan = session.metadata?.plan;
+
+        if (userId && session.subscription) {
+          console.log(`[Stripe Webhook] Updating subscription for user ${userId} to plan ${plan}`);
+          
+          await storage.updateUserStripeInfo(
+            userId,
+            session.customer as string,
+            session.subscription as string
+          );
+
+          const user = await storage.getUser(userId);
+          if (user) {
+            await db
+              .update(users)
+              .set({
+                subscriptionPlan: plan,
+                subscriptionStatus: 'active',
+                updatedAt: new Date(),
+              })
+              .where(eq(users.id, userId));
+          }
+        }
+      }
+
+      res.json({ received: true });
+    } catch (error) {
+      console.error('Webhook error:', error);
+      res.status(500).json({ error: 'Webhook handler failed' });
     }
   });
 
