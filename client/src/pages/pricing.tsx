@@ -109,20 +109,20 @@ export default function Pricing() {
             </div>
             <div className="flex items-center space-x-2">
               <div className="hidden sm:flex items-center space-x-2">
-                <Link href="/api/login">
+                <a href="/api/login">
                   <Button variant="ghost">Sign In</Button>
-                </Link>
-                <Link href="/api/login">
+                </a>
+                <a href="/api/login">
                   <Button>Sign Up</Button>
-                </Link>
+                </a>
               </div>
               <div className="sm:hidden flex items-center space-x-1">
-                <Link href="/api/login">
+                <a href="/api/login">
                   <Button variant="ghost" size="sm">Sign In</Button>
-                </Link>
-                <Link href="/api/login">
+                </a>
+                <a href="/api/login">
                   <Button size="sm">Sign Up</Button>
-                </Link>
+                </a>
               </div>
             </div>
           </div>
