@@ -143,7 +143,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           },
         });
         customerId = customer.id;
-        await storage.updateUserStripeInfo(userId, customerId, null);
+        await storage.updateUserStripeInfo(userId, customerId, "");
       }
 
       // Create Checkout Session
