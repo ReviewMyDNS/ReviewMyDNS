@@ -179,7 +179,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
       await storage.updateUserStripeInfo(userId, customerId, subscription.id);
 
       const latestInvoice: any = subscription.latest_invoice;
-      const paymentIntent: any = latestInvoice?.payment_intent;
+      let paymentIntent: any = latestInvoice?.payment_intent;
+
+      console.log("[Stripe] Subscription created:", subscription.id);
+      console.log("[Stripe] Latest invoice:", latestInvoice?.id);
+      console.log("[Stripe] Payment intent:", paymentIntent?.id);
+      console.log("[Stripe] Invoice status:", latestInvoice?.status);
+      
+      // If there's no payment intent but there's an invoice, we need to finalize it
+      if (!paymentIntent && latestInvoice) {
+        console.log("[Stripe] No payment intent found, finalizing invoice...");
+        const finalizedInvoice = await stripe.invoices.finalize(latestInvoice.id, {
+          expand: ['payment_intent'],
+        });
+        paymentIntent = finalizedInvoice.payment_intent;
+        console.log("[Stripe] After finalize - Payment intent:", paymentIntent?.id);
+      }
+
+      console.log("[Stripe] Client secret:", paymentIntent?.client_secret);
 
       res.send({
         subscriptionId: subscription.id,

@@ -79,18 +79,27 @@ export default function Subscribe() {
     }
 
     if (isAuthenticated && !clientSecret) {
+      console.log("Creating subscription for plan:", plan);
       apiRequest("POST", "/api/create-subscription", { plan })
-        .then((res) => res.json())
+        .then((res) => {
+          console.log("Subscription response status:", res.status);
+          return res.json();
+        })
         .then((data) => {
-          setClientSecret(data.clientSecret);
+          console.log("Subscription data:", data);
+          if (data.clientSecret) {
+            setClientSecret(data.clientSecret);
+          } else {
+            throw new Error("No client secret returned");
+          }
         })
         .catch((error) => {
+          console.error("Subscription error:", error);
           toast({
             title: "Error",
-            description: "Failed to initialize checkout. Please try again.",
+            description: error.message || "Failed to initialize checkout. Please try again.",
             variant: "destructive",
           });
-          console.error("Subscription error:", error);
         });
     }
   }, [isAuthenticated, isLoading, clientSecret, toast, plan]);
