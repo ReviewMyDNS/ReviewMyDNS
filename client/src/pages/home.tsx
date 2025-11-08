@@ -8,16 +8,46 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { Globe, User, Menu, Lock, BarChart3, Zap } from "lucide-react";
+import { Globe, User, Menu, Lock, BarChart3, Zap, Share2, Copy, Check } from "lucide-react";
 import { Link } from "wouter";
 import type { DnsLookupWithResults } from "@shared/schema";
+import { useToast } from "@/hooks/use-toast";
 
 export default function Home() {
   const [lookupResults, setLookupResults] = useState<DnsLookupWithResults | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const { toast } = useToast();
 
   const handleLookupComplete = (results: DnsLookupWithResults) => {
     setLookupResults(results);
+    setCopied(false); // Reset copied state for new results
+  };
+
+  const handleShare = async () => {
+    if (!lookupResults?.shareId) return;
+    
+    const shareUrl = `${window.location.origin}/r/${lookupResults.shareId}`;
+    
+    try {
+      if (navigator.share) {
+        await navigator.share({
+          title: `DNS Results for ${lookupResults.domain}`,
+          text: `Check out my DNS propagation results for ${lookupResults.domain}`,
+          url: shareUrl,
+        });
+      } else {
+        await navigator.clipboard.writeText(shareUrl);
+        setCopied(true);
+        toast({
+          title: "Link copied!",
+          description: "Share this link to show your DNS results",
+        });
+        setTimeout(() => setCopied(false), 2000);
+      }
+    } catch (err) {
+      console.error('Error sharing:', err);
+    }
   };
 
   return (
@@ -127,6 +157,10 @@ export default function Home() {
               </div>
               
               <div className="flex items-center space-x-3 mt-4 lg:mt-0">
+                <Button variant="outline" size="sm" onClick={handleShare} data-testid="button-share-results">
+                  {copied ? <Check className="h-4 w-4 mr-2" /> : <Share2 className="h-4 w-4 mr-2" />}
+                  {copied ? 'Copied!' : 'Share Results'}
+                </Button>
                 <Button variant="outline" size="sm">
                   <BarChart3 className="h-4 w-4 mr-2" />
                   Refresh

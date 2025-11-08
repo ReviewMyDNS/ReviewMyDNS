@@ -19,12 +19,14 @@ import Pricing from "@/pages/pricing";
 import Dashboard from "@/pages/dashboard";
 import Contact from "@/pages/contact";
 import Subscribe from "@/pages/subscribe";
+import SharedResult from "@/pages/shared-result";
 import NotFound from "@/pages/not-found";
 
 function Router() {
   return (
     <Switch>
       <Route path="/" component={Home} />
+      <Route path="/r/:shareId" component={SharedResult} />
       <Route path="/tools" component={Tools} />
       <Route path="/api-docs" component={ApiDocs} />
       <Route path="/documentation" component={Documentation} />

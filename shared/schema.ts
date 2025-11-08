@@ -5,12 +5,15 @@ import { sql } from 'drizzle-orm';
 
 export const dnsLookups = pgTable("dns_lookups", {
   id: serial("id").primaryKey(),
+  shareId: varchar("share_id", { length: 12 }),
   domain: text("domain").notNull(),
   recordType: text("record_type").notNull(),
   expectedValue: text("expected_value"),
   matchType: text("match_type").default("exact"),
   createdAt: timestamp("created_at").defaultNow(),
-});
+}, (table) => ({
+  shareIdIdx: index("share_id_idx").on(table.shareId),
+}));
 
 export const dnsServers = pgTable("dns_servers", {
   id: serial("id").primaryKey(),

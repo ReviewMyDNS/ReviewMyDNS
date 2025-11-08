@@ -1,11 +1,13 @@
 import { dnsLookups, dnsServers, dnsResults, users, type DnsLookup, type DnsServer, type DnsResult, type InsertDnsLookup, type InsertDnsServer, type InsertDnsResult, type DnsLookupWithResults, type User, type UpsertUser } from "@shared/schema";
 import { db } from "./db";
 import { eq } from "drizzle-orm";
+import { nanoid } from "nanoid";
 
 export interface IStorage {
   // DNS Lookups
   createDnsLookup(lookup: InsertDnsLookup): Promise<DnsLookup>;
   getDnsLookup(id: number): Promise<DnsLookup | undefined>;
+  getDnsLookupByShareId(shareId: string): Promise<DnsLookupWithResults | undefined>;
   getDnsLookupWithResults(id: number): Promise<DnsLookupWithResults | undefined>;
   
   // DNS Servers
@@ -67,9 +69,10 @@ export class DatabaseStorage implements IStorage {
   }
 
   async createDnsLookup(insertLookup: InsertDnsLookup): Promise<DnsLookup> {
+    const shareId = nanoid(10); // Generate unique 10-character ID
     const [lookup] = await db
       .insert(dnsLookups)
-      .values(insertLookup)
+      .values({ ...insertLookup, shareId })
       .returning();
     return lookup;
   }
@@ -77,6 +80,48 @@ export class DatabaseStorage implements IStorage {
   async getDnsLookup(id: number): Promise<DnsLookup | undefined> {
     const [lookup] = await db.select().from(dnsLookups).where(eq(dnsLookups.id, id));
     return lookup || undefined;
+  }
+
+  async getDnsLookupByShareId(shareId: string): Promise<DnsLookupWithResults | undefined> {
+    const [lookup] = await db.select().from(dnsLookups).where(eq(dnsLookups.shareId, shareId));
+    if (!lookup) return undefined;
+
+    const results = await db
+      .select({
+        id: dnsResults.id,
+        lookupId: dnsResults.lookupId,
+        serverId: dnsResults.serverId,
+        status: dnsResults.status,
+        response: dnsResults.response,
+        responseTime: dnsResults.responseTime,
+        timestamp: dnsResults.timestamp,
+        server: dnsServers,
+      })
+      .from(dnsResults)
+      .innerJoin(dnsServers, eq(dnsResults.serverId, dnsServers.id))
+      .where(eq(dnsResults.lookupId, lookup.id));
+
+    const resolvedCount = results.filter(r => r.status === 'resolved').length;
+    const totalServers = results.length;
+    const responseTimeSum = results
+      .filter(r => r.responseTime !== null)
+      .reduce((sum, r) => sum + (r.responseTime || 0), 0);
+    const averageResponseTime = responseTimeSum / Math.max(resolvedCount, 1);
+    const globalCoverage = totalServers > 0 ? (resolvedCount / totalServers) * 100 : 0;
+
+    const stats = {
+      totalServers,
+      resolvedCount,
+      unresolvedCount: totalServers - resolvedCount,
+      averageResponseTime,
+      globalCoverage,
+    };
+
+    return {
+      ...lookup,
+      results: results as any,
+      stats,
+    };
   }
 
   async getDnsLookupWithResults(id: number): Promise<DnsLookupWithResults | undefined> {

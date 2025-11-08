@@ -170,6 +170,93 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ message: "Internal server error" });
     }
   });
+
+  // Get lookup results by share ID (API endpoint)
+  app.get("/api/dns/share/:shareId", async (req, res) => {
+    try {
+      const shareId = req.params.shareId;
+      
+      const lookup = await storage.getDnsLookupByShareId(shareId);
+      if (!lookup) {
+        return res.status(404).json({ message: "Shared lookup not found" });
+      }
+      
+      res.json(lookup);
+    } catch (error) {
+      console.error("Error fetching shared lookup:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // Server-side render shared result page with meta tags for social crawlers
+  app.get("/r/:shareId", async (req, res, next) => {
+    try {
+      const shareId = req.params.shareId;
+      const userAgent = req.get('user-agent') || '';
+      
+      // Detect if request is from a social media crawler
+      const isCrawler = /facebookexternalhit|twitterbot|linkedinbot|slackbot|whatsapp|pinterest|telegrambot/i.test(userAgent);
+      
+      // If not a crawler, let the SPA handle it
+      if (!isCrawler) {
+        return next();
+      }
+
+      // Fetch lookup data for crawler
+      const lookup = await storage.getDnsLookupByShareId(shareId);
+      
+      if (!lookup) {
+        return next(); // Let SPA show 404
+      }
+
+      const title = `DNS Results: ${lookup.domain} (${lookup.recordType}) - ReviewMyDNS`;
+      const description = `${lookup.stats.resolvedCount} of ${lookup.stats.totalServers} DNS servers resolved successfully. Average response time: ${lookup.stats.averageResponseTime.toFixed(0)}ms. Global coverage: ${lookup.stats.globalCoverage.toFixed(1)}%`;
+      const url = `${req.protocol}://${req.get('host')}/r/${shareId}`;
+      const siteName = 'ReviewMyDNS';
+
+      // Read the base index.html and inject meta tags
+      const fs = await import('fs/promises');
+      const path = await import('path');
+      const indexPath = path.join(process.cwd(), 'dist/public/index.html');
+      
+      let html: string;
+      try {
+        html = await fs.readFile(indexPath, 'utf-8');
+      } catch (err) {
+        // Fallback to development mode
+        const devIndexPath = path.join(process.cwd(), 'client/index.html');
+        html = await fs.readFile(devIndexPath, 'utf-8');
+      }
+
+      // Inject meta tags into the HTML
+      const metaTags = `
+    <title>${title}</title>
+    <meta name="description" content="${description}" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="${url}" />
+    <meta property="og:title" content="${title}" />
+    <meta property="og:description" content="${description}" />
+    <meta property="og:site_name" content="${siteName}" />
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="${url}" />
+    <meta property="twitter:title" content="${title}" />
+    <meta property="twitter:description" content="${description}" />
+      `;
+
+      // Insert meta tags before </head>
+      html = html.replace('</head>', `${metaTags}\n  </head>`);
+
+      res.setHeader('Content-Type', 'text/html');
+      res.send(html);
+    } catch (error) {
+      console.error("Error rendering shared page:", error);
+      next(); // Let SPA handle error
+    }
+  });
   
   // Get all DNS servers
   app.get("/api/dns/servers", async (req, res) => {
