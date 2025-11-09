@@ -2,27 +2,27 @@ export default function LogoOptions() {
   const logos = [
     { 
       num: 1, 
-      name: "DNS Server Icon 1", 
-      file: "/earth-photo-1.jpg", 
-      desc: "Professional DNS server network icon"
+      name: "Simple Blue", 
+      file: "/blob-1.svg", 
+      desc: "Flat blue ocean with simple green blobs"
     },
     { 
       num: 2, 
-      name: "DNS Server Icon 2", 
-      file: "/earth-photo-2.jpg", 
-      desc: "Modern DNS infrastructure design"
+      name: "Gradient Blue", 
+      file: "/blob-2.svg", 
+      desc: "Gradient ocean with green blob continents"
     },
     { 
       num: 3, 
-      name: "DNS Server Icon 3", 
-      file: "/earth-photo-3.jpg", 
-      desc: "Clean DNS network symbol"
+      name: "Bright Cyan", 
+      file: "/blob-3.svg", 
+      desc: "Vibrant cyan with bright green blobs"
     },
     { 
       num: 4, 
-      name: "DNS Server Icon 4", 
-      file: "/earth-photo-4.jpg", 
-      desc: "Tech DNS connectivity icon"
+      name: "Dark Navy", 
+      file: "/blob-4.svg", 
+      desc: "Deep navy ocean with forest green blobs"
     },
   ];
 
