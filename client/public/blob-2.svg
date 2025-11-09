@@ -7,14 +7,17 @@
   </defs>
   <circle cx="50" cy="50" r="42" fill="url(#ocean2)"/>
   
-  <!-- Americas -->
-  <path d="M 16 24 L 20 20 L 24 22 L 26 28 L 28 34 L 26 40 L 24 46 L 22 50 L 20 56 L 22 62 L 24 68 L 22 72 L 18 70 L 14 64 L 12 56 L 14 48 L 16 40 L 14 32 Z" fill="#66bb6a"/>
+  <!-- Americas combined - western hemisphere view -->
+  <path d="M 13 30 L 16 26 L 20 24 L 24 24 L 28 26 L 30 30 L 31 35 L 30 40 L 28 45 L 26 50 L 25 55 L 26 60 L 27 65 L 26 70 L 24 74 L 20 75 L 16 73 L 13 69 L 11 64 L 10 58 L 11 52 L 12 46 L 11 40 L 11 34 Z" fill="#66bb6a"/>
   
-  <!-- Europe/Africa -->
-  <path d="M 46 20 L 50 18 L 54 20 L 58 24 L 60 30 L 62 36 L 64 44 L 62 50 L 60 56 L 56 60 L 52 58 L 48 52 L 46 46 L 44 38 L 46 30 Z" fill="#81c784"/>
+  <!-- Europe and Africa - eastern hemisphere -->
+  <path d="M 44 18 L 48 16 L 52 17 L 56 20 L 58 24 L 60 28 L 62 33 L 64 39 L 65 45 L 65 51 L 64 57 L 62 62 L 59 66 L 55 68 L 51 67 L 47 64 L 44 59 L 42 53 L 41 47 L 41 41 L 42 35 L 43 29 L 44 23 Z" fill="#81c784"/>
   
-  <!-- Asia/Australia -->
-  <path d="M 66 22 L 72 20 L 78 24 L 82 30 L 84 38 L 82 44 L 78 50 L 74 54 L 76 60 L 78 64 L 76 68 L 72 66 L 68 60 L 66 54 L 64 46 L 66 38 L 68 30 Z" fill="#66bb6a"/>
+  <!-- Asia - large eastern mass -->
+  <path d="M 66 20 L 70 18 L 75 18 L 80 20 L 84 24 L 86 29 L 87 35 L 86 41 L 84 46 L 81 50 L 77 53 L 73 54 L 69 52 L 66 48 L 64 43 L 63 37 L 64 31 L 65 25 Z" fill="#66bb6a"/>
+  
+  <!-- Australia -->
+  <path d="M 75 57 L 79 55 L 83 57 L 85 61 L 84 65 L 81 68 L 77 69 L 73 67 L 72 63 L 73 59 Z" fill="#81c784"/>
   
   <circle cx="50" cy="50" r="42" fill="none" stroke="#0d47a1" stroke-width="2"/>
 </svg>

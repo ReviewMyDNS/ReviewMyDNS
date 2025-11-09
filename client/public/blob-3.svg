@@ -1,14 +1,23 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
   <circle cx="50" cy="50" r="45" fill="#00bcd4"/>
   
-  <!-- North and South America -->
-  <path d="M 18 26 L 22 22 L 26 24 L 28 30 L 30 36 L 28 42 L 26 48 L 24 54 L 26 60 L 28 66 L 26 72 L 22 74 L 18 70 L 14 62 L 12 54 L 14 46 L 16 38 L 14 30 Z" fill="#00e676"/>
+  <!-- North America -->
+  <path d="M 14 31 L 17 27 L 21 25 L 25 25 L 29 27 L 31 31 L 32 36 L 31 41 L 29 46 L 27 50 L 25 53 L 23 51 L 21 48 L 19 44 L 17 40 L 15 35 Z" fill="#00e676"/>
   
-  <!-- Europe and Africa -->
-  <path d="M 44 18 L 48 16 L 52 18 L 56 22 L 58 28 L 60 34 L 62 42 L 64 48 L 62 54 L 58 60 L 54 62 L 50 60 L 46 54 L 44 46 L 42 38 L 44 30 L 46 24 Z" fill="#76ff03"/>
+  <!-- South America -->
+  <path d="M 23 55 L 26 53 L 29 56 L 30 60 L 30 64 L 29 68 L 27 72 L 24 74 L 21 73 L 18 70 L 16 66 L 15 62 L 16 58 L 19 55 Z" fill="#76ff03"/>
   
-  <!-- Asia and Australia -->
-  <path d="M 64 20 L 70 18 L 76 20 L 80 26 L 84 32 L 86 40 L 84 46 L 80 52 L 76 56 L 72 58 L 74 64 L 76 68 L 72 70 L 68 66 L 66 60 L 64 52 L 62 44 L 64 34 Z" fill="#00e676"/>
+  <!-- Europe -->
+  <path d="M 45 17 L 49 15 L 53 16 L 56 19 L 57 23 L 56 26 L 53 28 L 49 28 L 46 25 L 45 21 Z" fill="#00e676"/>
+  
+  <!-- Africa -->
+  <path d="M 49 29 L 52 30 L 56 32 L 59 36 L 61 41 L 63 47 L 63 53 L 61 59 L 58 64 L 54 66 L 50 65 L 47 61 L 45 56 L 44 50 L 45 44 L 46 38 L 48 33 Z" fill="#76ff03"/>
+  
+  <!-- Asia -->
+  <path d="M 59 17 L 64 15 L 70 15 L 75 17 L 80 21 L 84 26 L 86 32 L 86 38 L 84 43 L 81 48 L 77 51 L 72 52 L 68 50 L 64 46 L 61 41 L 60 35 L 60 29 L 61 23 Z" fill="#00e676"/>
+  
+  <!-- Australia -->
+  <path d="M 73 57 L 77 55 L 81 56 L 84 60 L 83 64 L 80 67 L 76 68 L 72 66 L 71 62 L 72 58 Z" fill="#76ff03"/>
   
   <circle cx="50" cy="50" r="45" fill="none" stroke="#0097a7" stroke-width="3"/>
 </svg>
