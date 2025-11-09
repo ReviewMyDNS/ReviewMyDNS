@@ -1,17 +1,21 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-  <!-- Option 3: Minimal Modern Globe -->
-  <circle cx="50" cy="50" r="42" fill="none" stroke="#3b82f6" stroke-width="5"/>
+  <!-- Blue ocean background -->
+  <circle cx="50" cy="50" r="45" fill="#3b82f6"/>
   
-  <!-- Single vertical meridian -->
-  <path d="M 50 8 Q 65 50 50 92" fill="none" stroke="#3b82f6" stroke-width="3"/>
-  <path d="M 50 8 Q 35 50 50 92" fill="none" stroke="#3b82f6" stroke-width="3"/>
+  <!-- Green landmasses (simplified continents) -->
+  <path d="M 30 25 Q 35 20 45 22 Q 50 24 52 30 Q 48 35 42 33 Q 35 32 30 25 Z" fill="#10b981"/>
+  <path d="M 65 18 Q 72 15 78 20 Q 80 28 75 32 Q 68 30 65 25 Z" fill="#059669"/>
+  <path d="M 20 45 Q 25 38 35 42 Q 40 48 38 55 Q 32 58 25 52 Q 20 48 20 45 Z" fill="#10b981"/>
+  <path d="M 50 50 Q 58 45 68 48 Q 75 52 72 62 Q 65 68 58 65 Q 52 60 50 50 Z" fill="#059669"/>
+  <path d="M 28 70 Q 35 68 42 72 Q 45 78 40 82 Q 32 80 28 75 Z" fill="#10b981"/>
+  <path d="M 60 75 Q 68 72 75 78 Q 78 85 70 88 Q 62 85 60 75 Z" fill="#059669"/>
   
-  <!-- Horizontal equator -->
-  <line x1="8" y1="50" x2="92" y2="50" stroke="#3b82f6" stroke-width="3"/>
+  <!-- White ice caps -->
+  <ellipse cx="50" cy="8" rx="15" ry="6" fill="white" opacity="0.9"/>
+  <ellipse cx="50" cy="92" rx="15" ry="6" fill="white" opacity="0.9"/>
   
-  <!-- Small accent dots -->
-  <circle cx="50" cy="8" r="3" fill="#1d4ed8"/>
-  <circle cx="50" cy="92" r="3" fill="#1d4ed8"/>
-  <circle cx="8" cy="50" r="3" fill="#1d4ed8"/>
-  <circle cx="92" cy="50" r="3" fill="#1d4ed8"/>
+  <!-- Globe outline and meridians -->
+  <circle cx="50" cy="50" r="45" fill="none" stroke="#1e40af" stroke-width="2"/>
+  <ellipse cx="50" cy="50" rx="22" ry="45" fill="none" stroke="white" stroke-width="1.5" opacity="0.3"/>
+  <line x1="5" y1="50" x2="95" y2="50" stroke="white" stroke-width="1.5" opacity="0.3"/>
 </svg>
