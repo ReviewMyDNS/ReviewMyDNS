@@ -2,27 +2,27 @@ export default function LogoOptions() {
   const logos = [
     { 
       num: 1, 
-      name: "Classic Earth", 
-      file: "/blob-1.svg", 
-      desc: "Blue ocean with all continents visible"
+      name: "Earth Photo 1", 
+      file: "/blob-1.jpg", 
+      desc: "Real NASA Earth from space photograph"
     },
     { 
       num: 2, 
-      name: "Gradient Earth", 
-      file: "/blob-2.svg", 
-      desc: "Radiant ocean with continent shapes"
+      name: "Earth Photo 2", 
+      file: "/blob-2.jpg", 
+      desc: "Actual Blue Marble space photo"
     },
     { 
       num: 3, 
-      name: "Bright Earth", 
-      file: "/blob-3.svg", 
-      desc: "Vibrant cyan with green continents"
+      name: "Earth Photo 3", 
+      file: "/blob-3.jpg", 
+      desc: "Authentic satellite Earth image"
     },
     { 
       num: 4, 
-      name: "Dark Earth", 
-      file: "/blob-4.svg", 
-      desc: "Navy ocean with forest continents"
+      name: "Earth Photo 4", 
+      file: "/blob-4.jpg", 
+      desc: "Real planet Earth photograph"
     },
   ];
 
