@@ -6,9 +6,18 @@
     </radialGradient>
   </defs>
   <circle cx="50" cy="50" r="43" fill="url(#ocean4)"/>
-  <circle cx="33" cy="33" r="14" fill="#2e7d32"/>
-  <ellipse cx="70" cy="30" rx="11" ry="9" fill="#388e3c"/>
-  <ellipse cx="30" cy="64" rx="17" ry="13" fill="#2e7d32"/>
-  <circle cx="68" cy="68" r="15" fill="#388e3c"/>
+  
+  <!-- Americas -->
+  <path d="M 17 25 L 21 21 L 25 23 L 28 29 L 30 35 L 28 41 L 26 47 L 24 53 L 26 59 L 28 65 L 26 71 L 22 73 L 18 69 L 14 61 L 12 53 L 14 45 L 16 37 L 14 29 Z" fill="#2e7d32"/>
+  
+  <!-- Europe/Africa -->
+  <path d="M 45 19 L 49 17 L 53 19 L 57 23 L 60 29 L 62 35 L 64 43 L 66 49 L 64 55 L 60 61 L 56 63 L 52 61 L 48 55 L 46 47 L 44 39 L 46 31 L 48 25 Z" fill="#388e3c"/>
+  
+  <!-- Asia -->
+  <path d="M 65 21 L 71 19 L 77 21 L 81 27 L 84 33 L 86 41 L 84 47 L 80 53 L 76 57 L 72 59 L 68 55 L 64 47 L 62 39 L 64 31 L 66 25 Z" fill="#2e7d32"/>
+  
+  <!-- Australia -->
+  <path d="M 74 60 L 78 58 L 82 60 L 84 64 L 82 68 L 78 70 L 74 68 L 72 64 Z" fill="#388e3c"/>
+  
   <circle cx="50" cy="50" r="43" fill="none" stroke="#01579b" stroke-width="2.5"/>
 </svg>

@@ -2,27 +2,27 @@ export default function LogoOptions() {
   const logos = [
     { 
       num: 1, 
-      name: "Simple Blue", 
+      name: "Classic Earth", 
       file: "/blob-1.svg", 
-      desc: "Flat blue ocean with simple green blobs"
+      desc: "Blue ocean with all continents visible"
     },
     { 
       num: 2, 
-      name: "Gradient Blue", 
+      name: "Gradient Earth", 
       file: "/blob-2.svg", 
-      desc: "Gradient ocean with green blob continents"
+      desc: "Radiant ocean with continent shapes"
     },
     { 
       num: 3, 
-      name: "Bright Cyan", 
+      name: "Bright Earth", 
       file: "/blob-3.svg", 
-      desc: "Vibrant cyan with bright green blobs"
+      desc: "Vibrant cyan with green continents"
     },
     { 
       num: 4, 
-      name: "Dark Navy", 
+      name: "Dark Earth", 
       file: "/blob-4.svg", 
-      desc: "Deep navy ocean with forest green blobs"
+      desc: "Navy ocean with forest continents"
     },
   ];
 

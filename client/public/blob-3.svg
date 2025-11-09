@@ -1,8 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
   <circle cx="50" cy="50" r="45" fill="#00bcd4"/>
-  <ellipse cx="32" cy="32" rx="18" ry="14" fill="#00e676"/>
-  <ellipse cx="72" cy="28" rx="12" ry="10" fill="#76ff03"/>
-  <circle cx="28" cy="62" r="16" fill="#00e676"/>
-  <ellipse cx="68" cy="68" rx="18" ry="14" fill="#76ff03"/>
+  
+  <!-- North and South America -->
+  <path d="M 18 26 L 22 22 L 26 24 L 28 30 L 30 36 L 28 42 L 26 48 L 24 54 L 26 60 L 28 66 L 26 72 L 22 74 L 18 70 L 14 62 L 12 54 L 14 46 L 16 38 L 14 30 Z" fill="#00e676"/>
+  
+  <!-- Europe and Africa -->
+  <path d="M 44 18 L 48 16 L 52 18 L 56 22 L 58 28 L 60 34 L 62 42 L 64 48 L 62 54 L 58 60 L 54 62 L 50 60 L 46 54 L 44 46 L 42 38 L 44 30 L 46 24 Z" fill="#76ff03"/>
+  
+  <!-- Asia and Australia -->
+  <path d="M 64 20 L 70 18 L 76 20 L 80 26 L 84 32 L 86 40 L 84 46 L 80 52 L 76 56 L 72 58 L 74 64 L 76 68 L 72 70 L 68 66 L 66 60 L 64 52 L 62 44 L 64 34 Z" fill="#00e676"/>
+  
   <circle cx="50" cy="50" r="45" fill="none" stroke="#0097a7" stroke-width="3"/>
 </svg>

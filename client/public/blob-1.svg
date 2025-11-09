@@ -1,8 +1,24 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Blue ocean -->
   <circle cx="50" cy="50" r="45" fill="#1e88e5"/>
-  <circle cx="35" cy="35" r="12" fill="#4caf50"/>
-  <circle cx="70" cy="30" r="8" fill="#66bb6a"/>
-  <ellipse cx="30" cy="60" rx="14" ry="10" fill="#4caf50"/>
-  <ellipse cx="65" cy="65" rx="16" ry="12" fill="#66bb6a"/>
+  
+  <!-- North America -->
+  <path d="M 15 25 L 18 22 L 22 20 L 26 22 L 28 26 L 30 30 L 28 35 L 26 40 L 24 44 L 22 48 L 20 52 L 18 48 L 16 44 L 14 40 L 12 35 L 13 30 Z" fill="#4caf50"/>
+  
+  <!-- South America -->
+  <path d="M 20 52 L 22 56 L 24 62 L 26 68 L 24 72 L 20 74 L 16 72 L 14 68 L 12 62 L 14 56 Z" fill="#66bb6a"/>
+  
+  <!-- Europe -->
+  <path d="M 46 18 L 50 16 L 54 18 L 56 22 L 54 26 L 52 28 L 48 26 L 46 22 Z" fill="#4caf50"/>
+  
+  <!-- Africa -->
+  <path d="M 48 28 L 52 30 L 56 34 L 58 40 L 60 46 L 58 52 L 56 58 L 52 62 L 48 60 L 46 54 L 44 48 L 46 42 L 48 36 Z" fill="#66bb6a"/>
+  
+  <!-- Asia -->
+  <path d="M 58 18 L 64 16 L 70 18 L 76 22 L 80 28 L 82 34 L 80 40 L 76 44 L 72 46 L 68 44 L 64 40 L 60 34 L 58 28 Z" fill="#4caf50"/>
+  
+  <!-- Australia -->
+  <path d="M 72 56 L 76 54 L 80 56 L 82 60 L 80 64 L 76 66 L 72 64 L 70 60 Z" fill="#66bb6a"/>
+  
   <circle cx="50" cy="50" r="45" fill="none" stroke="#0d47a1" stroke-width="3"/>
 </svg>
