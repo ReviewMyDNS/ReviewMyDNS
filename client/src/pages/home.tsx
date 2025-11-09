@@ -59,7 +59,7 @@ export default function Home() {
             {/* Logo and Brand */}
             <div className="flex items-center">
               <div className="flex-shrink-0 flex items-center">
-                <img src="/globe-icon-new.png" alt="ReviewMyDNS Globe" className="h-8 w-8 mr-2" />
+                <img src="/globe-icon-new.png" alt="ReviewMyDNS Globe" className="h-12 w-12 mr-2" />
                 <h1 className="text-xl font-bold text-gray-900">ReviewMyDNS</h1>
               </div>
             </div>
