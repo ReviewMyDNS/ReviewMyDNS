@@ -99,6 +99,12 @@
   }
 }
 
+@layer utilities {
+  .bg-grid-white\/\[0\.05\] {
+    background-image: radial-gradient(circle, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  }
+}
+
 /* Custom styles for DNS components */
 .dns-legend {
   font-size: 12px;

@@ -51,9 +51,9 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
+      <header className="bg-white/90 backdrop-blur-md shadow-sm border-b border-gray-200 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             {/* Logo and Brand */}
@@ -115,13 +115,14 @@ export default function Home() {
       {/* Main Content */}
       <main>
         {/* Main Search Section */}
-        <section className="bg-white shadow-sm border-b border-gray-100">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <section className="relative bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-700 overflow-hidden">
+          <div className="absolute inset-0 bg-grid-white/[0.05] bg-[size:32px_32px]"></div>
+          <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
             <div className="text-center mb-8">
-              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
+              <h2 className="text-3xl md:text-4xl font-bold text-white mb-3">
                 Global DNS Propagation Checker
               </h2>
-              <p className="text-gray-600 text-sm md:text-base">
+              <p className="text-blue-100 text-base md:text-lg">
                 Check DNS records and propagation status across 50+ worldwide servers
               </p>
             </div>
