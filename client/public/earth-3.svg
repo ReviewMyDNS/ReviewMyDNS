@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Deep blue ocean -->
+  <circle cx="50" cy="50" r="42" fill="#2563eb"/>
+  
+  <!-- Emerald continents -->
+  <path d="M 32 22 Q 38 18 46 24 Q 50 30 48 36 Q 44 40 38 36 Q 34 30 32 22 Z" fill="#10b981"/>
+  <path d="M 65 15 Q 72 13 78 18 Q 80 26 76 32 Q 70 34 66 28 Q 64 20 65 15 Z" fill="#059669"/>
+  <path d="M 22 48 Q 28 42 36 46 Q 42 52 40 60 Q 34 64 28 58 Q 22 52 22 48 Z" fill="#10b981"/>
+  <path d="M 54 50 Q 62 46 70 52 Q 74 60 70 68 Q 64 72 58 66 Q 54 58 54 50 Z" fill="#059669"/>
+  <path d="M 28 74 Q 36 72 42 78 Q 44 84 38 88 Q 32 86 28 80 Z" fill="#10b981"/>
+  <path d="M 64 76 Q 72 74 78 80 Q 80 86 74 90 Q 68 86 64 76 Z" fill="#059669"/>
+  
+  <!-- Ice -->
+  <ellipse cx="50" cy="8" rx="14" ry="5" fill="white"/>
+  <ellipse cx="50" cy="92" rx="14" ry="5" fill="white"/>
+  
+  <!-- Stars in space around earth -->
+  <circle cx="10" cy="15" r="1.5" fill="#fef08a"/>
+  <circle cx="90" cy="20" r="1.5" fill="#fef08a"/>
+  <circle cx="15" cy="85" r="1.5" fill="#fef08a"/>
+  <circle cx="85" cy="88" r="1.5" fill="#fef08a"/>
+  
+  <circle cx="50" cy="50" r="42" fill="none" stroke="#1e40af" stroke-width="3"/>
+</svg>

@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Purple/Blue gradient ocean -->
+  <defs>
+    <linearGradient id="ocean4" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8b5cf6"/>
+      <stop offset="50%" style="stop-color:#3b82f6"/>
+      <stop offset="100%" style="stop-color:#06b6d4"/>
+    </linearGradient>
+  </defs>
+  <circle cx="50" cy="50" r="45" fill="url(#ocean4)"/>
+  
+  <!-- Bright lime continents -->
+  <path d="M 28 24 Q 35 19 44 24 Q 48 30 46 38 Q 42 42 36 38 Q 30 32 28 24 Z" fill="#84cc16"/>
+  <path d="M 62 16 Q 70 14 76 20 Q 78 28 74 34 Q 68 36 64 30 Q 62 22 62 16 Z" fill="#65a30d"/>
+  <path d="M 18 48 Q 26 42 34 48 Q 38 56 36 64 Q 30 68 24 60 Q 18 54 18 48 Z" fill="#84cc16"/>
+  <path d="M 52 52 Q 60 48 68 54 Q 72 62 68 70 Q 62 74 56 68 Q 52 60 52 52 Z" fill="#65a30d"/>
+  <path d="M 26 72 Q 34 70 40 76 Q 42 82 36 86 Q 30 84 26 78 Z" fill="#84cc16"/>
+  <path d="M 66 78 Q 74 76 80 82 Q 82 88 76 90 Q 70 86 66 78 Z" fill="#65a30d"/>
+  
+  <!-- Sparkling ice caps -->
+  <ellipse cx="50" cy="8" rx="17" ry="6" fill="#fef9c3"/>
+  <ellipse cx="50" cy="92" rx="17" ry="6" fill="#fef9c3"/>
+  
+  <circle cx="50" cy="50" r="45" fill="none" stroke="#4c1d95" stroke-width="2.5"/>
+</svg>
