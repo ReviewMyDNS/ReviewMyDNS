@@ -59,20 +59,7 @@ export default function Home() {
             {/* Logo and Brand */}
             <div className="flex items-center">
               <div className="flex-shrink-0 flex items-center">
-                <svg className="h-8 w-8 mr-2" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                  <circle cx="50" cy="50" r="45" fill="#3b82f6"/>
-                  <path d="M 30 25 Q 35 20 45 22 Q 50 24 52 30 Q 48 35 42 33 Q 35 32 30 25 Z" fill="#10b981"/>
-                  <path d="M 65 18 Q 72 15 78 20 Q 80 28 75 32 Q 68 30 65 25 Z" fill="#059669"/>
-                  <path d="M 20 45 Q 25 38 35 42 Q 40 48 38 55 Q 32 58 25 52 Q 20 48 20 45 Z" fill="#10b981"/>
-                  <path d="M 50 50 Q 58 45 68 48 Q 75 52 72 62 Q 65 68 58 65 Q 52 60 50 50 Z" fill="#059669"/>
-                  <path d="M 28 70 Q 35 68 42 72 Q 45 78 40 82 Q 32 80 28 75 Z" fill="#10b981"/>
-                  <path d="M 60 75 Q 68 72 75 78 Q 78 85 70 88 Q 62 85 60 75 Z" fill="#059669"/>
-                  <ellipse cx="50" cy="8" rx="15" ry="6" fill="white" opacity="0.9"/>
-                  <ellipse cx="50" cy="92" rx="15" ry="6" fill="white" opacity="0.9"/>
-                  <circle cx="50" cy="50" r="45" fill="none" stroke="#1e40af" strokeWidth="2"/>
-                  <ellipse cx="50" cy="50" rx="22" ry="45" fill="none" stroke="white" strokeWidth="1.5" opacity="0.3"/>
-                  <line x1="5" y1="50" x2="95" y2="50" stroke="white" strokeWidth="1.5" opacity="0.3"/>
-                </svg>
+                <img src="/globe-icon-new.png" alt="ReviewMyDNS Globe" className="h-8 w-8 mr-2" />
                 <h1 className="text-xl font-bold text-gray-900">ReviewMyDNS</h1>
               </div>
             </div>
