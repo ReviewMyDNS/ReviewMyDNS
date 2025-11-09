@@ -6,6 +6,7 @@ import { sql } from 'drizzle-orm';
 export const dnsLookups = pgTable("dns_lookups", {
   id: serial("id").primaryKey(),
   shareId: varchar("share_id", { length: 12 }),
+  userId: varchar("user_id"),
   domain: text("domain").notNull(),
   recordType: text("record_type").notNull(),
   expectedValue: text("expected_value"),
@@ -13,6 +14,7 @@ export const dnsLookups = pgTable("dns_lookups", {
   createdAt: timestamp("created_at").defaultNow(),
 }, (table) => ({
   shareIdIdx: index("share_id_idx").on(table.shareId),
+  userIdIdx: index("user_id_idx").on(table.userId),
 }));
 
 export const dnsServers = pgTable("dns_servers", {
@@ -43,7 +45,8 @@ export const insertDnsLookupSchema = createInsertSchema(dnsLookups).pick({
   recordType: true,
   expectedValue: true,
   matchType: true,
-});
+  userId: true,
+}).partial({ userId: true });
 
 export const insertDnsServerSchema = createInsertSchema(dnsServers).pick({
   name: true,
@@ -137,3 +140,77 @@ export const signinSchema = z.object({
 
 export type SignupInput = z.infer<typeof signupSchema>;
 export type SigninInput = z.infer<typeof signinSchema>;
+
+// Usage tracking table for rate limiting
+export const usageLogs = pgTable("usage_logs", {
+  id: serial("id").primaryKey(),
+  userId: varchar("user_id"),
+  anonymousId: varchar("anonymous_id"), // IP-based tracking for non-authenticated users
+  action: text("action").notNull(), // 'dns_lookup', 'api_call', 'export'
+  date: timestamp("date").defaultNow(),
+}, (table) => ({
+  userIdIdx: index("usage_user_id_idx").on(table.userId),
+  anonymousIdIdx: index("usage_anonymous_id_idx").on(table.anonymousId),
+  dateIdx: index("usage_date_idx").on(table.date),
+}));
+
+export type InsertUsageLog = typeof usageLogs.$inferInsert;
+export type UsageLog = typeof usageLogs.$inferSelect;
+
+// Plan configuration constants
+export const PLAN_LIMITS = {
+  anonymous: {
+    dailyLookups: 5,
+    allowedRecordTypes: ["A", "AAAA", "CNAME"],
+    features: {
+      history: false,
+      export: false,
+      api: false,
+      alerts: false,
+      analytics: false,
+      bulkLookup: false,
+      monitoring: false,
+    }
+  },
+  free: {
+    dailyLookups: 50,
+    allowedRecordTypes: ["A", "AAAA", "CNAME"],
+    features: {
+      history: false,
+      export: false,
+      api: false,
+      alerts: false,
+      analytics: false,
+      bulkLookup: false,
+      monitoring: false,
+    }
+  },
+  pro: {
+    dailyLookups: -1, // unlimited
+    allowedRecordTypes: ["A", "AAAA", "CNAME", "MX", "NS", "TXT", "SOA", "PTR", "SRV", "CAA", "DS", "DNSKEY"],
+    features: {
+      history: true,
+      export: true,
+      api: true,
+      alerts: true,
+      analytics: true,
+      bulkLookup: true,
+      monitoring: true,
+    }
+  },
+  enterprise: {
+    dailyLookups: -1, // unlimited
+    allowedRecordTypes: ["A", "AAAA", "CNAME", "MX", "NS", "TXT", "SOA", "PTR", "SRV", "CAA", "DS", "DNSKEY"],
+    features: {
+      history: true,
+      export: true,
+      api: true,
+      alerts: true,
+      analytics: true,
+      bulkLookup: true,
+      monitoring: true,
+    }
+  }
+} as const;
+
+export type PlanTier = keyof typeof PLAN_LIMITS;

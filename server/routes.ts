@@ -2,9 +2,11 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { performDnsLookup } from "./services/dns-resolver";
-import { insertDnsLookupSchema, signupSchema, signinSchema, users } from "@shared/schema";
+import { insertDnsLookupSchema, signupSchema, signinSchema, users, PLAN_LIMITS } from "@shared/schema";
 import { ZodError } from "zod";
 import { createSessionMiddleware, requireAuth, hashPassword, verifyPassword, sanitizeUser } from "./auth";
+import { getPlanTier } from "./middleware/plan-guard";
+import { checkRateLimit, logUsage, getAnonymousId } from "./rate-limiter";
 import Stripe from "stripe";
 import { db } from "./db";
 import { eq } from "drizzle-orm";
@@ -102,13 +104,52 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.json({ user: sanitizeUser(req.user!) });
   });
 
-  // DNS Lookup endpoint
+  // DNS Lookup endpoint with rate limiting
   app.post("/api/dns/lookup", async (req, res) => {
     try {
       const validatedData = insertDnsLookupSchema.parse(req.body);
       
-      // Create the lookup record
-      const lookup = await storage.createDnsLookup(validatedData);
+      // Get user plan and limits
+      const userPlan = getPlanTier(req.user);
+      const planLimits = PLAN_LIMITS[userPlan];
+      const userId = req.user?.id || null;
+      const anonymousId = userId ? null : getAnonymousId(req);
+      
+      // Check if record type is allowed for this plan
+      const isAllowed = (planLimits.allowedRecordTypes as readonly string[]).includes(validatedData.recordType);
+      if (!isAllowed) {
+        return res.status(403).json({
+          error: "Record type not available",
+          message: `DNS record type '${validatedData.recordType}' requires a Pro or Enterprise plan`,
+          currentPlan: userPlan,
+          allowedTypes: planLimits.allowedRecordTypes,
+          upgradeUrl: "/pricing",
+        });
+      }
+      
+      // Check rate limit
+      const rateLimit = await checkRateLimit(userId, anonymousId, "dns_lookup", planLimits.dailyLookups);
+      
+      if (!rateLimit.allowed) {
+        return res.status(429).json({
+          error: "Rate limit exceeded",
+          message: `You've reached your daily limit of ${rateLimit.limit} DNS lookups`,
+          currentPlan: userPlan,
+          limit: rateLimit.limit,
+          remaining: 0,
+          resetAt: rateLimit.resetAt,
+          upgradeUrl: "/pricing",
+        });
+      }
+      
+      // Log usage
+      await logUsage(userId, anonymousId, "dns_lookup");
+      
+      // Create the lookup record with userId
+      const lookup = await storage.createDnsLookup({
+        ...validatedData,
+        userId,
+      });
       
       // Get active DNS servers
       const dnsServers = await storage.getActiveDnsServers();
@@ -132,9 +173,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
       
-      // Return the lookup with results
+      // Return the lookup with results and rate limit info
       const lookupWithResults = await storage.getDnsLookupWithResults(lookup.id);
-      res.json(lookupWithResults);
+      res.json({
+        ...lookupWithResults,
+        rateLimit: {
+          limit: rateLimit.limit,
+          remaining: rateLimit.remaining - 1,
+          resetAt: rateLimit.resetAt,
+        },
+      });
       
     } catch (error) {
       if (error instanceof ZodError) {
