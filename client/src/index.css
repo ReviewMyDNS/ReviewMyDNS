@@ -5,6 +5,29 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Smooth page transitions */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+/* Prevent page flicker on navigation */
+#root > div {
+  animation: fadeIn 0.15s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 /* Custom styles for DNS markers */
 .custom-dns-marker {
   background: transparent !important;
