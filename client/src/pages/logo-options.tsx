@@ -2,27 +2,27 @@ export default function LogoOptions() {
   const logos = [
     { 
       num: 1, 
-      name: "Classic Earth", 
+      name: "Simple & Clean", 
       file: "/earth-1.svg", 
-      desc: "Blue ocean with green continents and realistic styling"
+      desc: "Flat blue ocean with simple green shapes"
     },
     { 
       num: 2, 
-      name: "Teal & Gold", 
+      name: "Modern Material", 
       file: "/earth-2.svg", 
-      desc: "Teal ocean with golden landmasses"
+      desc: "Gradient ocean with geometric continents"
     },
     { 
       num: 3, 
-      name: "Space Earth", 
+      name: "Bright & Friendly", 
       file: "/earth-3.svg", 
-      desc: "Deep blue ocean, emerald continents, with stars"
+      desc: "Vibrant cyan ocean with bright green lands"
     },
     { 
       num: 4, 
-      name: "Rainbow Earth", 
+      name: "Dark & Elegant", 
       file: "/earth-4.svg", 
-      desc: "Purple-blue gradient ocean with lime continents"
+      desc: "Deep navy ocean with forest green continents"
     },
   ];
 
