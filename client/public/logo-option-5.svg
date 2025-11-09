@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Option 5: Earth Grid with Data Points -->
+  <defs>
+    <linearGradient id="grad5" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0ea5e9;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0284c7;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Main sphere -->
+  <circle cx="50" cy="50" r="38" fill="url(#grad5)" stroke="#0c4a6e" stroke-width="2"/>
+  
+  <!-- Grid lines - multiple meridians -->
+  <ellipse cx="50" cy="50" rx="10" ry="38" fill="none" stroke="white" stroke-width="1" opacity="0.4"/>
+  <ellipse cx="50" cy="50" rx="20" ry="38" fill="none" stroke="white" stroke-width="1" opacity="0.4"/>
+  <ellipse cx="50" cy="50" rx="30" ry="38" fill="none" stroke="white" stroke-width="1" opacity="0.4"/>
+  
+  <!-- Grid lines - latitudes -->
+  <ellipse cx="50" cy="50" rx="38" ry="12" fill="none" stroke="white" stroke-width="1" opacity="0.4"/>
+  <ellipse cx="50" cy="50" rx="38" ry="24" fill="none" stroke="white" stroke-width="1" opacity="0.4"/>
+  <line x1="12" y1="50" x2="88" y2="50" stroke="white" stroke-width="1.5" opacity="0.5"/>
+  
+  <!-- Bright data points -->
+  <circle cx="30" cy="30" r="3.5" fill="#fef08a"/>
+  <circle cx="70" cy="35" r="3.5" fill="#fef08a"/>
+  <circle cx="25" cy="65" r="3.5" fill="#fef08a"/>
+  <circle cx="75" cy="70" r="3.5" fill="#fef08a"/>
+  <circle cx="50" cy="20" r="3.5" fill="#fef08a"/>
+</svg>

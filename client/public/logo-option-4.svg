@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Option 4: DNS Signal Wave Globe -->
+  <defs>
+    <radialGradient id="grad4">
+      <stop offset="0%" style="stop-color:#60a5fa;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2563eb;stop-opacity:1" />
+    </radialGradient>
+  </defs>
+  
+  <circle cx="50" cy="50" r="35" fill="url(#grad4)"/>
+  
+  <!-- Globe structure -->
+  <circle cx="50" cy="50" r="35" fill="none" stroke="white" stroke-width="2" opacity="0.6"/>
+  <ellipse cx="50" cy="50" rx="18" ry="35" fill="none" stroke="white" stroke-width="1.5" opacity="0.5"/>
+  <line x1="15" y1="50" x2="85" y2="50" stroke="white" stroke-width="1.5" opacity="0.5"/>
+  
+  <!-- DNS signal waves -->
+  <path d="M 50 20 Q 60 20 65 25" fill="none" stroke="#fbbf24" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M 50 20 Q 40 20 35 25" fill="none" stroke="#fbbf24" stroke-width="2.5" stroke-linecap="round"/>
+  <circle cx="50" cy="20" r="3" fill="#fbbf24"/>
+</svg>
