@@ -21,6 +21,7 @@ import { Link } from "wouter";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import { useQuery } from "@tanstack/react-query";
+import { Logo } from "@/components/logo";
 
 export default function Dashboard() {
   const { user: authUser, isLoading: authLoading, logout } = useAuth();
@@ -105,7 +106,7 @@ export default function Dashboard() {
             <div className="flex items-center">
               <Link href="/">
                 <div className="flex items-center">
-                  <Globe className="h-8 w-8 text-blue-600 mr-2" />
+                  <Logo size="sm" className="mr-2" />
                   <h1 className="text-xl font-bold text-gray-900">ReviewMyDNS</h1>
                 </div>
               </Link>

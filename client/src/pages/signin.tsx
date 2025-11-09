@@ -7,10 +7,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
-import { ArrowLeft, Globe, Mail, User, Eye, EyeOff, CheckCircle, AlertCircle } from "lucide-react";
+import { ArrowLeft, Mail, User, Eye, EyeOff, CheckCircle, AlertCircle } from "lucide-react";
 import { Link } from "wouter";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
+import { Logo } from "@/components/logo";
 
 export default function SignIn() {
   const [location, setLocation] = useLocation();
@@ -112,7 +113,7 @@ export default function SignIn() {
                 </Button>
               </Link>
               <div className="flex items-center">
-                <Globe className="h-8 w-8 text-blue-600 mr-2" />
+                <Logo size="sm" className="mr-2" />
                 <h1 className="text-xl font-bold text-gray-900">ReviewMyDNS</h1>
               </div>
             </div>

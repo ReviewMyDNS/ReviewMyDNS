@@ -4,8 +4,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { ArrowLeft, Globe, Mail, Phone, MapPin, Clock } from "lucide-react";
+import { ArrowLeft, Mail, Phone, MapPin, Clock } from "lucide-react";
 import { Link } from "wouter";
+import { Logo } from "@/components/logo";
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -45,7 +46,7 @@ export default function Contact() {
                 </Button>
               </Link>
               <div className="flex items-center">
-                <Globe className="h-8 w-8 text-blue-600 mr-2" />
+                <Logo size="sm" className="mr-2" />
                 <h1 className="text-xl font-bold text-gray-900">ReviewMyDNS</h1>
               </div>
             </div>

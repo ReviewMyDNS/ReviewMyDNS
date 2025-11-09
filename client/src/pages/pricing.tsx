@@ -6,6 +6,7 @@ import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
 import { ArrowLeft, Globe, Check, X, Zap, Crown, Users, BarChart3, Bell, Shield, Clock } from "lucide-react";
 import { Link } from "wouter";
+import { Logo } from "@/components/logo";
 
 export default function Pricing() {
   const [isYearly, setIsYearly] = useState(false);
@@ -103,7 +104,7 @@ export default function Pricing() {
                 </Button>
               </Link>
               <div className="flex items-center">
-                <Globe className="h-8 w-8 text-blue-600 mr-2" />
+                <Logo size="sm" className="mr-2" />
                 <h1 className="text-xl font-bold text-gray-900">ReviewMyDNS</h1>
               </div>
             </div>

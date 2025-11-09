@@ -11,6 +11,7 @@ import { Globe, Lock, Share2, ExternalLink } from "lucide-react";
 import { Link } from "wouter";
 import type { DnsLookupWithResults } from "@shared/schema";
 import { useToast } from "@/hooks/use-toast";
+import { Logo } from "@/components/logo";
 
 export default function SharedResult() {
   const [, params] = useRoute("/r/:shareId");
@@ -126,7 +127,7 @@ export default function SharedResult() {
           <div className="flex justify-between items-center h-16">
             <Link href="/">
               <div className="flex items-center cursor-pointer">
-                <Globe className="h-8 w-8 text-blue-600 mr-2" />
+                <Logo size="sm" className="mr-2" />
                 <h1 className="text-xl font-bold text-gray-900">ReviewMyDNS</h1>
               </div>
             </Link>
