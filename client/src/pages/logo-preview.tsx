@@ -1,10 +1,10 @@
 export default function LogoPreview() {
   const logos = [
-    { num: 1, name: "Classic Globe", file: "/logo-option-1.svg" },
-    { num: 2, name: "Network Globe", file: "/logo-option-2.svg" },
-    { num: 3, name: "Minimal Outline", file: "/logo-option-3.svg" },
-    { num: 4, name: "Signal Wave", file: "/logo-option-4.svg" },
-    { num: 5, name: "Grid Globe", file: "/logo-option-5.svg" },
+    { num: 1, name: "Blue Globe", file: "/logo-1.svg", color: "Blue with white lines" },
+    { num: 2, name: "Green Network", file: "/logo-2.svg", color: "Green with yellow dots" },
+    { num: 3, name: "Purple Minimal", file: "/logo-3.svg", color: "Purple outline only" },
+    { num: 4, name: "Orange Signal", file: "/logo-4.svg", color: "Orange with signal" },
+    { num: 5, name: "Cyan Grid", file: "/logo-5.svg", color: "Cyan with grid" },
   ];
 
   return (
@@ -29,10 +29,10 @@ export default function LogoPreview() {
                 />
               </div>
               <h2 className="text-2xl font-bold text-center mb-2 text-gray-900 dark:text-white">
-                Option {logo.num}
+                #{logo.num} - {logo.name}
               </h2>
               <p className="text-center text-gray-600 dark:text-gray-400">
-                {logo.name}
+                {logo.color}
               </p>
             </div>
           ))}

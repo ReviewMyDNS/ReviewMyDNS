@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Orange signal globe -->
+  <circle cx="50" cy="50" r="35" fill="#f97316" stroke="#ea580c" stroke-width="3"/>
+  <ellipse cx="50" cy="50" rx="18" ry="35" fill="none" stroke="white" stroke-width="2"/>
+  <line x1="15" y1="50" x2="85" y2="50" stroke="white" stroke-width="2"/>
+  <circle cx="50" cy="15" r="4" fill="#fef08a"/>
+  <path d="M 50 15 Q 65 15 70 20" fill="none" stroke="#fef08a" stroke-width="3" stroke-linecap="round"/>
+  <path d="M 50 15 Q 35 15 30 20" fill="none" stroke="#fef08a" stroke-width="3" stroke-linecap="round"/>
+</svg>
