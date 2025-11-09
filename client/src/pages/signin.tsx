@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
-import { ArrowLeft, Lock, Mail, User, Eye, EyeOff, CheckCircle, AlertCircle } from "lucide-react";
+import { ArrowLeft, Globe, Mail, User, Eye, EyeOff, CheckCircle, AlertCircle } from "lucide-react";
 import { Link } from "wouter";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
@@ -112,7 +112,7 @@ export default function SignIn() {
                 </Button>
               </Link>
               <div className="flex items-center">
-                <Lock className="h-8 w-8 text-blue-600 mr-2" />
+                <Globe className="h-8 w-8 text-blue-600 mr-2" />
                 <h1 className="text-xl font-bold text-gray-900">ReviewMyDNS</h1>
               </div>
             </div>

@@ -6,7 +6,6 @@ import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   User, 
-  Lock, 
   BarChart3, 
   Clock, 
   AlertCircle, 
@@ -106,7 +105,7 @@ export default function Dashboard() {
             <div className="flex items-center">
               <Link href="/">
                 <div className="flex items-center">
-                  <Lock className="h-8 w-8 text-blue-600 mr-2" />
+                  <Globe className="h-8 w-8 text-blue-600 mr-2" />
                   <h1 className="text-xl font-bold text-gray-900">ReviewMyDNS</h1>
                 </div>
               </Link>
@@ -286,7 +285,7 @@ export default function Dashboard() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center space-x-2">
-                  <Lock className="h-5 w-5" />
+                  <Clock className="h-5 w-5" />
                   <span>Query History</span>
                   <Badge variant="outline">Pro Feature</Badge>
                 </CardTitle>

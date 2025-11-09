@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { ArrowLeft, Lock, Mail, Phone, MapPin, Clock } from "lucide-react";
+import { ArrowLeft, Globe, Mail, Phone, MapPin, Clock } from "lucide-react";
 import { Link } from "wouter";
 
 export default function Contact() {
@@ -45,7 +45,7 @@ export default function Contact() {
                 </Button>
               </Link>
               <div className="flex items-center">
-                <Lock className="h-8 w-8 text-blue-600 mr-2" />
+                <Globe className="h-8 w-8 text-blue-600 mr-2" />
                 <h1 className="text-xl font-bold text-gray-900">ReviewMyDNS</h1>
               </div>
             </div>

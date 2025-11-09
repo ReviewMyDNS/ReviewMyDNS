@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
-import { ArrowLeft, Lock, Check, X, Zap, Crown, Users, BarChart3, Bell, Shield, Globe, Clock } from "lucide-react";
+import { ArrowLeft, Globe, Check, X, Zap, Crown, Users, BarChart3, Bell, Shield, Clock } from "lucide-react";
 import { Link } from "wouter";
 
 export default function Pricing() {
@@ -103,7 +103,7 @@ export default function Pricing() {
                 </Button>
               </Link>
               <div className="flex items-center">
-                <Lock className="h-8 w-8 text-blue-600 mr-2" />
+                <Globe className="h-8 w-8 text-blue-600 mr-2" />
                 <h1 className="text-xl font-bold text-gray-900">ReviewMyDNS</h1>
               </div>
             </div>

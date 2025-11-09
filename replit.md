@@ -70,6 +70,13 @@ To enable real payments, update these secrets in Replit:
 
 ## Recent Changes
 
+**November 8, 2025 - Logo Update & Favicon Infrastructure**
+- ✅ Updated logo from Lock 🔒 to Globe 🌍 across all pages for better brand alignment
+- ✅ Added favicon infrastructure (SVG, ICO, Apple Touch Icon)
+- ✅ Created custom globe-style SVG favicon with network nodes representing worldwide DNS servers
+- ✅ Added SEO meta tags (title, description) to base HTML template
+- ✅ Bookmarks now display ReviewMyDNS globe icon instead of generic browser icon
+
 **November 8, 2025 - Shareable DNS Results Feature (Viral Growth)**
 - ✅ Added shareable result pages for viral growth and user engagement
 - ✅ Implemented unique share IDs (nanoid) for each DNS lookup

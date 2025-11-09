@@ -126,7 +126,7 @@ export default function SharedResult() {
           <div className="flex justify-between items-center h-16">
             <Link href="/">
               <div className="flex items-center cursor-pointer">
-                <Lock className="h-8 w-8 text-blue-600 mr-2" />
+                <Globe className="h-8 w-8 text-blue-600 mr-2" />
                 <h1 className="text-xl font-bold text-gray-900">ReviewMyDNS</h1>
               </div>
             </Link>
