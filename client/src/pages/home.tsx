@@ -14,6 +14,7 @@ import type { DnsLookupWithResults } from "@shared/schema";
 import { useToast } from "@/hooks/use-toast";
 import { Logo } from "@/components/logo";
 
+// Mobile-optimized home page
 export default function Home() {
   const [lookupResults, setLookupResults] = useState<DnsLookupWithResults | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -60,8 +61,8 @@ export default function Home() {
             {/* Logo and Brand */}
             <div className="flex items-center">
               <div className="flex-shrink-0 flex items-center">
-                <Logo size="md" className="mr-2 md:mr-3" />
-                <h1 className="text-xl font-bold text-gray-900">ReviewMyDNS</h1>
+                <Logo size="sm" className="mr-2" />
+                <h1 className="text-base md:text-xl font-bold text-gray-900">ReviewMyDNS</h1>
               </div>
             </div>
             
@@ -97,16 +98,10 @@ export default function Home() {
               </div>
               
               {/* Mobile Actions */}
-              <div className="md:hidden flex items-center space-x-2">
-                <Link href="/signin">
-                  <Button variant="ghost" size="sm">Sign In</Button>
+              <div className="md:hidden flex items-center">
+                <Link href="/pricing">
+                  <Button variant="ghost" size="sm" className="text-xs">Pricing</Button>
                 </Link>
-                <Link href="/signin?tab=signup">
-                  <Button size="sm">Sign Up</Button>
-                </Link>
-                <Button variant="ghost" size="icon" className="ml-2">
-                  <Menu className="h-5 w-5" />
-                </Button>
               </div>
             </div>
           </div>

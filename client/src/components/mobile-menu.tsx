@@ -3,8 +3,9 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu, X, Globe, Code, FileText, DollarSign } from "lucide-react";
 import { Link } from "wouter";
+import { Logo } from "@/components/logo";
 
-export function MobileMenu() {
+export default function MobileMenu() {
   const [isOpen, setIsOpen] = useState(false);
 
   const menuItems = [
@@ -26,7 +27,10 @@ export function MobileMenu() {
         <div className="flex flex-col h-full">
           {/* Header */}
           <div className="flex items-center justify-between p-6 border-b">
-            <h2 className="text-lg font-semibold">Menu</h2>
+            <div className="flex items-center">
+              <Logo size="sm" className="mr-2" />
+              <h2 className="text-lg font-semibold">ReviewMyDNS</h2>
+            </div>
             <Button
               variant="ghost"
               size="icon"
