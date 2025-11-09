@@ -10,6 +10,7 @@ import { checkRateLimit, logUsage, getAnonymousId } from "./rate-limiter";
 import Stripe from "stripe";
 import { db } from "./db";
 import { eq } from "drizzle-orm";
+import sitemapRoutes from "./routes/sitemap";
 
 if (!process.env.STRIPE_SECRET_KEY) {
   throw new Error('Missing required Stripe secret: STRIPE_SECRET_KEY');
@@ -498,6 +499,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ error: 'Webhook handler failed' });
     }
   });
+
+  // SEO routes
+  app.use(sitemapRoutes);
 
   // Health check endpoint
   app.get("/api/health", (req, res) => {

@@ -101,7 +101,7 @@ export default function Home() {
             <div className="flex items-center">
               <div className="flex-shrink-0 flex items-center">
                 <Logo size="sm" className="mr-2" />
-                <h1 className="text-base md:text-xl font-bold text-gray-900">ReviewMyDNS</h1>
+                <span className="text-base md:text-xl font-bold text-gray-900">ReviewMyDNS</span>
               </div>
             </div>
             
@@ -155,11 +155,14 @@ export default function Home() {
           <div className="absolute bottom-10 left-10 w-40 h-40 bg-indigo-500/30 rounded-full blur-3xl"></div>
           <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
             <div className="text-center mb-8">
-              <h2 className="text-3xl md:text-4xl font-bold text-white mb-3">
-                Global DNS Propagation Checker
-              </h2>
-              <p className="text-blue-100 text-base md:text-lg">
-                Check DNS records and propagation status across 50+ worldwide servers
+              <h1 className="text-3xl md:text-5xl font-bold text-white mb-4 leading-tight">
+                Free DNS Lookup & Propagation Checker
+              </h1>
+              <p className="text-blue-100 text-base md:text-xl mb-2">
+                Check DNS records instantly across 50+ global servers
+              </p>
+              <p className="text-blue-200 text-sm md:text-base">
+                Monitor DNS propagation, verify nameserver changes, and troubleshoot DNS issues in real-time
               </p>
             </div>
             

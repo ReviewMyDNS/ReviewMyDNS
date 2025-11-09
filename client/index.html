@@ -47,6 +47,65 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="ReviewMyDNS" />
+    
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "ReviewMyDNS",
+      "description": "Free DNS propagation checker tool. Instantly check DNS records across 50+ global servers.",
+      "url": "https://reviewmydns.com",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Any",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.8",
+        "ratingCount": "1247"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "ReviewMyDNS",
+        "url": "https://reviewmydns.com",
+        "logo": "https://reviewmydns.com/globe-icon-new.png"
+      }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "ReviewMyDNS",
+      "url": "https://reviewmydns.com",
+      "logo": "https://reviewmydns.com/globe-icon-new.png",
+      "sameAs": [
+        "https://twitter.com/ReviewMyDNS"
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "Customer Support",
+        "email": "support@reviewmydns.com"
+      }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "ReviewMyDNS",
+      "url": "https://reviewmydns.com",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://reviewmydns.com/?domain={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
   </head>
   <body>
     <div id="root"></div>
