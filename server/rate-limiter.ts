@@ -1,6 +1,6 @@
 import { db } from "./db";
 import { usageLogs } from "@shared/schema";
-import { eq, and, gte, sql } from "drizzle-orm";
+import { eq, and, gte, lt, sql } from "drizzle-orm";
 import type { Request } from "express";
 
 export interface RateLimitResult {
@@ -16,8 +16,9 @@ export async function checkRateLimit(
   action: string,
   limit: number
 ): Promise<RateLimitResult> {
+  // Use UTC time to ensure consistent daily reset across timezones
   const today = new Date();
-  today.setHours(0, 0, 0, 0);
+  today.setUTCHours(0, 0, 0, 0);
   
   // Count usage for today
   const whereClause = userId 
@@ -35,9 +36,9 @@ export async function checkRateLimit(
   const allowed = limit === -1 || currentCount < limit;
   const remaining = limit === -1 ? -1 : Math.max(0, limit - currentCount);
   
-  // Reset at midnight
+  // Reset at midnight UTC (next day at 00:00:00 UTC)
   const resetAt = new Date(today);
-  resetAt.setDate(resetAt.getDate() + 1);
+  resetAt.setUTCDate(resetAt.getUTCDate() + 1);
   
   return {
     allowed,
@@ -65,4 +66,46 @@ export function getAnonymousId(req: Request): string {
   const ip = req.ip || req.socket.remoteAddress || 'unknown';
   const userAgent = req.headers['user-agent'] || 'unknown';
   return `${ip}-${userAgent.slice(0, 50)}`;
+}
+
+// Cleanup function to remove old usage logs (prevent database bloat)
+export async function cleanupOldUsageLogs(retentionDays: number = 30): Promise<number> {
+  const cutoffDate = new Date();
+  cutoffDate.setUTCDate(cutoffDate.getUTCDate() - retentionDays);
+  cutoffDate.setUTCHours(0, 0, 0, 0);
+  
+  try {
+    const result = await db
+      .delete(usageLogs)
+      .where(lt(usageLogs.date, cutoffDate));
+    
+    const deletedCount = result.rowCount || 0;
+    if (deletedCount > 0) {
+      console.log(`[Cleanup] Removed ${deletedCount} usage logs older than ${retentionDays} days`);
+    }
+    return deletedCount;
+  } catch (error) {
+    console.error('[Cleanup] Error removing old usage logs:', error);
+    return 0;
+  }
+}
+
+// Start daily cleanup job
+let cleanupJobStarted = false;
+export function startCleanupJob(intervalHours: number = 24): void {
+  if (cleanupJobStarted) {
+    console.log('[Cleanup] Job already running');
+    return;
+  }
+  
+  cleanupJobStarted = true;
+  console.log(`[Cleanup] Starting daily cleanup job (runs every ${intervalHours} hours)`);
+  
+  // Run immediately on startup
+  cleanupOldUsageLogs();
+  
+  // Then run at intervals
+  setInterval(() => {
+    cleanupOldUsageLogs();
+  }, intervalHours * 60 * 60 * 1000);
 }

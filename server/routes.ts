@@ -104,6 +104,31 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.json({ user: sanitizeUser(req.user!) });
   });
 
+  // Get usage stats for current user/anonymous session
+  app.get('/api/usage/stats', async (req, res) => {
+    try {
+      const userPlan = getPlanTier(req.user);
+      const planLimits = PLAN_LIMITS[userPlan];
+      const userId = req.user?.id || null;
+      const anonymousId = userId ? null : getAnonymousId(req);
+      
+      // Get current usage
+      const usage = await checkRateLimit(userId, anonymousId, "dns_lookup", planLimits.dailyLookups);
+      
+      res.json({
+        plan: userPlan,
+        dailyLimit: planLimits.dailyLookups,
+        used: usage.limit - usage.remaining,
+        remaining: usage.remaining,
+        resetAt: usage.resetAt,
+        allowedRecordTypes: planLimits.allowedRecordTypes,
+      });
+    } catch (error) {
+      console.error("Error fetching usage stats:", error);
+      res.status(500).json({ error: 'Failed to fetch usage stats' });
+    }
+  });
+
   // DNS Lookup endpoint with rate limiting
   app.post("/api/dns/lookup", async (req, res) => {
     try {

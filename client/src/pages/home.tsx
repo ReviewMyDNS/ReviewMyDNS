@@ -4,6 +4,7 @@ import { PropagationMap } from "@/components/propagation-map";
 import { ResultsTable } from "@/components/results-table";
 import { PerformanceChart } from "@/components/performance-chart";
 import { DnsToolsGrid } from "@/components/dns-tools-grid";
+import { UsageStats } from "@/components/usage-stats";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -133,6 +134,11 @@ export default function Home() {
           </div>
         </section>
 
+        {/* Usage Stats Section - Always Visible */}
+        <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <UsageStats />
+        </section>
+
         {/* Results Section */}
         {lookupResults && (
           <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -210,6 +216,9 @@ export default function Home() {
               
               {/* Quick Stats */}
               <div className="space-y-6">
+                {/* Usage Statistics */}
+                <UsageStats />
+                
                 {/* Sponsor Ad Slot */}
                 <Card className="border-yellow-200 bg-yellow-50">
                   <CardContent className="p-4">
