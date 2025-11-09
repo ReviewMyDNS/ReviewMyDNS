@@ -2,27 +2,27 @@ export default function LogoOptions() {
   const logos = [
     { 
       num: 1, 
-      name: "Professional Globe 1", 
+      name: "DNS Server Icon 1", 
       file: "/earth-photo-1.jpg", 
-      desc: "Professional Earth globe stock image"
+      desc: "Professional DNS server network icon"
     },
     { 
       num: 2, 
-      name: "Professional Globe 2", 
+      name: "DNS Server Icon 2", 
       file: "/earth-photo-2.jpg", 
-      desc: "High-quality Earth globe imagery"
+      desc: "Modern DNS infrastructure design"
     },
     { 
       num: 3, 
-      name: "Professional Globe 3", 
+      name: "DNS Server Icon 3", 
       file: "/earth-photo-3.jpg", 
-      desc: "Clean professional Earth design"
+      desc: "Clean DNS network symbol"
     },
     { 
       num: 4, 
-      name: "Professional Globe 4", 
+      name: "DNS Server Icon 4", 
       file: "/earth-photo-4.jpg", 
-      desc: "Modern Earth globe stock photo"
+      desc: "Tech DNS connectivity icon"
     },
   ];
 
