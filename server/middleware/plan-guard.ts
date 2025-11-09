@@ -17,6 +17,7 @@ export function getPlanTier(user: Express.User | undefined): PlanTier {
   
   const plan = user.subscriptionPlan?.toLowerCase();
   if (plan === "pro") return "pro";
+  if (plan === "team") return "team";
   if (plan === "enterprise") return "enterprise";
   return "free";
 }

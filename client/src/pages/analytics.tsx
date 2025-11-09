@@ -6,11 +6,13 @@ import { BarChart3, PieChart, Activity, Globe } from "lucide-react";
 import { Link } from "wouter";
 import { Logo } from "@/components/logo";
 import MobileMenu from "@/components/mobile-menu";
+import { PlanGate } from "@/components/plan-gate";
 
 export default function Analytics() {
   const [selectedPeriod, setSelectedPeriod] = useState("7d");
 
   return (
+    <PlanGate feature="analytics" requiredPlan="pro">
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <header className="bg-white shadow-sm border-b border-gray-200">
@@ -232,5 +234,6 @@ export default function Analytics() {
         </Card>
       </main>
     </div>
+  </PlanGate>
   );
 }

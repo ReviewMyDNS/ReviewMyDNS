@@ -11,6 +11,7 @@ import { Link } from "wouter";
 import { Logo } from "@/components/logo";
 import MobileMenu from "@/components/mobile-menu";
 import { apiRequest } from "@/lib/queryClient";
+import { PlanGate } from "@/components/plan-gate";
 
 interface BulkResult {
   domain: string;
@@ -131,26 +132,27 @@ export default function BulkLookup() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white shadow-sm border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center">
-              <Link href="/">
-                <div className="flex items-center cursor-pointer">
-                  <Logo size="sm" className="mr-2" />
-                  <h1 className="text-base md:text-xl font-bold text-gray-900">ReviewMyDNS</h1>
-                </div>
-              </Link>
+    <PlanGate feature="bulkLookup" requiredPlan="pro">
+      <div className="min-h-screen bg-gray-50">
+        {/* Header */}
+        <header className="bg-white shadow-sm border-b border-gray-200">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex justify-between items-center h-16">
+              <div className="flex items-center">
+                <Link href="/">
+                  <div className="flex items-center cursor-pointer">
+                    <Logo size="sm" className="mr-2" />
+                    <h1 className="text-base md:text-xl font-bold text-gray-900">ReviewMyDNS</h1>
+                  </div>
+                </Link>
+              </div>
+              <MobileMenu />
             </div>
-            <MobileMenu />
           </div>
-        </div>
-      </header>
+        </header>
 
-      {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Main Content */}
+        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Input Section */}
           <div className="lg:col-span-1">
@@ -289,5 +291,6 @@ export default function BulkLookup() {
         </div>
       </main>
     </div>
+  </PlanGate>
   );
 }

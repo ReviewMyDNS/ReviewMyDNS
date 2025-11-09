@@ -198,6 +198,19 @@ export const PLAN_LIMITS = {
       monitoring: true,
     }
   },
+  team: {
+    dailyLookups: -1, // unlimited
+    allowedRecordTypes: ["A", "AAAA", "CNAME", "MX", "NS", "TXT", "SOA", "PTR", "SRV", "CAA", "DS", "DNSKEY"],
+    features: {
+      history: true,
+      export: true,
+      api: true,
+      alerts: true,
+      analytics: true,
+      bulkLookup: true,
+      monitoring: true,
+    }
+  },
   enterprise: {
     dailyLookups: -1, // unlimited
     allowedRecordTypes: ["A", "AAAA", "CNAME", "MX", "NS", "TXT", "SOA", "PTR", "SRV", "CAA", "DS", "DNSKEY"],
