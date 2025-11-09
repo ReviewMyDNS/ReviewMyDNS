@@ -9,23 +9,60 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { Globe, User, Menu, Lock, BarChart3, Zap, Share2, Copy, Check } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Globe, User, Menu, Lock, BarChart3, Zap, Share2, Copy, Check, RefreshCw } from "lucide-react";
 import { Link } from "wouter";
 import type { DnsLookupWithResults } from "@shared/schema";
 import { useToast } from "@/hooks/use-toast";
 import { Logo } from "@/components/logo";
 import MobileMenu from "@/components/mobile-menu";
+import { useMutation } from "@tanstack/react-query";
+import { apiRequest, queryClient } from "@/lib/queryClient";
 
 // Mobile-optimized home page
 export default function Home() {
   const [lookupResults, setLookupResults] = useState<DnsLookupWithResults | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [lastLookupParams, setLastLookupParams] = useState<{ domain: string; recordType: string } | null>(null);
   const { toast } = useToast();
 
   const handleLookupComplete = (results: DnsLookupWithResults) => {
     setLookupResults(results);
+    setLastLookupParams({ domain: results.domain, recordType: results.recordType });
     setCopied(false); // Reset copied state for new results
+  };
+
+  const refreshMutation = useMutation({
+    mutationFn: async () => {
+      if (!lastLookupParams) throw new Error("No previous lookup to refresh");
+      setIsLoading(true);
+      const response = await apiRequest("POST", "/api/dns/lookup", lastLookupParams);
+      return response.json() as Promise<DnsLookupWithResults>;
+    },
+    onSuccess: (data) => {
+      setLookupResults(data);
+      queryClient.invalidateQueries({ queryKey: ['/api/usage/stats'] });
+      toast({
+        title: "Results Refreshed",
+        description: `Updated DNS propagation results for ${data.domain}`,
+      });
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Refresh Failed",
+        description: error.message || "An error occurred while refreshing results.",
+        variant: "destructive",
+      });
+    },
+    onSettled: () => {
+      setIsLoading(false);
+    },
+  });
+
+  const handleRefresh = () => {
+    if (!lastLookupParams) return;
+    refreshMutation.mutate();
   };
 
   const handleShare = async () => {
@@ -166,18 +203,49 @@ export default function Home() {
                   {copied ? <Check className="h-4 w-4 mr-2" /> : <Share2 className="h-4 w-4 mr-2" />}
                   {copied ? 'Copied!' : 'Share Results'}
                 </Button>
-                <Button variant="outline" size="sm">
-                  <BarChart3 className="h-4 w-4 mr-2" />
+                
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={handleRefresh} 
+                  disabled={!lastLookupParams || isLoading}
+                  data-testid="button-refresh"
+                >
+                  <RefreshCw className={`h-4 w-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
                   Refresh
                 </Button>
-                <Button variant="outline" size="sm">
-                  <Zap className="h-4 w-4 mr-2" />
-                  Export
-                </Button>
-                <Button size="sm">
-                  <Globe className="h-4 w-4 mr-2" />
-                  Monitor
-                </Button>
+                
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <span>
+                        <Button variant="outline" size="sm" disabled data-testid="button-export">
+                          <Zap className="h-4 w-4 mr-2" />
+                          Export
+                        </Button>
+                      </span>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Coming Soon - Export results to CSV/JSON (Pro Feature)</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+                
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <span>
+                        <Button size="sm" disabled data-testid="button-monitor">
+                          <Globe className="h-4 w-4 mr-2" />
+                          Monitor
+                        </Button>
+                      </span>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Coming Soon - Set up continuous DNS monitoring (Pro Feature)</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
               </div>
             </div>
 

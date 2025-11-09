@@ -55,3 +55,35 @@ Preferred communication style: Simple, everyday language.
 - **typescript**: Type checking and compilation.
 - **vite**: Build tool and development server.
 - **tsx**: TypeScript execution for Node.js.
+
+## Recent Features
+
+### Results Action Buttons (November 9, 2025)
+The DNS results section includes four action buttons for managing and sharing lookup results:
+
+**Refresh Button** ✅ **Fully Functional**
+- Re-runs the same DNS lookup with identical domain and record type
+- Shows spinning loading icon during refresh
+- Updates results with fresh data and new timestamp
+- Increments daily usage counter (counts against rate limits)
+- Displays success toast notification
+- Respects freemium rate limits
+
+**Share Results Button** ✅ **Fully Functional**
+- Copies shareable link to clipboard
+- Native share API support on mobile devices
+- Unique URL per lookup: `/r/{shareId}`
+- Social media optimized with Open Graph tags
+
+**Export Button** 🔜 **Coming Soon**
+- Future feature: Export results to CSV/JSON formats
+- Planned as Pro/Enterprise feature
+- Tooltip shows roadmap status
+- Currently disabled with clear user feedback
+
+**Monitor Button** 🔜 **Coming Soon**
+- Future feature: Set up continuous DNS monitoring
+- Planned automated alerts for DNS changes
+- Planned as Pro/Enterprise feature
+- Tooltip shows roadmap status
+- Currently disabled with clear user feedback
