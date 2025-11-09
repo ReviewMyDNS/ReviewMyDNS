@@ -234,6 +234,6 @@ export default function Analytics() {
         </Card>
       </main>
     </div>
-  </PlanGate>
+    </PlanGate>
   );
 }

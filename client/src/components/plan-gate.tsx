@@ -79,6 +79,15 @@ const FEATURE_DETAILS = {
   }
 };
 
+// Plan hierarchy for tier-based access control
+const PLAN_RANKS = {
+  anonymous: 0,
+  free: 1,
+  pro: 2,
+  team: 3,
+  enterprise: 4
+} as const;
+
 export function PlanGate({ feature, requiredPlan = "pro", children, previewMode = false }: PlanGateProps) {
   const { data: usageStats } = useQuery<UsageStats>({
     queryKey: ['/api/usage/stats'],
@@ -86,7 +95,9 @@ export function PlanGate({ feature, requiredPlan = "pro", children, previewMode 
   });
 
   const currentPlan = usageStats?.plan?.toLowerCase() || "anonymous";
-  const hasAccess = currentPlan === "pro" || currentPlan === "team" || currentPlan === "enterprise";
+  const currentRank = PLAN_RANKS[currentPlan as keyof typeof PLAN_RANKS] || 0;
+  const requiredRank = PLAN_RANKS[requiredPlan];
+  const hasAccess = currentRank >= requiredRank;
 
   // If user has access, show the actual content
   if (hasAccess && !previewMode) {
@@ -96,6 +107,12 @@ export function PlanGate({ feature, requiredPlan = "pro", children, previewMode 
   // Otherwise show upgrade prompt
   const details = FEATURE_DETAILS[feature];
   const Icon = details.icon;
+  
+  // Dynamic upgrade messaging based on required plan
+  const planNames = { pro: "Pro", team: "Team", enterprise: "Enterprise" };
+  const planPrices = { pro: "$29", team: "$59", enterprise: "$129" };
+  const requiredPlanName = planNames[requiredPlan];
+  const requiredPlanPrice = planPrices[requiredPlan];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 py-12 px-4">
@@ -120,7 +137,7 @@ export function PlanGate({ feature, requiredPlan = "pro", children, previewMode 
               <div className="flex items-center">
                 <Crown className="h-5 w-5 text-yellow-600 mr-2" />
                 <p className="text-sm text-yellow-800 font-medium">
-                  This is a Pro feature. Upgrade to unlock unlimited access.
+                  This is a {requiredPlanName} feature. Upgrade to unlock unlimited access.
                 </p>
               </div>
             </div>
@@ -140,7 +157,7 @@ export function PlanGate({ feature, requiredPlan = "pro", children, previewMode 
                 <Link href="/pricing">
                   <Button size="lg" className="w-full sm:w-auto">
                     <Crown className="h-5 w-5 mr-2" />
-                    Upgrade to Pro - $29/month
+                    Upgrade to {requiredPlanName} - {requiredPlanPrice}/month
                   </Button>
                 </Link>
                 <Link href="/">

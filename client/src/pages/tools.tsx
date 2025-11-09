@@ -24,7 +24,8 @@ const toolCategories = [
         description: "Check multiple domains simultaneously",
         icon: List,
         status: "Active",
-        path: "/bulk-lookup"
+        path: "/bulk-lookup",
+        badge: "Pro"
       },
       {
         name: "DNS Comparison Tool",
@@ -44,21 +45,24 @@ const toolCategories = [
         description: "Track DNS response times globally",
         icon: Zap,
         status: "Active",
-        path: "/monitor"
+        path: "/monitor",
+        badge: "Pro"
       },
       {
         name: "Historical Tracking",
         description: "Monitor DNS changes over time",
         icon: History,
         status: "Active",
-        path: "/history"
+        path: "/history",
+        badge: "Pro"
       },
       {
         name: "Performance Analytics",
         description: "Detailed DNS performance reports",
         icon: Database,
         status: "Active",
-        path: "/analytics"
+        path: "/analytics",
+        badge: "Pro"
       }
     ]
   },
@@ -91,7 +95,8 @@ const toolCategories = [
         description: "RESTful API for DNS lookups",
         icon: Code,
         status: "Active",
-        path: "/api-docs"
+        path: "/api-docs",
+        badge: "Pro"
       }
     ]
   }
@@ -145,15 +150,27 @@ export default function Tools() {
                   const isActive = tool.status === "Active";
                   
                   return (
-                    <Card key={toolIndex} className={`group hover:shadow-lg transition-all duration-200 ${isActive ? 'hover:border-blue-200 cursor-pointer' : 'opacity-75'}`}>
+                    <Card 
+                      key={toolIndex} 
+                      className={`group hover:shadow-lg transition-all duration-200 ${isActive ? 'hover:border-blue-200 cursor-pointer' : 'opacity-75'}`}
+                      data-testid={`tool-card-${tool.name.toLowerCase().replace(/\s+/g, '-')}`}
+                    >
                       <CardHeader>
                         <div className="flex items-center justify-between mb-4">
                           <div className="text-blue-600">
                             <IconComponent className="h-8 w-8" />
                           </div>
-                          <Badge variant={isActive ? "default" : "secondary"}>
-                            {tool.status}
-                          </Badge>
+                          <div className="flex gap-2" data-testid={`badge-container-${tool.name.toLowerCase().replace(/\s+/g, '-')}`}>
+                            {tool.badge && (
+                              <Badge 
+                                variant="default" 
+                                className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white"
+                                data-testid={`badge-${tool.badge.toLowerCase()}`}
+                              >
+                                {tool.badge}
+                              </Badge>
+                            )}
+                          </div>
                         </div>
                         <CardTitle className={`text-lg font-semibold ${isActive ? 'group-hover:text-blue-600' : ''} transition-colors`}>
                           {tool.name}

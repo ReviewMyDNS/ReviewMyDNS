@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { History, Calendar, Database, TrendingUp } from "lucide-react";
 import { Link } from "wouter";
 import { Logo } from "@/components/logo";
+import { PlanGate } from "@/components/plan-gate";
 
 interface HistoryRecord {
   date: string;
@@ -64,6 +65,7 @@ export default function HistoryPage() {
   ];
 
   return (
+    <PlanGate feature="history" requiredPlan="pro">
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <header className="bg-white shadow-sm border-b border-gray-200">
@@ -224,5 +226,6 @@ export default function HistoryPage() {
         </Card>
       </main>
     </div>
+    </PlanGate>
   );
 }

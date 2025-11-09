@@ -21,8 +21,8 @@ Preferred communication style: Simple, everyday language.
 - **Framework**: Express.js with TypeScript on Node.js (ES modules).
 - **Database**: PostgreSQL with Drizzle ORM (Neon Database).
 - **Authentication**: Email/Password with bcrypt hashing and Express-session (PostgreSQL storage).
-- **Monetization**: Stripe integration for subscription plans (Pro: $19/month, Enterprise: $49/month).
-- **Freemium Model**: Tiered access (Anonymous, Free, Pro, Enterprise) with rate limiting and feature gating based on subscription plan. Advanced DNS record types are exclusive to Pro/Enterprise plans.
+- **Monetization**: Stripe integration for subscription plans (Pro: $29/month, Team: $59/month, Enterprise: $129/month).
+- **Freemium Model**: 4-tier access system (Anonymous, Free, Pro, Team, Enterprise) with rate limiting and feature gating. Advanced DNS record types and premium automation tools (bulk lookup, analytics, history, monitoring, API) are exclusive to Pro+ plans.
 
 ### Database Schema
 - `dns_lookups`: Stores DNS query requests.
@@ -87,3 +87,44 @@ The DNS results section includes four action buttons for managing and sharing lo
 - Planned as Pro/Enterprise feature
 - Tooltip shows roadmap status
 - Currently disabled with clear user feedback
+
+### Revenue Optimization & Paywall System (November 9, 2025)
+Comprehensive revenue optimization with 4-tier freemium model and premium feature gating.
+
+**Pricing Structure** ✅ **Fully Implemented**
+- **Free Plan**: $0/month - 50 lookups/day, basic DNS records, single-domain checker
+- **Pro Plan**: $29/month - Unlimited lookups, all premium tools, advanced DNS records
+- **Team Plan**: $59/month - All Pro features + collaboration tools, shared workspaces
+- **Enterprise Plan**: $129/month - Unlimited everything, priority support, dedicated infrastructure
+
+**PlanGate Component** ✅ **Fully Functional**
+- Reusable paywall component enforcing tier-based access control
+- Plan hierarchy system using numeric ranks (anonymous:0, free:1, pro:2, team:3, enterprise:4)
+- Dynamic upgrade messaging showing correct tier name and price based on required plan
+- Professional upgrade UI with feature benefits, CTAs, and trial messaging
+- Prevents bypass vulnerabilities by comparing current plan rank >= required plan rank
+
+**Premium Features Gated** ✅ **All Paywalled**
+Premium automation tools require Pro+ subscription:
+- **Bulk DNS Lookup** (/bulk-lookup) - Process up to 500 domains per day with automated reporting
+- **Performance Analytics** (/analytics) - Deep insights, historical trends, global coverage analysis
+- **Historical Tracking** (/history) - 30-day lookup history with change detection and alerts
+- **DNS Monitoring** (/monitor) - Real-time monitoring with instant change alerts and notifications
+- **Developer API** (/api-docs) - RESTful API access with 25,000 calls per month
+
+**Tools Page Enhancement** ✅ **Pro Badges Live**
+- Premium tool cards display distinctive "Pro" badges with gradient styling
+- Clear visual differentiation between free and paid features
+- Improved conversion funnel guiding users to pricing page
+
+**Revenue Targets**
+- Year 1: $250K+ (targeting 5.8M annual visitors from DNS tool market)
+- Year 5: $1.58M (aggressive growth matching competitor traffic)
+- Free tier serves as lead magnet while premium tools drive conversions
+- Pro plan ($29/mo) optimized for maximum conversion from DNS professionals
+
+**Technical Implementation**
+- Backend: Plan guard middleware enforces tier restrictions on API routes
+- Frontend: PlanGate component blocks UI access and shows upgrade prompts
+- Database: Schema supports 4-tier system with plan column in users table
+- Testing: E2E tests validate paywall enforcement and pricing display

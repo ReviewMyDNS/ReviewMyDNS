@@ -7,6 +7,7 @@ import { Link } from "wouter";
 import { Logo } from "@/components/logo";
 import MobileMenu from "@/components/mobile-menu";
 import { useQuery } from "@tanstack/react-query";
+import { PlanGate } from "@/components/plan-gate";
 
 interface MonitorResult {
   server: string;
@@ -49,6 +50,7 @@ export default function Monitor() {
   ];
 
   return (
+    <PlanGate feature="monitoring" requiredPlan="pro">
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <header className="bg-white shadow-sm border-b border-gray-200">
@@ -174,5 +176,6 @@ export default function Monitor() {
         </Card>
       </main>
     </div>
+    </PlanGate>
   );
 }
