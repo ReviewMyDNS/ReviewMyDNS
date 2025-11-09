@@ -39,16 +39,12 @@ export default function Contact() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
-              <Link href="/pricing">
-                <Button variant="ghost" size="sm" className="mr-4">
-                  <ArrowLeft className="h-4 w-4 mr-2" />
-                  Back to Pricing
-                </Button>
+              <Link href="/">
+                <div className="flex items-center cursor-pointer">
+                  <Logo size="sm" className="mr-2" />
+                  <h1 className="text-xl font-bold text-gray-900">ReviewMyDNS</h1>
+                </div>
               </Link>
-              <div className="flex items-center">
-                <Logo size="sm" className="mr-2" />
-                <h1 className="text-xl font-bold text-gray-900">ReviewMyDNS</h1>
-              </div>
             </div>
             <div className="flex items-center space-x-2">
               <Link href="/signin">

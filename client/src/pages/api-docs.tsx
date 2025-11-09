@@ -2,8 +2,9 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ArrowLeft, Code, Key, Zap, Globe } from "lucide-react";
+import { Code, Key, Zap, Globe } from "lucide-react";
 import { Link } from "wouter";
+import { Logo } from "@/components/logo";
 
 const endpoints = [
   {
@@ -116,12 +117,11 @@ export default function ApiDocs() {
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
               <Link href="/">
-                <Button variant="ghost" size="sm" className="mr-4">
-                  <ArrowLeft className="h-4 w-4 mr-2" />
-                  Back to DNS Checker
-                </Button>
+                <div className="flex items-center cursor-pointer">
+                  <Logo size="sm" className="mr-2" />
+                  <h1 className="text-xl font-bold text-gray-900">ReviewMyDNS</h1>
+                </div>
               </Link>
-              <h1 className="text-xl font-bold text-gray-900">API Documentation</h1>
             </div>
             <Button>Get API Key</Button>
           </div>

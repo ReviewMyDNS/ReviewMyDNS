@@ -2,8 +2,9 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, History, Calendar, Database, TrendingUp } from "lucide-react";
+import { History, Calendar, Database, TrendingUp } from "lucide-react";
 import { Link } from "wouter";
+import { Logo } from "@/components/logo";
 
 interface HistoryRecord {
   date: string;
@@ -69,16 +70,12 @@ export default function HistoryPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
-              <Link href="/tools">
-                <Button variant="ghost" size="sm" className="mr-4">
-                  <ArrowLeft className="h-4 w-4 mr-2" />
-                  Back to Tools
-                </Button>
+              <Link href="/">
+                <div className="flex items-center cursor-pointer">
+                  <Logo size="sm" className="mr-2" />
+                  <h1 className="text-xl font-bold text-gray-900">ReviewMyDNS</h1>
+                </div>
               </Link>
-              <div className="flex items-center">
-                <History className="h-6 w-6 text-blue-600 mr-2" />
-                <h1 className="text-xl font-bold text-gray-900">Historical DNS Tracking</h1>
-              </div>
             </div>
           </div>
         </div>

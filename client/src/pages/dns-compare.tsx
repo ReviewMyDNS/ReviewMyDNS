@@ -6,8 +6,9 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { ArrowLeft, GitCompare, CheckCircle, XCircle, AlertTriangle } from "lucide-react";
+import { GitCompare, CheckCircle, XCircle, AlertTriangle } from "lucide-react";
 import { Link } from "wouter";
+import { Logo } from "@/components/logo";
 import { apiRequest } from "@/lib/queryClient";
 
 interface ComparisonResult {
@@ -156,13 +157,12 @@ export default function DnsCompare() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
-              <Link href="/tools">
-                <Button variant="ghost" size="sm" className="mr-4">
-                  <ArrowLeft className="h-4 w-4 mr-2" />
-                  Back to Tools
-                </Button>
+              <Link href="/">
+                <div className="flex items-center cursor-pointer">
+                  <Logo size="sm" className="mr-2" />
+                  <h1 className="text-xl font-bold text-gray-900">ReviewMyDNS</h1>
+                </div>
               </Link>
-              <h1 className="text-xl font-bold text-gray-900">DNS Provider Comparison</h1>
             </div>
           </div>
         </div>
