@@ -4,6 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Book, Globe, Zap, Shield, AlertCircle } from "lucide-react";
 import { Link } from "wouter";
 import { Logo } from "@/components/logo";
+import MobileMenu from "@/components/mobile-menu";
 
 const dnsRecordTypes = [
   {
@@ -106,10 +107,11 @@ export default function Documentation() {
               <Link href="/">
                 <div className="flex items-center cursor-pointer">
                   <Logo size="sm" className="mr-2" />
-                  <h1 className="text-xl font-bold text-gray-900">ReviewMyDNS</h1>
+                  <h1 className="text-base md:text-xl font-bold text-gray-900">ReviewMyDNS</h1>
                 </div>
               </Link>
             </div>
+            <MobileMenu />
           </div>
         </div>
       </header>

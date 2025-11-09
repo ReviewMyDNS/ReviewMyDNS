@@ -5,6 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Code, Key, Zap, Globe } from "lucide-react";
 import { Link } from "wouter";
 import { Logo } from "@/components/logo";
+import MobileMenu from "@/components/mobile-menu";
 
 const endpoints = [
   {
@@ -119,11 +120,14 @@ export default function ApiDocs() {
               <Link href="/">
                 <div className="flex items-center cursor-pointer">
                   <Logo size="sm" className="mr-2" />
-                  <h1 className="text-xl font-bold text-gray-900">ReviewMyDNS</h1>
+                  <h1 className="text-base md:text-xl font-bold text-gray-900">ReviewMyDNS</h1>
                 </div>
               </Link>
             </div>
-            <Button>Get API Key</Button>
+            <div className="flex items-center space-x-2">
+              <Button className="hidden md:block">Get API Key</Button>
+              <MobileMenu />
+            </div>
           </div>
         </div>
       </header>

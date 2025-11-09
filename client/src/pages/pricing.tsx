@@ -7,6 +7,7 @@ import { Switch } from "@/components/ui/switch";
 import { ArrowLeft, Globe, Check, X, Zap, Crown, Users, BarChart3, Bell, Shield, Clock } from "lucide-react";
 import { Link } from "wouter";
 import { Logo } from "@/components/logo";
+import MobileMenu from "@/components/mobile-menu";
 
 export default function Pricing() {
   const [isYearly, setIsYearly] = useState(false);
@@ -100,12 +101,12 @@ export default function Pricing() {
               <Link href="/">
                 <div className="flex items-center cursor-pointer">
                   <Logo size="sm" className="mr-2" />
-                  <h1 className="text-xl font-bold text-gray-900">ReviewMyDNS</h1>
+                  <h1 className="text-base md:text-xl font-bold text-gray-900">ReviewMyDNS</h1>
                 </div>
               </Link>
             </div>
             <div className="flex items-center space-x-2">
-              <div className="hidden sm:flex items-center space-x-2">
+              <div className="hidden md:flex items-center space-x-2">
                 <Link href="/signin">
                   <Button variant="ghost">Sign In</Button>
                 </Link>
@@ -113,14 +114,7 @@ export default function Pricing() {
                   <Button>Sign Up</Button>
                 </Link>
               </div>
-              <div className="sm:hidden flex items-center space-x-1">
-                <Link href="/signin">
-                  <Button variant="ghost" size="sm">Sign In</Button>
-                </Link>
-                <Link href="/signin?tab=signup">
-                  <Button size="sm">Sign Up</Button>
-                </Link>
-              </div>
+              <MobileMenu />
             </div>
           </div>
         </div>

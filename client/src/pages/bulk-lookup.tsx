@@ -9,6 +9,7 @@ import { Progress } from "@/components/ui/progress";
 import { Upload, Download, CheckCircle, XCircle, Clock } from "lucide-react";
 import { Link } from "wouter";
 import { Logo } from "@/components/logo";
+import MobileMenu from "@/components/mobile-menu";
 import { apiRequest } from "@/lib/queryClient";
 
 interface BulkResult {
@@ -139,10 +140,11 @@ export default function BulkLookup() {
               <Link href="/">
                 <div className="flex items-center cursor-pointer">
                   <Logo size="sm" className="mr-2" />
-                  <h1 className="text-xl font-bold text-gray-900">ReviewMyDNS</h1>
+                  <h1 className="text-base md:text-xl font-bold text-gray-900">ReviewMyDNS</h1>
                 </div>
               </Link>
             </div>
+            <MobileMenu />
           </div>
         </div>
       </header>

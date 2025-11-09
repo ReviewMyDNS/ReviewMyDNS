@@ -13,6 +13,7 @@ import { Link } from "wouter";
 import type { DnsLookupWithResults } from "@shared/schema";
 import { useToast } from "@/hooks/use-toast";
 import { Logo } from "@/components/logo";
+import MobileMenu from "@/components/mobile-menu";
 
 // Mobile-optimized home page
 export default function Home() {
@@ -97,12 +98,8 @@ export default function Home() {
                 </Link>
               </div>
               
-              {/* Mobile Actions */}
-              <div className="md:hidden flex items-center">
-                <Link href="/pricing">
-                  <Button variant="ghost" size="sm" className="text-xs">Pricing</Button>
-                </Link>
-              </div>
+              {/* Mobile Menu */}
+              <MobileMenu />
             </div>
           </div>
         </div>

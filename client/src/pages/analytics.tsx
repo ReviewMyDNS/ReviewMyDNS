@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { BarChart3, PieChart, Activity, Globe } from "lucide-react";
 import { Link } from "wouter";
 import { Logo } from "@/components/logo";
+import MobileMenu from "@/components/mobile-menu";
 
 export default function Analytics() {
   const [selectedPeriod, setSelectedPeriod] = useState("7d");
@@ -19,10 +20,11 @@ export default function Analytics() {
               <Link href="/">
                 <div className="flex items-center cursor-pointer">
                   <Logo size="sm" className="mr-2" />
-                  <h1 className="text-xl font-bold text-gray-900">ReviewMyDNS</h1>
+                  <h1 className="text-base md:text-xl font-bold text-gray-900">ReviewMyDNS</h1>
                 </div>
               </Link>
             </div>
+            <MobileMenu />
           </div>
         </div>
       </header>

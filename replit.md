@@ -70,6 +70,16 @@ To enable real payments, update these secrets in Replit:
 
 ## Recent Changes
 
+**November 9, 2025 - Mobile Navigation & UX Improvements**
+- ✅ Fixed page flickering on navigation with 0.15s fade-in animation
+- ✅ Added comprehensive mobile menu (hamburger icon) to all pages site-wide
+- ✅ Implemented responsive navigation: desktop links hidden on mobile, hamburger menu visible
+- ✅ Mobile menu includes: DNS Checker, Tools, API, Terminology, Pricing, Sign In, Sign Up
+- ✅ Consistent mobile UX across 10+ pages: home, tools, pricing, api-docs, documentation, bulk-lookup, dns-compare, security, monitor, analytics
+- ✅ Logo text scales responsively: text-base on mobile, text-xl on desktop
+- ✅ Mobile menu auto-closes after navigation for smooth user experience
+- ✅ Tested on mobile viewport (iPhone 12) - all navigation working perfectly
+
 **November 8, 2025 - Logo Update & Favicon Infrastructure**
 - ✅ Updated logo from Lock 🔒 to Globe 🌍 across all pages for better brand alignment
 - ✅ Added favicon infrastructure (SVG, ICO, Apple Touch Icon)
