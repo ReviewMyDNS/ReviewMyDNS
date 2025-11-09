@@ -2,27 +2,27 @@ export default function LogoOptions() {
   const logos = [
     { 
       num: 1, 
-      name: "Simple & Clean", 
+      name: "Classic Globe", 
       file: "/earth-1.svg", 
-      desc: "Flat blue ocean with simple green shapes"
+      desc: "Americas, Africa, Asia visible with meridian lines"
     },
     { 
       num: 2, 
-      name: "Modern Material", 
+      name: "Gradient Globe", 
       file: "/earth-2.svg", 
-      desc: "Gradient ocean with geometric continents"
+      desc: "Radiant ocean with continents and grid lines"
     },
     { 
       num: 3, 
-      name: "Bright & Friendly", 
+      name: "Bright Globe", 
       file: "/earth-3.svg", 
-      desc: "Vibrant cyan ocean with bright green lands"
+      desc: "Turquoise ocean with visible continents"
     },
     { 
       num: 4, 
-      name: "Dark & Elegant", 
+      name: "Blue Marble", 
       file: "/earth-4.svg", 
-      desc: "Deep navy ocean with forest green continents"
+      desc: "NASA-style Earth with Antarctica visible"
     },
   ];
 
