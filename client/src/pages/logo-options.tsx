@@ -2,27 +2,27 @@ export default function LogoOptions() {
   const logos = [
     { 
       num: 1, 
-      name: "Earth Photo 1", 
+      name: "Clean Earth 1", 
       file: "/blob-1.jpg", 
-      desc: "Real NASA Earth from space photograph"
+      desc: "Earth globe on clean white background"
     },
     { 
       num: 2, 
-      name: "Earth Photo 2", 
+      name: "Clean Earth 2", 
       file: "/blob-2.jpg", 
-      desc: "Actual Blue Marble space photo"
+      desc: "Isolated Earth without black space"
     },
     { 
       num: 3, 
-      name: "Earth Photo 3", 
+      name: "Clean Earth 3", 
       file: "/blob-3.jpg", 
-      desc: "Authentic satellite Earth image"
+      desc: "Planet Earth on white background"
     },
     { 
       num: 4, 
-      name: "Earth Photo 4", 
+      name: "Clean Earth 4", 
       file: "/blob-4.jpg", 
-      desc: "Real planet Earth photograph"
+      desc: "Earth globe isolated clean look"
     },
   ];
 
