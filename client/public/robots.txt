@@ -1,0 +1,16 @@
+# ReviewMyDNS - Robots.txt
+# Allow all search engines to crawl the site
+
+User-agent: *
+Allow: /
+
+# Disallow private/auth pages
+Disallow: /login
+Disallow: /register
+Disallow: /api/
+
+# Sitemap location
+Sitemap: https://reviewmydns.com/sitemap.xml
+
+# Crawl delay (be nice to small servers)
+Crawl-delay: 1
