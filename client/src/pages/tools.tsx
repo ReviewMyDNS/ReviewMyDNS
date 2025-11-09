@@ -200,54 +200,6 @@ export default function Tools() {
           ))}
         </div>
 
-        {/* Sponsored Tools Section */}
-        <div className="mt-12 mb-8">
-          <div className="text-center mb-6">
-            <span className="text-xs text-gray-500 uppercase tracking-wide">Partner Tools</span>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Card className="border-purple-200 bg-purple-50">
-              <CardContent className="p-6">
-                <div className="flex items-center mb-4">
-                  <div className="w-10 h-10 bg-purple-600 rounded-lg flex items-center justify-center mr-3">
-                    <span className="text-white font-bold text-sm">CF</span>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-gray-900">Cloudflare DNS</h4>
-                    <span className="text-xs text-gray-500">Sponsored</span>
-                  </div>
-                </div>
-                <p className="text-sm text-gray-600 mb-4">
-                  Fast, secure, and reliable DNS with global anycast network. Free tier available.
-                </p>
-                <Button variant="outline" size="sm" className="w-full">
-                  Get Started Free
-                </Button>
-              </CardContent>
-            </Card>
-
-            <Card className="border-green-200 bg-green-50">
-              <CardContent className="p-6">
-                <div className="flex items-center mb-4">
-                  <div className="w-10 h-10 bg-green-600 rounded-lg flex items-center justify-center mr-3">
-                    <span className="text-white font-bold text-sm">R53</span>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-gray-900">Route 53</h4>
-                    <span className="text-xs text-gray-500">Sponsored</span>
-                  </div>
-                </div>
-                <p className="text-sm text-gray-600 mb-4">
-                  AWS managed DNS service with health checks and traffic routing.
-                </p>
-                <Button variant="outline" size="sm" className="w-full">
-                  Learn More
-                </Button>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-
         {/* Call to Action */}
         <div className="mt-16 bg-blue-50 rounded-lg p-8 text-center">
           <h3 className="text-2xl font-bold text-gray-900 mb-4">Need More Tools?</h3>
