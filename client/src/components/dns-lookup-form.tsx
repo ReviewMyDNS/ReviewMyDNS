@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -9,12 +9,14 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Checkbox } from "@/components/ui/checkbox";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Card, CardContent } from "@/components/ui/card";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { ChevronRight, Search } from "lucide-react";
+import { ChevronRight, Search, Lock, Crown } from "lucide-react";
 import { insertDnsLookupSchema, DNS_RECORD_TYPES, type DnsLookupWithResults } from "@shared/schema";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { z } from "zod";
+import { Link } from "wouter";
 
 const formSchema = insertDnsLookupSchema.extend({
   domain: z.string().min(1, "Domain is required").regex(/^[a-zA-Z0-9][a-zA-Z0-9-_.]*[a-zA-Z0-9]$/, "Invalid domain format"),
@@ -28,9 +30,24 @@ interface DnsLookupFormProps {
   setIsLoading: (loading: boolean) => void;
 }
 
+interface UsageStats {
+  plan: string;
+  dailyLimit: number | null;
+  used: number;
+  remaining: number;
+  resetAt: string;
+  allowedRecordTypes: string[];
+}
+
 export function DnsLookupForm({ onLookupComplete, isLoading, setIsLoading }: DnsLookupFormProps) {
   const [isAdvancedOpen, setIsAdvancedOpen] = useState(false);
   const { toast } = useToast();
+
+  // Fetch usage stats to check allowed record types
+  const { data: usageStats } = useQuery<UsageStats>({
+    queryKey: ['/api/usage/stats'],
+    refetchInterval: 30000,
+  });
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -112,11 +129,28 @@ export function DnsLookupForm({ onLookupComplete, isLoading, setIsLoading }: Dns
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          {DNS_RECORD_TYPES.map((type) => (
-                            <SelectItem key={type} value={type}>
-                              {type}
-                            </SelectItem>
-                          ))}
+                          {DNS_RECORD_TYPES.map((type) => {
+                            const isAllowed = usageStats?.allowedRecordTypes.includes(type) !== false;
+                            return (
+                              <SelectItem 
+                                key={type} 
+                                value={type}
+                                disabled={!isAllowed}
+                                className={!isAllowed ? "opacity-50 cursor-not-allowed" : ""}
+                                data-testid={`record-type-option-${type.toLowerCase()}`}
+                              >
+                                <div className="flex items-center gap-2">
+                                  {type}
+                                  {!isAllowed && (
+                                    <div className="flex items-center gap-1">
+                                      <Lock className="h-3 w-3 text-muted-foreground" />
+                                      <span className="text-xs text-muted-foreground">Pro</span>
+                                    </div>
+                                  )}
+                                </div>
+                              </SelectItem>
+                            );
+                          })}
                         </SelectContent>
                       </Select>
                       <FormMessage />

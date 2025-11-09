@@ -112,13 +112,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const userId = req.user?.id || null;
       const anonymousId = userId ? null : getAnonymousId(req);
       
-      // Get current usage
-      const usage = await checkRateLimit(userId, anonymousId, "dns_lookup", planLimits.dailyLookups);
+      // Get current usage (convert null to -1 for unlimited plans)
+      const dailyLimit = planLimits.dailyLookups ?? -1;
+      const usage = await checkRateLimit(userId, anonymousId, "dns_lookup", dailyLimit);
       
       res.json({
         plan: userPlan,
         dailyLimit: planLimits.dailyLookups,
-        used: usage.limit - usage.remaining,
+        used: usage.limit === -1 ? 0 : usage.limit - usage.remaining,
         remaining: usage.remaining,
         resetAt: usage.resetAt,
         allowedRecordTypes: planLimits.allowedRecordTypes,
@@ -152,8 +153,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
       
-      // Check rate limit
-      const rateLimit = await checkRateLimit(userId, anonymousId, "dns_lookup", planLimits.dailyLookups);
+      // Check rate limit (convert null to -1 for unlimited plans)
+      const dailyLimit = planLimits.dailyLookups ?? -1;
+      const rateLimit = await checkRateLimit(userId, anonymousId, "dns_lookup", dailyLimit);
       
       if (!rateLimit.allowed) {
         return res.status(429).json({
