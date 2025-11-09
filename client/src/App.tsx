@@ -20,6 +20,7 @@ import Dashboard from "@/pages/dashboard";
 import Contact from "@/pages/contact";
 import Subscribe from "@/pages/subscribe";
 import SharedResult from "@/pages/shared-result";
+import LogoPreview from "@/pages/logo-preview";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -42,6 +43,7 @@ function Router() {
       <Route path="/subscribe" component={Subscribe} />
       <Route path="/dashboard" component={Dashboard} />
       <Route path="/contact" component={Contact} />
+      <Route path="/logo-preview" component={LogoPreview} />
       <Route component={NotFound} />
     </Switch>
   );
