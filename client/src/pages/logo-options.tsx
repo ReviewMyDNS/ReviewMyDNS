@@ -2,27 +2,27 @@ export default function LogoOptions() {
   const logos = [
     { 
       num: 1, 
-      name: "Classic Globe", 
-      file: "/earth-1.svg", 
-      desc: "Americas, Africa, Asia visible with meridian lines"
+      name: "Professional Globe 1", 
+      file: "/earth-photo-1.jpg", 
+      desc: "Professional Earth globe stock image"
     },
     { 
       num: 2, 
-      name: "Gradient Globe", 
-      file: "/earth-2.svg", 
-      desc: "Radiant ocean with continents and grid lines"
+      name: "Professional Globe 2", 
+      file: "/earth-photo-2.jpg", 
+      desc: "High-quality Earth globe imagery"
     },
     { 
       num: 3, 
-      name: "Bright Globe", 
-      file: "/earth-3.svg", 
-      desc: "Turquoise ocean with visible continents"
+      name: "Professional Globe 3", 
+      file: "/earth-photo-3.jpg", 
+      desc: "Clean professional Earth design"
     },
     { 
       num: 4, 
-      name: "Blue Marble", 
-      file: "/earth-4.svg", 
-      desc: "NASA-style Earth with Antarctica visible"
+      name: "Professional Globe 4", 
+      file: "/earth-photo-4.jpg", 
+      desc: "Modern Earth globe stock photo"
     },
   ];
 
