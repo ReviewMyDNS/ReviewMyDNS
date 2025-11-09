@@ -2,27 +2,27 @@ export default function LogoOptions() {
   const logos = [
     { 
       num: 1, 
-      name: "Clean Earth 1", 
+      name: "3D Globe", 
       file: "/blob-1.jpg", 
-      desc: "Earth globe on clean white background"
+      desc: "Clean 3D rendered world globe"
     },
     { 
       num: 2, 
-      name: "Clean Earth 2", 
+      name: "Minimalist Globe", 
       file: "/blob-2.jpg", 
-      desc: "Isolated Earth without black space"
+      desc: "Modern minimalist Earth globe"
     },
     { 
       num: 3, 
-      name: "Clean Earth 3", 
+      name: "Professional Globe", 
       file: "/blob-3.jpg", 
-      desc: "Planet Earth on white background"
+      desc: "Professional 3D world globe icon"
     },
     { 
       num: 4, 
-      name: "Clean Earth 4", 
+      name: "Elegant Globe", 
       file: "/blob-4.jpg", 
-      desc: "Earth globe isolated clean look"
+      desc: "Simple elegant world globe sphere"
     },
   ];
 
