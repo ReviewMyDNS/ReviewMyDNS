@@ -149,7 +149,7 @@ export default function Home() {
         <section className="relative bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 overflow-hidden">
           <div className="absolute inset-0 bg-grid-white/[0.05] bg-[size:32px_32px]"></div>
           <div className="absolute inset-0 opacity-20">
-            <img src="/globe-icon-new.png" alt="" className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] object-contain blur-3xl" />
+            <img src="/logo.png" alt="" className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] object-contain blur-3xl" />
           </div>
           <div className="absolute top-10 right-10 w-32 h-32 bg-blue-500/30 rounded-full blur-3xl"></div>
           <div className="absolute bottom-10 left-10 w-40 h-40 bg-indigo-500/30 rounded-full blur-3xl"></div>
