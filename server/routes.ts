@@ -384,6 +384,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           price: priceId,
           quantity: 1,
         }],
+        allow_promotion_codes: true,
         success_url: `${req.headers.origin}/dashboard?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${req.headers.origin}/pricing`,
         metadata: {
