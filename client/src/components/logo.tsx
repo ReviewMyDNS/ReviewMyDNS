@@ -14,7 +14,7 @@ export function Logo({ size = "md", className }: LogoProps) {
 
   return (
     <img 
-      src="/logo.png" 
+      src="/logo.png?v=1762968389" 
       alt="ReviewMyDNS Logo"
       className={cn(sizeClasses[size], className)}
       data-testid="logo-image"
