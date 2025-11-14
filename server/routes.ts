@@ -381,6 +381,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
         await storage.updateUserStripeInfo(userId, customerId, "");
       }
 
+      // Construct base URL with fallback
+      const protocol = req.headers['x-forwarded-proto'] || 'https';
+      const host = req.headers.host;
+      const origin = req.headers.origin || `${protocol}://${host}`;
+      
       // Create Checkout Session
       const session = await stripe.checkout.sessions.create({
         customer: customerId,
@@ -390,8 +395,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
           quantity: 1,
         }],
         allow_promotion_codes: true,
-        success_url: `${req.headers.origin}/dashboard?session_id={CHECKOUT_SESSION_ID}`,
-        cancel_url: `${req.headers.origin}/pricing`,
+        success_url: `${origin}/dashboard?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${origin}/pricing`,
         metadata: {
           userId: user.id,
           plan: plan,
