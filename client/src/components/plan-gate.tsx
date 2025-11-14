@@ -110,7 +110,7 @@ export function PlanGate({ feature, requiredPlan = "pro", children, previewMode 
   
   // Dynamic upgrade messaging based on required plan
   const planNames = { pro: "Pro", team: "Team", enterprise: "Enterprise" };
-  const planPrices = { pro: "$29", team: "$59", enterprise: "$129" };
+  const planPrices = { pro: "$19", team: "$59", enterprise: "$49" };
   const requiredPlanName = planNames[requiredPlan];
   const requiredPlanPrice = planPrices[requiredPlan];
 
