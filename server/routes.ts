@@ -349,9 +349,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/create-checkout-session', requireAuth, async (req, res) => {
     try {
       const { plan = 'pro' } = req.body;
-      const priceId = plan === 'enterprise' 
-        ? process.env.STRIPE_ENTERPRISE_PRICE_ID 
-        : process.env.STRIPE_PRICE_ID;
+      let priceId;
+      if (plan === 'enterprise') {
+        priceId = process.env.STRIPE_ENTERPRISE_PRICE_ID;
+      } else if (plan === 'team') {
+        priceId = process.env.STRIPE_TEAM_PRICE_ID;
+      } else {
+        priceId = process.env.STRIPE_PRICE_ID;
+      }
       
       console.log("[Stripe] Creating checkout session for plan:", plan, "priceId:", priceId);
       

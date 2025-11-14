@@ -225,6 +225,7 @@ export default function Pricing() {
                   <Link href={
                     plan.name === "Free" ? "/api/login" :
                     plan.name === "Enterprise" ? "/subscribe?plan=enterprise" :
+                    plan.name === "Team" ? "/subscribe?plan=team" :
                     "/subscribe?plan=pro"
                   }>
                     <Button 
