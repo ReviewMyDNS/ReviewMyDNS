@@ -40,8 +40,8 @@ export default function Pricing() {
     {
       name: "Pro",
       description: "For professionals and power users",
-      monthlyPrice: 29,
-      yearlyPrice: 288,
+      monthlyPrice: 19,
+      yearlyPrice: 190,
       icon: Zap,
       color: "text-blue-600",
       bgColor: "bg-blue-50",
@@ -89,8 +89,8 @@ export default function Pricing() {
     {
       name: "Enterprise",
       description: "For large organizations",
-      monthlyPrice: 129,
-      yearlyPrice: 1290,
+      monthlyPrice: 49,
+      yearlyPrice: 490,
       icon: Crown,
       color: "text-purple-600",
       bgColor: "bg-purple-50",
