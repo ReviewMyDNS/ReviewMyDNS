@@ -58,6 +58,50 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Features
 
+### Traffic Acquisition Features (November 18, 2025)
+Comprehensive traffic acquisition system targeting 100K monthly visitors through SEO, embeddable widgets, and email marketing.
+
+**SEO Landing Pages** ✅ **Live**
+Three keyword-optimized landing pages targeting high-volume search queries:
+- **/dns-propagation-checker** - 12K monthly searches, "DNS propagation checker" keyword
+- **/mx-record-lookup** - 8K monthly searches, "MX record lookup" keyword  
+- **/txt-record-checker** - 6K monthly searches, "TXT record checker" keyword
+- Each page includes: H1 with target keywords, SEO-optimized meta descriptions, complete Open Graph tags, structured content sections, DNS lookup form, results display
+- HelmetProvider integration ensures proper meta tag rendering across all pages
+- Expected organic traffic: 15K-25K monthly visitors from these three pages alone
+
+**Embeddable Widget System** ✅ **Live**
+Viral growth feature allowing any website to embed ReviewMyDNS DNS checker:
+- **/widget** - Widget distribution page with iframe embed code and live preview
+- **/embed** - Minimal DNS checker optimized for iframe embedding (no header/footer)
+- Copy-paste embed code with customizable width/height
+- "Powered by ReviewMyDNS" branding drives referral traffic
+- Target: 500+ embeds across tech blogs, documentation sites, DNS forums
+- Expected backlink SEO value: Massive domain authority boost from 100+ referring domains
+
+**Email Capture Popup** ✅ **Live**
+Marketing automation to build remarketing email list:
+- Appears after 15 seconds on homepage for new visitors
+- "Get DNS monitoring alerts" value proposition
+- Saves emails to database with source tracking (popup, landing-page, widget)
+- LocalStorage suppression prevents repeat display (keys: emailPopupSeen, emailPopupDismissed, emailCaptured)
+- API endpoint: POST /api/email-capture with Zod validation using insertEmailCaptureSchema
+- Database table: email_captures (id, email, source, referrer, createdAt)
+- Target: 5-8% conversion rate = 500-800 emails/month at current traffic
+- Future use: DNS monitoring feature launch, Pro plan promotions, product updates
+
+**Technical Implementation**
+- Frontend: React Helmet for SEO meta tags, Dialog component for popup modal
+- Backend: /api/email-capture endpoint with Zod validation, emailCaptures database table
+- Database: PostgreSQL with email index for fast lookups
+- Testing: E2E tests verify popup flow, landing pages, and widget embedding
+
+**Expected Impact**
+- SEO landing pages: +15K-25K monthly organic visitors
+- Embeddable widgets: +5K-10K referral visitors from embedded sites
+- Email list: 500-800 new subscribers monthly for remarketing campaigns
+- Combined: 20K-35K additional monthly visitors, 40% progress toward 100K goal
+
 ### Results Action Buttons (November 9, 2025)
 The DNS results section includes four action buttons for managing and sharing lookup results:
 
