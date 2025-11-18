@@ -21,7 +21,7 @@ Preferred communication style: Simple, everyday language.
 - **Framework**: Express.js with TypeScript on Node.js (ES modules).
 - **Database**: PostgreSQL with Drizzle ORM (Neon Database).
 - **Authentication**: Email/Password with bcrypt hashing and Express-session (PostgreSQL storage).
-- **Monetization**: Stripe integration for subscription plans (Pro: $29/month, Team: $59/month, Enterprise: $129/month).
+- **Monetization**: Stripe integration for subscription plans (Pro: $19/month, Team: $59/month, Enterprise: $49/month).
 - **Freemium Model**: 4-tier access system (Anonymous, Free, Pro, Team, Enterprise) with rate limiting and feature gating. Advanced DNS record types and premium automation tools (bulk lookup, analytics, history, monitoring, API) are exclusive to Pro+ plans.
 
 ### Database Schema
@@ -93,9 +93,9 @@ Comprehensive revenue optimization with 4-tier freemium model and premium featur
 
 **Pricing Structure** ✅ **Fully Implemented**
 - **Free Plan**: $0/month - 50 lookups/day, basic DNS records, single-domain checker
-- **Pro Plan**: $29/month - Unlimited lookups, all premium tools, advanced DNS records
+- **Pro Plan**: $19/month - Unlimited lookups, all premium tools, advanced DNS records
 - **Team Plan**: $59/month - All Pro features + collaboration tools, shared workspaces
-- **Enterprise Plan**: $129/month - Unlimited everything, priority support, dedicated infrastructure
+- **Enterprise Plan**: $49/month - Unlimited everything, priority support, dedicated infrastructure
 
 **PlanGate Component** ✅ **Fully Functional**
 - Reusable paywall component enforcing tier-based access control
@@ -121,7 +121,7 @@ Premium automation tools require Pro+ subscription:
 - Year 1: $250K+ (targeting 5.8M annual visitors from DNS tool market)
 - Year 5: $1.58M (aggressive growth matching competitor traffic)
 - Free tier serves as lead magnet while premium tools drive conversions
-- Pro plan ($29/mo) optimized for maximum conversion from DNS professionals
+- Pro plan ($19/mo) optimized for maximum conversion from DNS professionals
 
 **Technical Implementation**
 - Backend: Plan guard middleware enforces tier restrictions on API routes

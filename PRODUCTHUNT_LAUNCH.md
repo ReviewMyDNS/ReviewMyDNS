@@ -60,9 +60,9 @@ ReviewMyDNS provides instant DNS propagation checking with:
 ### Pricing
 
 **Free Plan**: 50 lookups/day, basic DNS records, single-domain checker
-**Pro Plan**: $29/month - Unlimited lookups, all premium tools
+**Pro Plan**: $19/month - Unlimited lookups, all premium tools
 **Team Plan**: $59/month - Collaboration features + shared workspaces  
-**Enterprise Plan**: $129/month - Priority support + dedicated infrastructure
+**Enterprise Plan**: $49/month - Priority support + dedicated infrastructure
 
 ---
 
