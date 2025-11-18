@@ -1,4 +1,4 @@
-import { dnsLookups, dnsServers, dnsResults, users, type DnsLookup, type DnsServer, type DnsResult, type InsertDnsLookup, type InsertDnsServer, type InsertDnsResult, type DnsLookupWithResults, type User, type UpsertUser } from "@shared/schema";
+import { dnsLookups, dnsServers, dnsResults, users, emailCaptures, type DnsLookup, type DnsServer, type DnsResult, type InsertDnsLookup, type InsertDnsServer, type InsertDnsResult, type DnsLookupWithResults, type User, type UpsertUser, type InsertEmailCapture, type EmailCapture } from "@shared/schema";
 import { db } from "./db";
 import { eq } from "drizzle-orm";
 import { nanoid } from "nanoid";
@@ -25,6 +25,9 @@ export interface IStorage {
   createUser(email: string, passwordHash: string, firstName?: string, lastName?: string): Promise<User>;
   upsertUser(user: UpsertUser): Promise<User>;
   updateUserStripeInfo(userId: string, stripeCustomerId: string, stripeSubscriptionId: string): Promise<User>;
+  
+  // Email capture
+  captureEmail(capture: InsertEmailCapture): Promise<EmailCapture>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -241,6 +244,14 @@ export class DatabaseStorage implements IStorage {
       .where(eq(users.id, userId))
       .returning();
     return user;
+  }
+
+  async captureEmail(capture: InsertEmailCapture): Promise<EmailCapture> {
+    const [captured] = await db
+      .insert(emailCaptures)
+      .values(capture)
+      .returning();
+    return captured;
   }
 }
 

@@ -3,6 +3,7 @@ import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { HelmetProvider } from "react-helmet-async";
 import Home from "@/pages/home";
 import Tools from "@/pages/tools";
 import ApiDocs from "@/pages/api-docs";
@@ -23,6 +24,11 @@ import SharedResult from "@/pages/shared-result";
 import LogoPreview from "@/pages/logo-preview";
 import LogoOptions from "@/pages/logo-options";
 import NotFound from "@/pages/not-found";
+import DnsPropagationChecker from "@/pages/dns-propagation-checker";
+import MxRecordLookup from "@/pages/mx-record-lookup";
+import TxtRecordChecker from "@/pages/txt-record-checker";
+import Embed from "@/pages/embed";
+import Widget from "@/pages/widget";
 
 function Router() {
   return (
@@ -46,6 +52,11 @@ function Router() {
       <Route path="/contact" component={Contact} />
       <Route path="/logo-preview" component={LogoPreview} />
       <Route path="/logo-options" component={LogoOptions} />
+      <Route path="/dns-propagation-checker" component={DnsPropagationChecker} />
+      <Route path="/mx-record-lookup" component={MxRecordLookup} />
+      <Route path="/txt-record-checker" component={TxtRecordChecker} />
+      <Route path="/embed" component={Embed} />
+      <Route path="/widget" component={Widget} />
       <Route component={NotFound} />
     </Switch>
   );
@@ -53,12 +64,14 @@ function Router() {
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <Router />
-      </TooltipProvider>
-    </QueryClientProvider>
+    <HelmetProvider>
+      <QueryClientProvider client={queryClient}>
+        <TooltipProvider>
+          <Toaster />
+          <Router />
+        </TooltipProvider>
+      </QueryClientProvider>
+    </HelmetProvider>
   );
 }
 

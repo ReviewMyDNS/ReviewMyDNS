@@ -18,6 +18,7 @@ import { Logo } from "@/components/logo";
 import MobileMenu from "@/components/mobile-menu";
 import { useMutation } from "@tanstack/react-query";
 import { apiRequest, queryClient } from "@/lib/queryClient";
+import { EmailCapturePopup } from "@/components/email-capture-popup";
 
 // Mobile-optimized home page
 export default function Home() {
@@ -467,6 +468,7 @@ export default function Home() {
           </div>
         </footer>
       </main>
+      <EmailCapturePopup />
     </div>
   );
 }

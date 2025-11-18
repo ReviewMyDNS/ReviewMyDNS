@@ -227,3 +227,23 @@ export const PLAN_LIMITS = {
 } as const;
 
 export type PlanTier = keyof typeof PLAN_LIMITS;
+
+// Email captures for marketing and remarketing
+export const emailCaptures = pgTable("email_captures", {
+  id: serial("id").primaryKey(),
+  email: varchar("email", { length: 255 }).notNull(),
+  source: varchar("source", { length: 100 }), // 'popup', 'landing-page', 'widget'
+  referrer: text("referrer"),
+  createdAt: timestamp("created_at").defaultNow(),
+}, (table) => ({
+  emailIdx: index("email_capture_email_idx").on(table.email),
+}));
+
+export const insertEmailCaptureSchema = createInsertSchema(emailCaptures).pick({
+  email: true,
+  source: true,
+  referrer: true,
+});
+
+export type InsertEmailCapture = z.infer<typeof insertEmailCaptureSchema>;
+export type EmailCapture = typeof emailCaptures.$inferSelect;

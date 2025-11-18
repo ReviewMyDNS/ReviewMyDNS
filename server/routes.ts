@@ -2,7 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { performDnsLookup } from "./services/dns-resolver";
-import { insertDnsLookupSchema, signupSchema, signinSchema, users, PLAN_LIMITS } from "@shared/schema";
+import { insertDnsLookupSchema, signupSchema, signinSchema, users, PLAN_LIMITS, insertEmailCaptureSchema } from "@shared/schema";
 import { ZodError } from "zod";
 import { createSessionMiddleware, requireAuth, hashPassword, verifyPassword, sanitizeUser } from "./auth";
 import { getPlanTier } from "./middleware/plan-guard";
@@ -508,6 +508,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error('Webhook error:', error);
       res.status(500).json({ error: 'Webhook handler failed' });
+    }
+  });
+
+  // Email capture endpoint
+  app.post("/api/email-capture", async (req, res) => {
+    try {
+      const result = insertEmailCaptureSchema.safeParse(req.body);
+      
+      if (!result.success) {
+        return res.status(400).json({ 
+          message: "Invalid email data",
+          errors: result.error.errors 
+        });
+      }
+
+      await storage.captureEmail(result.data);
+
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Error capturing email:", error);
+      res.status(500).json({ message: "Internal server error" });
     }
   });
 
