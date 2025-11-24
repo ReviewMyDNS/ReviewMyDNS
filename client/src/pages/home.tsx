@@ -415,6 +415,140 @@ export default function Home() {
         {/* DNS Tools Section */}
         <DnsToolsGrid />
 
+        {/* SEO Content Sections */}
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 bg-white">
+          <div className="prose prose-blue max-w-none">
+            {/* What is DNS Propagation */}
+            <h2 className="text-3xl font-bold text-gray-900 mb-6">What is DNS Propagation?</h2>
+            <p className="text-lg text-gray-700 mb-4">
+              DNS propagation is the time it takes for DNS record changes to spread across the internet's global network of DNS servers. When you update your domain's DNS records—such as changing your website's IP address, modifying MX records for email, or updating nameservers—these changes don't happen instantly worldwide.
+            </p>
+            <p className="text-gray-700 mb-6">
+              The propagation process involves updating thousands of DNS servers maintained by ISPs, hosting providers, and DNS services like Google DNS (8.8.8.8), Cloudflare (1.1.1.1), and OpenDNS. Each server caches DNS records based on their Time To Live (TTL) value, which determines how long the record should be stored before checking for updates. This caching mechanism improves internet performance but causes delays when DNS changes need to propagate globally.
+            </p>
+
+            {/* How Long Does DNS Propagation Take */}
+            <h2 className="text-3xl font-bold text-gray-900 mb-6 mt-12">How Long Does DNS Propagation Take?</h2>
+            <p className="text-lg text-gray-700 mb-4">
+              DNS propagation typically takes anywhere from <strong>15 minutes to 48 hours</strong>, though most changes complete within 2-6 hours. The propagation time depends on several key factors:
+            </p>
+            <ul className="list-disc pl-6 text-gray-700 mb-6 space-y-2">
+              <li><strong>TTL (Time To Live) Settings:</strong> Lower TTL values (like 300 seconds or 5 minutes) result in faster propagation, while higher values (86400 seconds or 24 hours) can significantly delay updates.</li>
+              <li><strong>DNS Server Caching Policies:</strong> Different DNS providers have varying cache expiration policies. Some strictly honor TTL, while others may cache records longer.</li>
+              <li><strong>Record Type:</strong> A records typically propagate faster than NS (nameserver) changes, which can take 24-48 hours for complete global propagation.</li>
+              <li><strong>Previous TTL Value:</strong> If your previous record had a high TTL, servers must wait for that TTL to expire before fetching the new record.</li>
+              <li><strong>Geographic Location:</strong> Changes may appear faster in some regions while taking longer in others, depending on local DNS infrastructure.</li>
+            </ul>
+            <p className="text-gray-700 mb-6">
+              <strong>Pro Tip:</strong> Before making critical DNS changes (like migrating to a new host), lower your TTL to 300 seconds (5 minutes) at least 24-48 hours in advance. This ensures faster propagation when you make the actual change.
+            </p>
+
+            {/* Common DNS Issues During Propagation */}
+            <h2 className="text-3xl font-bold text-gray-900 mb-6 mt-12">Common DNS Issues During Propagation</h2>
+            <p className="text-gray-700 mb-4">
+              DNS propagation can cause several temporary issues that resolve once propagation completes. Understanding these common problems helps you troubleshoot effectively:
+            </p>
+            
+            <h3 className="text-xl font-semibold text-gray-900 mb-3 mt-6">NXDOMAIN (Non-Existent Domain)</h3>
+            <p className="text-gray-700 mb-4">
+              This error occurs when a DNS server cannot find any records for your domain. During propagation, some servers may still have outdated information while others show NXDOMAIN, causing intermittent accessibility issues.
+            </p>
+
+            <h3 className="text-xl font-semibold text-gray-900 mb-3 mt-6">Inconsistent Responses Across Locations</h3>
+            <p className="text-gray-700 mb-4">
+              Users in different geographic locations may see different versions of your website or experience different email delivery behaviors. This happens because DNS servers in various regions update at different times. Our global DNS checker queries 50+ servers worldwide to identify these inconsistencies.
+            </p>
+
+            <h3 className="text-xl font-semibold text-gray-900 mb-3 mt-6">Email Delivery Failures</h3>
+            <p className="text-gray-700 mb-4">
+              When MX (Mail Exchange) records are propagating, some email servers may fail to deliver messages because they're querying DNS servers with outdated MX records. This can cause emails to bounce or be delayed during the propagation window.
+            </p>
+
+            <h3 className="text-xl font-semibold text-gray-900 mb-3 mt-6">SSL Certificate Validation Issues</h3>
+            <p className="text-gray-700 mb-4">
+              If you're using DNS validation for SSL certificates (like Let's Encrypt), propagation delays in TXT records can prevent certificate issuance or renewal. Ensure your DNS changes are fully propagated before requesting SSL certificates.
+            </p>
+
+            <h3 className="text-xl font-semibold text-gray-900 mb-3 mt-6">SERVFAIL Errors</h3>
+            <p className="text-gray-700 mb-4">
+              Server failure responses indicate the DNS server encountered an error while processing your query. During propagation, this can occur if there are misconfigurations in DNSSEC settings, conflicting records, or issues with authoritative nameservers.
+            </p>
+
+            {/* How to Use This Global DNS Checker */}
+            <h2 className="text-3xl font-bold text-gray-900 mb-6 mt-12">How to Use This Global DNS Propagation Checker</h2>
+            <p className="text-gray-700 mb-4">
+              Our DNS lookup tool queries 50+ DNS servers across six continents to provide comprehensive propagation status. Here's how to use it effectively:
+            </p>
+            <ol className="list-decimal pl-6 text-gray-700 mb-6 space-y-4">
+              <li>
+                <strong>Enter Your Domain Name:</strong> Type the domain you want to check (e.g., example.com or subdomain.example.com).
+              </li>
+              <li>
+                <strong>Select Record Type:</strong> Choose the DNS record type you've changed:
+                <ul className="list-disc pl-6 mt-2 space-y-1">
+                  <li><strong>A Record:</strong> Maps domain to IPv4 address (most common for websites)</li>
+                  <li><strong>AAAA Record:</strong> Maps domain to IPv6 address</li>
+                  <li><strong>CNAME Record:</strong> Creates domain alias (e.g., www to root domain)</li>
+                  <li><strong>MX Record:</strong> Email server configuration</li>
+                  <li><strong>TXT Record:</strong> Text data (SPF, DKIM, domain verification)</li>
+                  <li><strong>NS Record:</strong> Nameserver delegation</li>
+                  <li><strong>SOA Record:</strong> Zone authority information</li>
+                </ul>
+              </li>
+              <li>
+                <strong>Optional - Set Expected Value:</strong> Enter the value you expect to see (your new IP address, hostname, etc.). This helps identify servers still showing old data.
+              </li>
+              <li>
+                <strong>Click "Check DNS Propagation":</strong> The tool will query DNS servers globally and display results in real-time.
+              </li>
+              <li>
+                <strong>Analyze Results:</strong> Review the interactive world map and detailed server table to see which locations have received your DNS updates and which are still showing cached records.
+              </li>
+              <li>
+                <strong>Share Results:</strong> Use the share button to generate a unique URL for your DNS check results, perfect for sharing with team members or support tickets.
+              </li>
+            </ol>
+
+            {/* FAQ Section */}
+            <h2 className="text-3xl font-bold text-gray-900 mb-6 mt-12">Frequently Asked Questions</h2>
+            
+            <h3 className="text-xl font-semibold text-gray-900 mb-3 mt-6">How often should I check DNS propagation?</h3>
+            <p className="text-gray-700 mb-6">
+              Check immediately after making DNS changes, then recheck every 1-2 hours until you see consistent results across all global servers. Use our refresh button to rerun checks without re-entering your domain.
+            </p>
+
+            <h3 className="text-xl font-semibold text-gray-900 mb-3">Why do some servers show different results?</h3>
+            <p className="text-gray-700 mb-6">
+              DNS servers cache records based on TTL values and have different update cycles. Servers geographically closer to your authoritative nameservers typically update faster, while distant servers may take longer to reflect changes.
+            </p>
+
+            <h3 className="text-xl font-semibold text-gray-900 mb-3">Can I speed up DNS propagation?</h3>
+            <p className="text-gray-700 mb-6">
+              You cannot force global DNS servers to update immediately, but you can reduce propagation time by lowering TTL values 24-48 hours before making changes. Also ensure your authoritative nameservers are correctly configured and responding quickly.
+            </p>
+
+            <h3 className="text-xl font-semibold text-gray-900 mb-3">What's the difference between DNS propagation and DNS resolution?</h3>
+            <p className="text-gray-700 mb-6">
+              DNS resolution is the process of looking up a domain's DNS records, which happens instantly. DNS propagation refers to the time it takes for DNS record changes to spread across all global DNS servers after you make an update.
+            </p>
+
+            <h3 className="text-xl font-semibold text-gray-900 mb-3">Is DNS propagation the same for all record types?</h3>
+            <p className="text-gray-700 mb-6">
+              No. Nameserver (NS) changes typically take the longest (24-48 hours) because they affect zone delegation. A, AAAA, MX, and TXT records usually propagate within 2-6 hours, depending on TTL settings.
+            </p>
+
+            <h3 className="text-xl font-semibold text-gray-900 mb-3">What should I do if DNS isn't propagating after 48 hours?</h3>
+            <p className="text-gray-700 mb-6">
+              First, verify your changes were saved correctly at your DNS provider. Check that your authoritative nameservers are responding with the new records using our DNS checker. If issues persist, contact your DNS provider as there may be a configuration problem or service outage.
+            </p>
+
+            <h3 className="text-xl font-semibold text-gray-900 mb-3">Does clearing my browser cache help with DNS propagation?</h3>
+            <p className="text-gray-700 mb-6">
+              Browser cache is different from DNS cache. To see fresh DNS results, you need to flush your operating system's DNS cache (ipconfig /flushdns on Windows, sudo dscacheutil -flushcache on Mac). However, this only affects your local computer—our global checker shows real propagation status worldwide.
+            </p>
+          </div>
+        </section>
+
         {/* Footer */}
         <footer className="bg-gray-800 text-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
