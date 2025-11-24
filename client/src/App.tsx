@@ -29,6 +29,7 @@ import MxRecordLookup from "@/pages/mx-record-lookup";
 import TxtRecordChecker from "@/pages/txt-record-checker";
 import Embed from "@/pages/embed";
 import Widget from "@/pages/widget";
+import Guide from "@/pages/guide";
 
 function Router() {
   return (
@@ -57,6 +58,7 @@ function Router() {
       <Route path="/txt-record-checker" component={TxtRecordChecker} />
       <Route path="/embed" component={Embed} />
       <Route path="/widget" component={Widget} />
+      <Route path="/guides/:slug" component={Guide} />
       <Route component={NotFound} />
     </Switch>
   );
