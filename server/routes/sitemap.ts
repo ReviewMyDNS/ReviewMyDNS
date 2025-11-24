@@ -6,7 +6,11 @@ const router = Router();
 const providerGuideSlugs = [
   'cloudflare-dns-setup',
   'godaddy-dns-setup',
-  // Add more as they're created: namecheap, route53, google-domains, hover, bluehost
+  'namecheap-dns-setup',
+  'aws-route53-dns-setup',
+  'google-domains-dns-setup',
+  'bluehost-dns-setup',
+  'hover-dns-setup',
 ];
 
 router.get('/sitemap.xml', (req, res) => {
