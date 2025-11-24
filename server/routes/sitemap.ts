@@ -11,6 +11,13 @@ const providerGuideSlugs = [
   'google-domains-dns-setup',
   'bluehost-dns-setup',
   'hover-dns-setup',
+  'nxdomain-error-fix',
+  'servfail-error-fix',
+  'spf-too-many-lookups-error',
+  'dmarc-authentication-failed',
+  'domain-com-dns-setup',
+  'siteground-dns-setup',
+  'hostgator-dns-setup',
 ];
 
 router.get('/sitemap.xml', (req, res) => {

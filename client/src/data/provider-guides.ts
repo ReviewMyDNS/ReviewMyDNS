@@ -787,6 +787,766 @@ export const providerGuides: ProviderGuide[] = [
         answer: "Yes! In domain settings, click 'Edit Nameservers' and enter custom nameservers from providers like Cloudflare or your hosting company. Once changed, manage all DNS records at the external provider. Nameserver changes take 24-48 hours to propagate. You can switch back to Hover nameservers anytime to regain Hover DNS management."
       }
     ]
+  },
+  {
+    slug: "nxdomain-error-fix",
+    provider: "NXDOMAIN Error",
+    title: "How to Fix NXDOMAIN Error - DNS Resolution Failed",
+    metaDescription: "NXDOMAIN error means your domain doesn't exist in DNS. Learn what causes it and how to fix it quickly with our troubleshooting guide.",
+    h1: "Fix NXDOMAIN DNS Error: Complete Troubleshooting Guide",
+    introduction: "NXDOMAIN (Non-Existent Domain) is one of the most common DNS errors, occurring when your domain name cannot be found in DNS servers. This guide explains what causes NXDOMAIN errors and provides step-by-step solutions to get your domain working again.",
+    steps: [
+      {
+        title: "Verify Domain Registration",
+        description: "Ensure your domain is properly registered and hasn't expired.",
+        details: [
+          "Check your domain registrar account (GoDaddy, Namecheap, etc.)",
+          "Verify domain registration status is 'Active' not 'Expired' or 'Suspended'",
+          "Renew domain if it expired recently",
+          "Check domain registrar inbox for auto-renewal failure notifications"
+        ]
+      },
+      {
+        title: "Check Nameservers Are Correct",
+        description: "NXDOMAIN often means nameservers point to wrong DNS provider.",
+        details: [
+          "Log into domain registrar and check current nameservers",
+          "Verify they match your DNS provider's nameservers",
+          "If using custom DNS (Cloudflare, Route53), ensure nameservers are updated at registrar",
+          "Nameserver changes take 24-48 hours to propagate"
+        ]
+      },
+      {
+        title: "Wait for DNS Propagation",
+        description: "Recent nameserver changes need time to propagate globally.",
+        details: [
+          "After updating nameservers, wait 24-48 hours minimum",
+          "Some ISPs cache DNS longer than others",
+          "Use ReviewMyDNS to check propagation status across servers",
+          "If nameservers changed recently, NXDOMAIN will resolve after propagation"
+        ]
+      },
+      {
+        title: "Add DNS Records",
+        description: "Ensure A records exist for your domain.",
+        details: [
+          "Log into DNS provider dashboard",
+          "Add A record for @ (root domain) pointing to your server IP",
+          "Add A record for www pointing to same IP or CNAME to root",
+          "Wait 15-30 minutes for records to propagate"
+        ]
+      }
+    ],
+    recordTypes: [
+      {
+        type: "A Record Missing",
+        example: "Symptom: No A or AAAA records exist for @ (root domain)",
+        instructions: "NXDOMAIN often occurs when no A records exist. Add A record with @ as hostname and your server IP. This creates the root domain in DNS."
+      },
+      {
+        type: "Nameserver Issue",
+        example: "Nameservers at registrar don't match DNS provider nameservers",
+        instructions: "Registrar nameservers must point to your DNS provider. Mismatch causes NXDOMAIN. Update registrar nameservers to match DNS provider."
+      },
+      {
+        type: "Expired Domain",
+        example: "Domain registration expired without auto-renewal",
+        instructions: "Expired domains are removed from DNS and return NXDOMAIN. Renew domain immediately at registrar. Takes 1-4 hours to restore."
+      },
+      {
+        type: "Propagation Delay",
+        example: "Recent nameserver change still propagating globally",
+        instructions: "Nameserver changes take 24-48 hours. Use DNS propagation checker to see if some servers still show NXDOMAIN while others have updated."
+      }
+    ],
+    troubleshooting: [
+      {
+        issue: "NXDOMAIN persists even after adding A records",
+        solution: "Verify your A record points to correct IP (check with hosting provider). Ensure nameservers at registrar match DNS provider. If recently changed, wait additional 12-24 hours. Use 'nslookup domain.com' command to test from different DNS servers. Check if domain registration actually active (not suspended)."
+      },
+      {
+        issue: "DNS worked before, now showing NXDOMAIN",
+        solution: "Check if domain registration expired or was not renewed. Verify DNS provider account is active and billing current. Check if nameservers were accidentally changed. Review recent DNS changes - you may have deleted critical records. Use DNS history if available."
+      },
+      {
+        issue: "Subdomain returns NXDOMAIN but root domain works",
+        solution: "Add A or CNAME record for subdomain. For example, if www.example.com shows NXDOMAIN, add CNAME record 'www' pointing to 'example.com' or A record 'www' pointing to IP. Root domain DNS must exist first."
+      },
+      {
+        issue: "NXDOMAIN from some servers, works on others",
+        solution: "DNS hasn't fully propagated yet. Different servers have different TTL values and update schedules. This is normal after changes. Wait 24-48 hours for complete global propagation. Use our global DNS checker to monitor which servers have updated."
+      }
+    ],
+    faq: [
+      {
+        question: "What exactly does NXDOMAIN mean?",
+        answer: "NXDOMAIN (Non-Existent Domain) means the authoritative DNS server received a query for a domain that doesn't exist in its database. It's the DNS server saying 'I don't have any records for that domain.' This happens when A records are missing or nameservers are misconfigured."
+      },
+      {
+        question: "How long to fix NXDOMAIN after registering domain?",
+        answer: "New domain registration takes 24-48 hours for DNS to propagate globally. Your registrar automatically creates nameserver records, but ISP and resolver caching delays visibility. After 4-6 hours most people can resolve it. Full 24-48 hours ensures 99% of worldwide resolvers show it."
+      },
+      {
+        question: "Can I fix NXDOMAIN if my domain expired?",
+        answer: "Yes! Renew expired domain immediately at your registrar. DNS records are usually preserved during renewal. Within 1-4 hours of renewal, NXDOMAIN should resolve. If records were deleted during expiration, re-add them. Most registrars hold expired domains for 30 days before permanent deletion."
+      },
+      {
+        question: "Will NXDOMAIN hurt my SEO?",
+        answer: "If NXDOMAIN persists for days/weeks, Google stops indexing your site. However, if resolved within 24-48 hours, SEO impact is minimal. Google's crawler will retry and re-index once domain works. Frequent NXDOMAIN errors can eventually harm rankings if they last weeks, so fix promptly."
+      }
+    ]
+  },
+  {
+    slug: "servfail-error-fix",
+    provider: "SERVFAIL Error",
+    title: "How to Fix SERVFAIL DNS Error - Complete Guide",
+    metaDescription: "SERVFAIL means your DNS server encountered an error. Learn what causes it and how to troubleshoot and resolve SERVFAIL errors.",
+    h1: "Fix SERVFAIL Error: DNS Server Failure Troubleshooting",
+    introduction: "SERVFAIL is a DNS error indicating the authoritative nameserver cannot process your query. Unlike NXDOMAIN (domain doesn't exist), SERVFAIL means the DNS infrastructure itself has a problem. This guide helps diagnose and resolve SERVFAIL errors.",
+    steps: [
+      {
+        title: "Check DNS Provider Status",
+        description: "Verify your DNS provider isn't experiencing outages.",
+        details: [
+          "Visit DNS provider's status page (Cloudflare, Route53, etc.)",
+          "Check if there are active incidents or maintenance windows",
+          "Monitor Twitter/status channels for provider announcements",
+          "SERVFAIL during maintenance usually resolves automatically"
+        ]
+      },
+      {
+        title: "Verify DNS Record Configuration",
+        description: "SERVFAIL often caused by misconfigured DNS records.",
+        details: [
+          "Check for invalid CNAME records (CNAME pointing to invalid targets)",
+          "Verify all records have valid syntax (no typos in hostnames)",
+          "Look for CNAME records on root domain @ (not allowed)",
+          "Check for circular DNS chains (record A points to B, B points back to A)"
+        ]
+      },
+      {
+        title: "Test DNS Propagation",
+        description: "Use multiple DNS servers to isolate the problem.",
+        details: [
+          "Test with Google DNS: 8.8.8.8",
+          "Test with Cloudflare DNS: 1.1.1.1",
+          "Test with your ISP DNS",
+          "If SERVFAIL appears on some but not all, propagation is in progress"
+        ]
+      },
+      {
+        title: "Fix or Delete Problem Records",
+        description: "Remove or correct DNS records causing SERVFAIL.",
+        details: [
+          "Delete any CNAME records on root domain",
+          "Fix typos in DNS record targets",
+          "Remove circular DNS chains",
+          "Save changes and wait 15-30 minutes for propagation"
+        ]
+      }
+    ],
+    recordTypes: [
+      {
+        type: "Invalid CNAME Target",
+        example: "CNAME pointing to non-existent hostname (e.g., 'cdn.example.com' doesn't have A record)",
+        instructions: "CNAME must point to hostname with corresponding A record. Ensure target hostname has valid DNS records pointing to IP."
+      },
+      {
+        type: "CNAME on Root Domain",
+        example: "@ CNAME pointing somewhere (violates DNS spec)",
+        instructions: "Root domain cannot have CNAME record. Use A record or Alias record instead. Delete CNAME @, add A record @ with IP."
+      },
+      {
+        type: "Syntax Error in Record",
+        example: "Hostname contains invalid characters or spacing",
+        instructions: "DNS record values must follow strict format. Hostnames only: a-z, 0-9, hyphens. No spaces or special characters. Fix typos."
+      },
+      {
+        type: "Circular DNS Chain",
+        example: "A points to B, B points back to A, creating infinite loop",
+        instructions: "Break the cycle by making one record point directly to IP address. Identify circular references and edit one record to have IP target."
+      }
+    ],
+    troubleshooting: [
+      {
+        issue: "SERVFAIL on all DNS servers",
+        solution: "DNS provider likely has outage or your DNS zone is corrupted. Check provider status page for incidents. If no outage, check for misconfigured records (invalid CNAME, circular chains). Contact provider support if zone appears corrupted. You may need to delete and recreate problematic records."
+      },
+      {
+        issue: "SERVFAIL from some servers, OK from others",
+        solution: "DNS changes are still propagating globally. Different nameservers have different configurations during propagation window. This is normal and will resolve within 15-30 minutes. Use our global DNS checker to see which servers still show SERVFAIL."
+      },
+      {
+        issue: "SERVFAIL started suddenly for working domain",
+        solution: "Recent DNS change likely caused it. Check recent record additions/edits for typos or invalid configurations. Delete the problematic record or fix it. If can't identify, check DNS provider's change log. Rollback recent changes if necessary."
+      },
+      {
+        issue: "SERVFAIL for specific record type only (e.g., only MX fails)",
+        solution: "That record type has configuration error. Check MX records for syntax errors, verify mail server hostnames have corresponding A records. For email-specific SERVFAIL, review all email-related DNS records (MX, SPF, DKIM)."
+      }
+    ],
+    faq: [
+      {
+        question: "What's the difference between NXDOMAIN and SERVFAIL?",
+        answer: "NXDOMAIN means the domain doesn't exist in DNS. SERVFAIL means the domain exists but the DNS server encountered an error processing your query. NXDOMAIN = 'I don't have this domain' vs SERVFAIL = 'I have this domain but something's broken.'"
+      },
+      {
+        question: "Can SERVFAIL be caused by my ISP DNS?",
+        answer: "Yes, ISP DNS servers can cause SERVFAIL if they're misconfigured or offline. Test with public DNS (Google 8.8.8.8, Cloudflare 1.1.1.1). If those work but ISP DNS fails, problem is ISP's DNS infrastructure. Contact your ISP about their DNS problems."
+      },
+      {
+        question: "How long does it take to fix SERVFAIL?",
+        answer: "If caused by DNS provider outage, it resolves when provider fixes it (usually 15 minutes - 2 hours). If caused by your misconfigured records, fix appears in 15-30 minutes after you correct the record. Provider typically needs to resolve it within 1 hour or it's a major incident."
+      },
+      {
+        question: "Does SERVFAIL affect my website visitors?",
+        answer: "Yes, visitors cannot resolve your domain during SERVFAIL. Their browsers show 'Cannot find server' errors. Email delivery fails if SERVFAIL affects MX records. This severely impacts user experience. SERVFAIL should be fixed as highest priority - typically within minutes."
+      }
+    ]
+  },
+  {
+    slug: "spf-too-many-lookups-error",
+    provider: "SPF Too Many Lookups",
+    title: "Fix SPF Too Many Lookups Error - Email Authentication",
+    metaDescription: "SPF too many lookups error breaks email delivery. Learn what causes it and how to optimize your SPF record to fix email authentication.",
+    h1: "Fix SPF Too Many Lookups: Email Authentication Error",
+    introduction: "SPF (Sender Policy Framework) 'too many lookups' error occurs when your SPF record exceeds DNS lookup limits. This causes emails to fail authentication and get rejected or marked as spam. This guide shows how to fix and optimize SPF records.",
+    steps: [
+      {
+        title: "Understand SPF Lookup Limit",
+        description: "SPF allows maximum 10 DNS lookups per record.",
+        details: [
+          "Each 'include:' directive counts as one lookup",
+          "Nested includes count toward limit (includes within includes)",
+          "Over 10 lookups = SPF fails entirely = email fails authentication",
+          "Most domains hit this limit after adding 5-6 email services"
+        ]
+      },
+      {
+        title: "Count Current SPF Lookups",
+        description: "Determine how many lookups your SPF record uses.",
+        details: [
+          "Use SPF lookup tool or manual counting",
+          "Count each 'include:' directive as 1 lookup",
+          "Add nested includes from referenced SPF records",
+          "Some includes expand to multiple lookups"
+        ]
+      },
+      {
+        title: "Reduce SPF Complexity",
+        description: "Consolidate includes and remove unnecessary services.",
+        details: [
+          "Remove SPF records for email services no longer used",
+          "Consolidate multiple services under single include if possible",
+          "Use A, MX, and IP records instead of includes where possible",
+          "Consider DNS flattening/consolidation services"
+        ]
+      },
+      {
+        title: "Implement SPF Optimization",
+        description: "Restructure SPF for efficiency.",
+        details: [
+          "Move rarely-used services to separate subdomain SPF",
+          "Use IP ranges instead of includes for simple cases",
+          "Implement DNS consolidation solution if using many services",
+          "Test final SPF record before deploying"
+        ]
+      }
+    ],
+    recordTypes: [
+      {
+        type: "SPF With Too Many Includes",
+        example: "v=spf1 include:_spf.google.com include:sendgrid.com include:mailchimp.com include:spf.salesforce.com ~all",
+        instructions: "Each include counts as one lookup. This simple example uses 4 lookups. Add more services and nested includes quickly exceed 10-lookup limit. Solution: consolidate services or remove unused ones."
+      },
+      {
+        type: "Optimized SPF Record",
+        example: "v=spf1 include:_spf.google.com ip4:192.0.2.0/24 ~all",
+        instructions: "Combines include (1 lookup) with direct IP range (0 lookups). Direct IPs don't count toward lookup limit. Use this approach for custom mail servers."
+      },
+      {
+        type: "SPF With Nested Includes",
+        example: "include:_spf.sendgrid.net which itself includes other SPF records",
+        instructions: "Nested includes count toward your 10-lookup limit. If include:_spf.sendgrid.net references 3 other SPF records, that counts as 4 lookups total (1 for initial, 3 nested)."
+      },
+      {
+        type: "SPF Redirect Solution",
+        example: "v=spf1 redirect=_spf.company.com (references external SPF record)",
+        instructions: "Redirect mechanism allows SPF reuse without counting as lookup. Useful for complex multi-service setups. Redirect record becomes authoritative for SPF checking."
+      }
+    ],
+    troubleshooting: [
+      {
+        issue: "Emails rejected with SPF 'too many lookups' error",
+        solution: "Count SPF lookups in your record (each include = 1 lookup, max 10). Remove unnecessary email services or consolidate. Use IP ranges instead of includes for simple cases. Test SPF record with SPF checking tools. Consider DNS consolidation service if using many platforms."
+      },
+      {
+        issue: "Added email service but now SPF fails",
+        solution: "Likely exceeded 10-lookup limit by adding new include. Remove one or more old services you no longer use. Use SPF flattening service to optimize record. Some platforms offer individual IP addresses instead of includes - use those. Test before deploying."
+      },
+      {
+        issue: "SPF includes reference records that reference other records",
+        solution: "These nested includes count toward your limit. Flatten the includes: instead of including an include, include the final IP addresses directly if you have access. Or ask service provider for consolidated SPF include with fewer nested references."
+      },
+      {
+        issue: "Some emails pass SPF, others fail",
+        solution: "SPF may be borderline at 10 lookups. Some resolvers are stricter than others. Reduce lookups below 10 to ensure consistency. Remove least-critical email service to get safety margin. Test with different email providers."
+      }
+    ],
+    faq: [
+      {
+        question: "What causes SPF 'too many lookups'?",
+        answer: "SPF mechanism allows maximum 10 DNS lookups per SPF record query. Each 'include:' directive counts as one lookup. Nested includes (includes within includes) also count. Services like Google Workspace, SendGrid, Mailchimp each require include directives. Adding too many email services quickly exceeds 10-lookup limit."
+      },
+      {
+        question: "How do I count SPF lookups?",
+        answer: "Count each 'include:' directive in your SPF record as 1 lookup. Then research each included SPF record and count their includes too (nested lookups). Use online SPF analysis tools that show lookup count. Goal is keeping total ≤10 lookups."
+      },
+      {
+        question: "Does SPF too many lookups break all email?",
+        answer: "Yes, SPF fails entirely when exceeding 10 lookups. Receiving mail servers reject emails or send to spam. Email authentication fails completely. This is a hard limit - even 1 lookup over 10 causes complete failure, not partial failure."
+      },
+      {
+        question: "What's the best way to fix too many lookups?",
+        answer: "1) Remove unused email services' SPF records. 2) Use IP addresses instead of includes where possible. 3) Use DNS consolidation service to flatten includes. 4) Ask services for individual IP addresses instead of SPF includes. 5) Implement SPF redirect for complex setups."
+      }
+    ]
+  },
+  {
+    slug: "dmarc-authentication-failed",
+    provider: "DMARC Authentication Failed",
+    title: "Fix DMARC Authentication Failed Error - Email Security",
+    metaDescription: "DMARC authentication failing causes emails to be rejected or marked spam. Learn how to configure DMARC correctly for email security.",
+    h1: "Fix DMARC Authentication Failed: Email Security Setup",
+    introduction: "DMARC (Domain-based Message Authentication, Reporting and Conformance) authentication failures occur when SPF or DKIM fail. This guide helps diagnose and fix DMARC issues to improve email deliverability and security.",
+    steps: [
+      {
+        title: "Verify SPF Record Exists",
+        description: "DMARC requires SPF authentication to pass.",
+        details: [
+          "Check your domain's SPF record (TXT record starting with 'v=spf1')",
+          "SPF must include authorized mail servers",
+          "SPF must align with email 'From:' domain",
+          "If SPF missing or broken, DMARC fails"
+        ]
+      },
+      {
+        title: "Verify DKIM Signature",
+        description: "DMARC requires DKIM authentication to pass.",
+        details: [
+          "Check DKIM TXT records exist (e.g., 'selector1._domainkey.example.com')",
+          "Email provider gives you DKIM selector and public key",
+          "Add DKIM TXT record to your DNS",
+          "If DKIM missing or incorrectly configured, DMARC fails"
+        ]
+      },
+      {
+        title: "Create DMARC Policy Record",
+        description: "Add DMARC TXT record to your domain.",
+        details: [
+          "Create TXT record named '_dmarc' with value like 'v=DMARC1; p=quarantine; rua=mailto:dmarc@example.com'",
+          "p=none (monitoring only, don't reject emails) for initial setup",
+          "p=quarantine (send failing emails to spam) after testing",
+          "p=reject (reject failing emails) only after fully validated"
+        ]
+      },
+      {
+        title: "Monitor DMARC Reports",
+        description: "Review DMARC reports to identify issues.",
+        details: [
+          "DMARC sends daily reports to email in 'rua=' tag",
+          "Reports show SPF/DKIM pass/fail rates",
+          "Identify which services are failing authentication",
+          "Adjust SPF/DKIM configuration based on report insights"
+        ]
+      }
+    ],
+    recordTypes: [
+      {
+        type: "DMARC Policy Record (Monitoring)",
+        example: "Type: TXT, Host: _dmarc, Value: v=DMARC1; p=none; rua=mailto:dmarc@example.com",
+        instructions: "p=none means don't reject emails, just monitor. Use this for initial DMARC setup to see authentication results without blocking email."
+      },
+      {
+        type: "DMARC Policy Record (Quarantine)",
+        example: "Type: TXT, Host: _dmarc, Value: v=DMARC1; p=quarantine; rua=mailto:dmarc@example.com; fo=1",
+        instructions: "p=quarantine sends failing emails to spam folder. Use after validating SPF/DKIM working correctly. fo=1 sends daily reports for failures."
+      },
+      {
+        type: "DMARC Policy Record (Reject)",
+        example: "Type: TXT, Host: _dmarc, Value: v=DMARC1; p=reject; rua=mailto:dmarc@example.com; pct=100",
+        instructions: "p=reject blocks emails failing DMARC. Only use after fully validated. pct=100 rejects 100% of failing emails. Start at pct=10 and gradually increase."
+      },
+      {
+        type: "DKIM TXT Record",
+        example: "Type: TXT, Host: selector1._domainkey, Value: v=DKIM1; k=rsa; p=MIGfMA0BgkqhkiG9w0BAQ...",
+        instructions: "DKIM public key provided by email provider. 'selector1' name varies by provider (Google Workspace uses selector1, others may vary). Required for DMARC to verify signatures."
+      }
+    ],
+    troubleshooting: [
+      {
+        issue: "DMARC reports show 0% SPF/DKIM pass rate",
+        solution: "SPF or DKIM not configured correctly. Check SPF TXT record exists and includes all mail servers. Verify DKIM TXT record matches provider's public key exactly. Ensure 'From:' domain in emails matches domain with SPF/DKIM. Test with DMARC analyzer tool."
+      },
+      {
+        issue: "Some emails pass DMARC, others fail",
+        solution: "Different email services may not be included in SPF. Check which services are failing in DMARC reports and add their SPF includes. Verify DKIM is enabled for all email sources. Some services may not support DKIM alignment."
+      },
+      {
+        issue: "DMARC p=reject breaking legitimate emails",
+        solution: "Revert to p=quarantine or p=none while debugging. Review DMARC reports to identify which senders are failing. Add their SPF includes or enable DKIM for those services. Test thoroughly before re-enabling p=reject."
+      },
+      {
+        issue: "DMARC records show inconsistent alignment",
+        solution: "SPF/DKIM alignment requires domain in SPF/DKIM records matches domain in email 'From:' header. Check if using subdomain for email vs different domain. Align domain consistently across email configuration and SPF/DKIM records."
+      }
+    ],
+    faq: [
+      {
+        question: "Do I need DMARC if I have SPF and DKIM?",
+        answer: "DMARC policy tells receiving servers what to do when SPF/DKIM fails. Without DMARC, servers use their own judgment (often send to spam). DMARC enforces your policy. SPF and DKIM are authentication mechanisms; DMARC is the enforcement policy on top of them."
+      },
+      {
+        question: "What's the difference between p=none, p=quarantine, p=reject?",
+        answer: "p=none: Monitor only, no action taken on failures. p=quarantine: Send failing emails to spam/junk folder. p=reject: Block and reject failing emails entirely. Start with p=none, graduate to quarantine after validation, finally to reject after full confidence."
+      },
+      {
+        question: "How long to fix DMARC issues?",
+        answer: "DMARC TXT records take effect immediately (or within 15-30 minutes depending on DNS propagation). However, DMARC reports take 24 hours to generate. You'll see first authentication results tomorrow. Fixing underlying SPF/DKIM takes 15-30 minutes per fix."
+      },
+      {
+        question: "Can DMARC reject legitimate emails?",
+        answer: "Yes, if SPF/DKIM not properly configured, legitimate emails from your domain can fail and be rejected. Always start with p=none to monitor before enforcing rejection. Test thoroughly with DMARC analyzer before using p=reject."
+      }
+    ]
+  },
+  {
+    slug: "domain-com-dns-setup",
+    provider: "Domain.com",
+    title: "How to Set DNS Records on Domain.com - Complete Guide",
+    metaDescription: "Learn how to configure DNS records on Domain.com. Step-by-step guide for setting up A, CNAME, MX, and TXT records.",
+    h1: "How to Configure DNS Records on Domain.com",
+    introduction: "Domain.com is a popular domain registrar offering affordable domains and email services. This guide shows how to manage DNS records in Domain.com's control panel for websites, email, and third-party services.",
+    steps: [
+      {
+        title: "Log Into Domain.com Account",
+        description: "Access your Domain.com account to manage DNS.",
+        details: [
+          "Visit domain.com and sign in with email/password",
+          "Click 'Manage Domains' from main menu",
+          "Find your domain and click 'Manage' button",
+          "Select 'DNS Management' or 'Edit DNS' option"
+        ]
+      },
+      {
+        title: "View Existing DNS Records",
+        description: "Review current DNS configuration.",
+        details: [
+          "Domain.com shows DNS records in list format",
+          "Default includes Domain.com nameservers and parking records",
+          "You'll see options to add, edit, or delete records",
+          "TTL (Time To Live) can be customized per record"
+        ]
+      },
+      {
+        title: "Add New DNS Record",
+        description: "Create custom DNS entry.",
+        details: [
+          "Click 'Add New Record' or similar button",
+          "Select record type (A, CNAME, MX, TXT, etc.)",
+          "Enter host/name (@ for root or subdomain)",
+          "Input value/target and TTL",
+          "Click 'Save' or 'Add Record'"
+        ]
+      },
+      {
+        title: "Verify Propagation",
+        description: "DNS changes take time to propagate globally.",
+        details: [
+          "Domain.com updates usually within 1 hour",
+          "Global propagation: 24-48 hours typical",
+          "Use ReviewMyDNS to check propagation status",
+          "Flush local DNS cache for immediate testing"
+        ]
+      }
+    ],
+    recordTypes: [
+      {
+        type: "A Record",
+        example: "Host: @, Type: A, Value: 192.0.2.1, TTL: 3600",
+        instructions: "Points root domain to IPv4 address. Use @ for root or subdomain name for subdomains."
+      },
+      {
+        type: "MX Record",
+        example: "Host: @, Type: MX, Value: mail.example.com, Priority: 10, TTL: 3600",
+        instructions: "Routes email to mail server. Add multiple MX records for redundancy."
+      },
+      {
+        type: "CNAME Record",
+        example: "Host: www, Type: CNAME, Value: example.com, TTL: 3600",
+        instructions: "Creates domain alias. Cannot be used on root domain (@)."
+      },
+      {
+        type: "TXT Record",
+        example: "Host: @, Type: TXT, Value: v=spf1 include:_spf.google.com ~all, TTL: 3600",
+        instructions: "Stores text for SPF, DKIM, DMARC, domain verification."
+      }
+    ],
+    troubleshooting: [
+      {
+        issue: "DNS changes not appearing",
+        solution: "Domain.com DNS updates within 1 hour to their servers. Wait 24-48 hours for global propagation. Flush your DNS cache. Use DNS propagation checker to verify worldwide status."
+      },
+      {
+        issue: "Email not working",
+        solution: "Verify MX records point to correct mail servers. Check SPF and DKIM TXT records configured. Ensure nameservers at registrar point to Domain.com (if using their DNS)."
+      },
+      {
+        issue: "Website showing parking page",
+        solution: "A records still point to parking. Update A record @ to point to hosting provider IP."
+      },
+      {
+        issue: "Cannot add CNAME for root",
+        solution: "DNS doesn't allow CNAME on root. Use A record instead."
+      }
+    ],
+    faq: [
+      {
+        question: "What are Domain.com's default nameservers?",
+        answer: "Domain.com nameservers are typically ns1.domain.com, ns2.domain.com (exact values shown in account)."
+      },
+      {
+        question: "Can I use external DNS with Domain.com domain?",
+        answer: "Yes, update nameservers to external provider (Cloudflare, Route53) at Domain.com account settings."
+      },
+      {
+        question: "How long Domain.com DNS propagation?",
+        answer: "Domain.com servers update within 1 hour. Global propagation: 24-48 hours typical."
+      },
+      {
+        question: "What TTL should I use?",
+        answer: "Default 3600 (1 hour) works for most cases. Lower TTL (300-600) for frequent changes. Higher TTL (14400) for stable records."
+      }
+    ]
+  },
+  {
+    slug: "siteground-dns-setup",
+    provider: "SiteGround",
+    title: "How to Configure DNS Records on SiteGround - Complete Guide",
+    metaDescription: "Step-by-step guide for setting up DNS records on SiteGround hosting. Learn to configure A, MX, CNAME, and TXT records.",
+    h1: "How to Set Up DNS Records on SiteGround",
+    introduction: "SiteGround is a leading web hosting provider serving millions of sites. This guide explains how to manage DNS records in SiteGround's control panel for websites, email, and services.",
+    steps: [
+      {
+        title: "Access SiteGround Control Panel",
+        description: "Log into your SiteGround hosting account.",
+        details: [
+          "Visit my.siteground.com and sign in",
+          "Select 'Manage Domain' for your domain",
+          "Navigate to 'DNS Zone' or 'Zone Editor'",
+          "View all DNS records in SiteGround's interface"
+        ]
+      },
+      {
+        title: "Locate DNS Zone Editor",
+        description: "Find DNS management section.",
+        details: [
+          "In domain settings, find 'DNS Zone' or 'Advanced DNS'",
+          "SiteGround shows records in editable table format",
+          "You can add, edit, delete records directly",
+          "Changes apply within minutes to SiteGround servers"
+        ]
+      },
+      {
+        title: "Add DNS Record",
+        description: "Create new DNS entry.",
+        details: [
+          "Click 'Add New Record' button",
+          "Select type (A, AAAA, CNAME, MX, TXT, etc.)",
+          "Enter hostname/name (@ for root)",
+          "Input value/target",
+          "Set TTL if available",
+          "Save record"
+        ]
+      },
+      {
+        title: "Test DNS Changes",
+        description: "Verify changes propagated.",
+        details: [
+          "SiteGround updates within 15-30 minutes",
+          "Global propagation: 1-4 hours typical",
+          "Use DNS checker to verify worldwide status",
+          "Changes may not appear immediately on all devices (DNS caching)"
+        ]
+      }
+    ],
+    recordTypes: [
+      {
+        type: "A Record",
+        example: "Name: @, Type: A, IP: 192.0.2.1, TTL: 3600",
+        instructions: "Points domain to IPv4 address. SiteGround provides your hosting IP in account."
+      },
+      {
+        type: "MX Record",
+        example: "Name: @, Type: MX, Value: mail.example.com, Priority: 10",
+        instructions: "Routes email to mail server. SiteGround email requires specific MX records."
+      },
+      {
+        type: "CNAME Record",
+        example: "Name: www, Type: CNAME, Value: example.com",
+        instructions: "Creates domain alias. SiteGround often pre-configures www CNAME."
+      },
+      {
+        type: "TXT Record",
+        example: "Name: @, Type: TXT, Value: v=spf1 include:sendgrid.net ~all",
+        instructions: "Stores verification, SPF, DKIM, DMARC records."
+      }
+    ],
+    troubleshooting: [
+      {
+        issue: "DNS changes not visible",
+        solution: "SiteGround updates within 15-30 minutes. Wait 1-4 hours for global propagation. Flush DNS cache. Check SiteGround status for incidents."
+      },
+      {
+        issue: "Website not working",
+        solution: "Verify A record points to SiteGround hosting IP (SiteGround provides this). If using external DNS, ensure nameservers point to SiteGround."
+      },
+      {
+        issue: "SiteGround email not working",
+        solution: "SiteGround email requires specific MX records. Check SiteGround documentation for their MX values. Add SPF and DKIM TXT records."
+      },
+      {
+        issue: "SSL certificate errors",
+        solution: "SiteGround issues free SSL certificates. Ensure domain points to SiteGround. Force SSL renewal in SiteGround account. May take 24 hours."
+      }
+    ],
+    faq: [
+      {
+        question: "What are SiteGround's nameservers?",
+        answer: "SiteGround nameservers shown in account control panel. Usually ns1.siteground.xxx, ns2.siteground.xxx pattern. Use these when changing from another registrar."
+      },
+      {
+        question: "Can I use external DNS with SiteGround hosting?",
+        answer: "Yes, point your domain registrar nameservers to external provider (Cloudflare, Route53). Then manage DNS there. SiteGround hosting works with any nameservers."
+      },
+      {
+        question: "How long SiteGround DNS propagation?",
+        answer: "SiteGround servers update within 15-30 minutes. Global propagation: 1-4 hours. Previous TTL values affect propagation speed."
+      },
+      {
+        question: "Can I manage DNS on domain registered elsewhere?",
+        answer: "Yes, change nameservers at your domain registrar to SiteGround's nameservers. Then manage DNS in SiteGround account."
+      }
+    ]
+  },
+  {
+    slug: "hostgator-dns-setup",
+    provider: "HostGator",
+    title: "How to Configure DNS Records on HostGator - Step-by-Step",
+    metaDescription: "Complete guide for setting up DNS records on HostGator hosting. Learn to add A, MX, CNAME, and TXT records.",
+    h1: "How to Set Up DNS Records on HostGator",
+    introduction: "HostGator is one of the largest web hosting providers serving millions of customers. This guide shows how to manage DNS records in HostGator's control panel.",
+    steps: [
+      {
+        title: "Access HostGator Control Panel",
+        description: "Log into your HostGator account.",
+        details: [
+          "Visit login.hostgator.com with email/password",
+          "Click 'Manage My Domains'",
+          "Select your domain from the list",
+          "Click 'Manage Domain' or 'DNS Management'"
+        ]
+      },
+      {
+        title: "Navigate to Zone Editor",
+        description: "Find DNS records section.",
+        details: [
+          "In domain management, find 'Zone Editor' or 'DNS Zone'",
+          "HostGator displays records in table format",
+          "Default records include HostGator nameservers and hosting A records",
+          "You can add, edit, or delete records"
+        ]
+      },
+      {
+        title: "Add or Edit DNS Records",
+        description: "Create or modify DNS entries.",
+        details: [
+          "Click 'Add New Record' to create entry",
+          "Select record type (A, CNAME, MX, TXT, etc.)",
+          "Enter hostname and value",
+          "Set TTL (default usually fine)",
+          "Click 'Save' to apply"
+        ]
+      },
+      {
+        title: "Verify Propagation",
+        description: "Wait for changes to take effect.",
+        details: [
+          "HostGator updates within 1-2 hours typically",
+          "Global propagation: 4-24 hours",
+          "Use DNS checker to verify worldwide",
+          "Some delays are normal due to caching"
+        ]
+      }
+    ],
+    recordTypes: [
+      {
+        type: "A Record",
+        example: "Name: @, Type: A, Value: 192.0.2.1, TTL: 14400",
+        instructions: "Points domain to hosting IP. HostGator provides your hosting IP address."
+      },
+      {
+        type: "MX Record",
+        example: "Name: @, Type: MX, Priority: 10, Value: mail.hostgator.com",
+        instructions: "Routes email to mail server. HostGator email needs specific MX records."
+      },
+      {
+        type: "CNAME Record",
+        example: "Name: www, Type: CNAME, Value: example.com",
+        instructions: "Subdomain alias. HostGator typically pre-configures www CNAME."
+      },
+      {
+        type: "TXT Record",
+        example: "Name: @, Type: TXT, Value: v=spf1 include:_spf.hostgator.com ~all",
+        instructions: "Email authentication, SPF, DKIM, DMARC, domain verification."
+      }
+    ],
+    troubleshooting: [
+      {
+        issue: "DNS changes not appearing",
+        solution: "HostGator updates within 1-2 hours. Global propagation takes 4-24 hours. Flush DNS cache on your device. Verify changes saved correctly in Zone Editor."
+      },
+      {
+        issue: "Website showing HostGator default page",
+        solution: "A record still pointing to parking or old IP. Check A record @ points to correct hosting IP. Save changes and wait 1-2 hours."
+      },
+      {
+        issue: "HostGator email not working",
+        solution: "Verify MX records match HostGator email configuration. Add SPF record if required. Check HostGator's email documentation for correct values."
+      },
+      {
+        issue: "SSL certificate errors",
+        solution: "HostGator provides free SSL via AutoSSL. Ensure domain points to HostGator hosting. Force AutoSSL renewal through cPanel. May take up to 24 hours."
+      }
+    ],
+    faq: [
+      {
+        question: "What are HostGator's nameservers?",
+        answer: "HostGator nameservers shown in account. Usually ns1.hostgator.com, ns2.hostgator.com pattern. Use when pointing domain from another registrar."
+      },
+      {
+        question: "Can I use external DNS with HostGator?",
+        answer: "Yes, change nameservers at your registrar to external provider (Cloudflare, etc.). Then manage DNS there. HostGator hosting works with any nameservers."
+      },
+      {
+        question: "How long HostGator DNS propagation?",
+        answer: "HostGator servers update 1-2 hours. Global propagation: 4-24 hours typical. Depends on TTL and ISP caching."
+      },
+      {
+        question: "Can I manage DNS for domain registered elsewhere?",
+        answer: "Yes, change nameservers at registrar to HostGator nameservers. Then manage DNS in HostGator account."
+      }
+    ]
   }
 ];
 
