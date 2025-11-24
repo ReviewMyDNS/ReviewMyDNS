@@ -18,6 +18,16 @@ const providerGuideSlugs = [
   'domain-com-dns-setup',
   'siteground-dns-setup',
   'hostgator-dns-setup',
+  'namesilo-dns-setup',
+  'dynadot-dns-setup',
+  'porkbun-dns-setup',
+  'email-delivery-debugging-dns',
+  'dns-resolution-not-working-propagation',
+  'dnssec-validation-errors',
+  'ns1-managed-dns-setup',
+  'dnsimple-dns-setup',
+  'linode-dns-setup',
+  'digitalocean-dns-setup',
 ];
 
 router.get('/sitemap.xml', (req, res) => {
