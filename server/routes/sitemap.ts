@@ -1,5 +1,4 @@
 import { Router } from 'express';
-import { getAllFaqGuideSlugs } from '@shared/schema';
 
 const router = Router();
 
