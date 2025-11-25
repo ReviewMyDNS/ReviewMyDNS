@@ -1,6 +1,17 @@
 import { Router } from 'express';
+import { getAllFaqGuideSlugs } from '@shared/schema';
 
 const router = Router();
+
+// FAQ guide slugs for programmatic SEO (synced with client/src/data/faq-guides.ts)
+const faqSlugs = [
+  'why-dns-not-updating-24-hours',
+  'how-to-check-dns-propagation',
+  'difference-between-a-record-cname-mx-txt',
+  'domain-nameservers-vs-dns-records',
+  'what-is-dns-caching',
+  'how-to-find-your-nameservers',
+];
 
 // Provider guide slugs for programmatic SEO (synced with client/src/data/provider-guides.ts)
 const providerGuideSlugs = [
@@ -61,6 +72,15 @@ router.get('/sitemap.xml', (req, res) => {
     urls.push({
       loc: `/guides/${slug}`,
       priority: '0.8',
+      changefreq: 'monthly'
+    });
+  });
+
+  // Add FAQ pages
+  faqSlugs.forEach(slug => {
+    urls.push({
+      loc: `/faq/${slug}`,
+      priority: '0.7',
       changefreq: 'monthly'
     });
   });

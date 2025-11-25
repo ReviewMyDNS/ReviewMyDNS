@@ -30,6 +30,7 @@ import TxtRecordChecker from "@/pages/txt-record-checker";
 import Embed from "@/pages/embed";
 import Widget from "@/pages/widget";
 import Guide from "@/pages/guide";
+import FaqPage from "@/pages/faq";
 
 function Router() {
   return (
@@ -59,6 +60,7 @@ function Router() {
       <Route path="/embed" component={Embed} />
       <Route path="/widget" component={Widget} />
       <Route path="/guides/:slug" component={Guide} />
+      <Route path="/faq/:slug" component={FaqPage} />
       <Route component={NotFound} />
     </Switch>
   );

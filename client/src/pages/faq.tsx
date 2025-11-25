@@ -1,24 +1,24 @@
 import { useRoute, Link } from "wouter";
 import { Helmet } from "react-helmet-async";
-import { getProviderGuide } from "@/data/provider-guides";
+import { getFaqGuide } from "@/data/faq-guides";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { CheckCircle2, AlertCircle, ArrowRight, ExternalLink } from "lucide-react";
+import { ArrowRight, ExternalLink } from "lucide-react";
 import { Logo } from "@/components/logo";
 import MobileMenu from "@/components/mobile-menu";
 import { SocialShareButtons } from "@/components/social-share-buttons";
 
-export default function Guide() {
-  const [, params] = useRoute("/guides/:slug");
+export default function FaqPage() {
+  const [, params] = useRoute("/faq/:slug");
   const slug = params?.slug || "";
-  const guide = getProviderGuide(slug);
+  const faq = getFaqGuide(slug);
 
-  if (!guide) {
+  if (!faq) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
         <div className="max-w-4xl mx-auto px-4 py-16 text-center">
-          <h1 className="text-3xl font-bold text-gray-900 mb-4">Guide Not Found</h1>
-          <p className="text-gray-600 mb-8">The guide you're looking for doesn't exist.</p>
+          <h1 className="text-3xl font-bold text-gray-900 mb-4">FAQ Not Found</h1>
+          <p className="text-gray-600 mb-8">The FAQ you're looking for doesn't exist.</p>
           <Link href="/">
             <Button>Return Home</Button>
           </Link>
@@ -30,23 +30,23 @@ export default function Guide() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
       <Helmet>
-        <title>{guide.title} | ReviewMyDNS</title>
-        <meta name="description" content={guide.metaDescription} />
-        <meta name="keywords" content={`${guide.provider} DNS, DNS setup, ${guide.provider} DNS records, configure DNS ${guide.provider}, ${guide.provider} nameserver`} />
+        <title>{faq.title} | ReviewMyDNS</title>
+        <meta name="description" content={faq.metaDescription} />
+        <meta name="keywords" content={`${faq.category}, DNS FAQ, frequently asked questions, ${faq.category.toLowerCase()}`} />
         
         {/* Open Graph */}
-        <meta property="og:title" content={guide.title} />
-        <meta property="og:description" content={guide.metaDescription} />
+        <meta property="og:title" content={faq.title} />
+        <meta property="og:description" content={faq.metaDescription} />
         <meta property="og:type" content="article" />
-        <meta property="og:url" content={`https://reviewmydns.com/guides/${guide.slug}`} />
+        <meta property="og:url" content={`https://reviewmydns.com/faq/${faq.slug}`} />
         
         {/* Twitter Card */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={guide.title} />
-        <meta name="twitter:description" content={guide.metaDescription} />
+        <meta name="twitter:title" content={faq.title} />
+        <meta name="twitter:description" content={faq.metaDescription} />
         
         {/* Canonical URL */}
-        <link rel="canonical" href={`https://reviewmydns.com/guides/${guide.slug}`} />
+        <link rel="canonical" href={`https://reviewmydns.com/faq/${faq.slug}`} />
       </Helmet>
 
       {/* Header */}
@@ -92,20 +92,25 @@ export default function Guide() {
         <nav className="mb-8 text-sm text-gray-600">
           <Link href="/" className="hover:text-blue-600">Home</Link>
           <span className="mx-2">/</span>
-          <span className="text-gray-900 font-medium">{guide.provider} DNS Setup</span>
+          <span className="text-gray-900 font-medium">{faq.category}</span>
         </nav>
 
         {/* Page Header */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">{guide.h1}</h1>
-          <p className="text-xl text-gray-700 mb-6">{guide.introduction}</p>
+          <div className="inline-block mb-3">
+            <span className="text-xs font-semibold text-blue-600 bg-blue-50 px-3 py-1 rounded-full">
+              {faq.category}
+            </span>
+          </div>
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">{faq.h1}</h1>
+          <p className="text-xl text-gray-700 mb-6">{faq.metaDescription}</p>
           
           {/* Social Share Buttons */}
           <div className="mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
             <SocialShareButtons 
               url={typeof window !== 'undefined' ? window.location.href : ''} 
-              title={guide.title}
-              description={guide.metaDescription}
+              title={faq.title}
+              description={faq.metaDescription}
             />
           </div>
           
@@ -113,7 +118,7 @@ export default function Guide() {
           <Card className="bg-blue-50 border-blue-200">
             <CardContent className="p-4 flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-blue-900">Verify your DNS changes globally</p>
+                <p className="text-sm font-medium text-blue-900">Ready to test your DNS?</p>
                 <p className="text-xs text-blue-700">Check propagation across 50+ servers worldwide</p>
               </div>
               <Link href="/">
@@ -125,89 +130,16 @@ export default function Guide() {
           </Card>
         </div>
 
-        {/* Step-by-Step Instructions */}
+        {/* FAQ Items */}
         <section className="mb-12">
-          <h2 className="text-3xl font-bold text-gray-900 mb-6">Step-by-Step Setup Guide</h2>
           <div className="space-y-6">
-            {guide.steps.map((step, index) => (
-              <Card key={index}>
-                <CardHeader>
-                  <CardTitle className="flex items-center">
-                    <span className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white text-sm font-bold mr-3">
-                      {index + 1}
-                    </span>
-                    {step.title}
-                  </CardTitle>
-                  <CardDescription>{step.description}</CardDescription>
-                </CardHeader>
-                {step.details && (
-                  <CardContent>
-                    <ul className="space-y-2">
-                      {step.details.map((detail, idx) => (
-                        <li key={idx} className="flex items-start">
-                          <CheckCircle2 className="h-5 w-5 text-green-600 mr-2 flex-shrink-0 mt-0.5" />
-                          <span className="text-gray-700">{detail}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </CardContent>
-                )}
-              </Card>
-            ))}
-          </div>
-        </section>
-
-        {/* DNS Record Types */}
-        <section className="mb-12">
-          <h2 className="text-3xl font-bold text-gray-900 mb-6">Common DNS Record Types on {guide.provider}</h2>
-          <div className="space-y-6">
-            {guide.recordTypes.map((record, index) => (
-              <Card key={index}>
-                <CardHeader>
-                  <CardTitle>{record.type}</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  <p className="text-gray-700">{record.instructions}</p>
-                  <div className="bg-gray-100 rounded-lg p-3 font-mono text-sm text-gray-800">
-                    {record.example}
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </section>
-
-        {/* Troubleshooting */}
-        <section className="mb-12">
-          <h2 className="text-3xl font-bold text-gray-900 mb-6">Troubleshooting Common Issues</h2>
-          <div className="space-y-6">
-            {guide.troubleshooting.map((item, index) => (
-              <Card key={index} className="border-yellow-200 bg-yellow-50">
-                <CardHeader>
-                  <CardTitle className="flex items-center text-lg">
-                    <AlertCircle className="h-5 w-5 text-yellow-600 mr-2" />
-                    {item.issue}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-gray-700">{item.solution}</p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </section>
-
-        {/* FAQ */}
-        <section className="mb-12">
-          <h2 className="text-3xl font-bold text-gray-900 mb-6">Frequently Asked Questions</h2>
-          <div className="space-y-6">
-            {guide.faq.map((item, index) => (
+            {faq.faqs.map((item, index) => (
               <Card key={index}>
                 <CardHeader>
                   <CardTitle className="text-lg">{item.question}</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-gray-700">{item.answer}</p>
+                  <p className="text-gray-700 leading-relaxed">{item.answer}</p>
                 </CardContent>
               </Card>
             ))}
@@ -217,9 +149,9 @@ export default function Guide() {
         {/* Final CTA */}
         <Card className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
           <CardContent className="p-8 text-center">
-            <h3 className="text-2xl font-bold mb-4">Verify Your DNS Changes Now</h3>
+            <h3 className="text-2xl font-bold mb-4">Ready to Verify Your DNS?</h3>
             <p className="text-blue-100 mb-6">
-              Use our global DNS propagation checker to ensure your {guide.provider} DNS records are working correctly across all servers worldwide.
+              Use our global DNS propagation checker to verify your DNS records are working correctly across all servers worldwide.
             </p>
             <Link href="/">
               <Button size="lg" variant="secondary" data-testid="final-cta">
