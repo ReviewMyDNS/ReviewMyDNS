@@ -214,6 +214,34 @@ export default function Guide() {
           </div>
         </section>
 
+        {/* Affiliate CTA - Only show if provider has affiliate link */}
+        {guide.affiliateUrl && (
+          <Card className="mb-12 bg-gradient-to-r from-green-50 to-emerald-50 border-green-200">
+            <CardContent className="p-6">
+              <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+                <div>
+                  <h3 className="text-lg font-semibold text-green-900 mb-1">
+                    Need a domain or hosting with {guide.provider}?
+                  </h3>
+                  <p className="text-green-700 text-sm">
+                    {guide.affiliateDescription}
+                  </p>
+                </div>
+                <a
+                  href={guide.affiliateUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  data-testid="affiliate-cta"
+                >
+                  <Button className="bg-green-600 hover:bg-green-700 text-white whitespace-nowrap">
+                    {guide.affiliateCta} <ExternalLink className="ml-2 h-4 w-4" />
+                  </Button>
+                </a>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
         {/* Final CTA */}
         <Card className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
           <CardContent className="p-8 text-center">

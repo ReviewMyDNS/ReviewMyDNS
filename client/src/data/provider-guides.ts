@@ -6,6 +6,9 @@ export interface ProviderGuide {
   metaDescription: string;
   h1: string;
   introduction: string;
+  affiliateUrl?: string;
+  affiliateCta?: string;
+  affiliateDescription?: string;
   steps: {
     title: string;
     description: string;
@@ -34,6 +37,9 @@ export const providerGuides: ProviderGuide[] = [
     metaDescription: "Step-by-step guide to configure DNS records on Cloudflare. Learn how to set up A, AAAA, CNAME, MX, and TXT records with screenshots and examples.",
     h1: "How to Set Up DNS Records on Cloudflare",
     introduction: "Cloudflare is one of the world's largest DNS providers, offering fast global DNS resolution with built-in DDoS protection and CDN services. This guide walks you through configuring DNS records on Cloudflare, from A records for your website to MX records for email delivery.",
+    affiliateUrl: "https://www.cloudflare.com/plans/",
+    affiliateCta: "Get Started with Cloudflare Free",
+    affiliateDescription: "Free DNS, CDN, and DDoS protection for your domain",
     steps: [
       {
         title: "Log into Cloudflare Dashboard",
@@ -140,6 +146,9 @@ export const providerGuides: ProviderGuide[] = [
     metaDescription: "Complete guide to configure DNS records on GoDaddy. Learn how to add A, CNAME, MX, and TXT records for your domain with detailed instructions.",
     h1: "How to Configure DNS Records on GoDaddy",
     introduction: "GoDaddy is one of the world's largest domain registrars, hosting millions of domains. This tutorial shows you how to manage DNS records in GoDaddy's domain management panel, from pointing your domain to web hosting to setting up email with MX records.",
+    affiliateUrl: "https://www.godaddy.com/domains",
+    affiliateCta: "Register a Domain on GoDaddy",
+    affiliateDescription: "Get your domain from the world's largest registrar",
     steps: [
       {
         title: "Access GoDaddy Domain Management",
@@ -247,6 +256,9 @@ export const providerGuides: ProviderGuide[] = [
     metaDescription: "Learn how to configure DNS records on Namecheap with our step-by-step guide. Set up A, CNAME, MX, and TXT records for your domain easily.",
     h1: "How to Set Up DNS Records on Namecheap",
     introduction: "Namecheap is a popular domain registrar known for affordable domains and user-friendly DNS management. This guide will show you how to configure DNS records on Namecheap, whether you're hosting a website, setting up email, or verifying domain ownership.",
+    affiliateUrl: "https://www.namecheap.com/domains/",
+    affiliateCta: "Get Affordable Domains at Namecheap",
+    affiliateDescription: "Low-cost domains with free WhoisGuard privacy",
     steps: [
       {
         title: "Log into Namecheap Account",
@@ -573,6 +585,9 @@ export const providerGuides: ProviderGuide[] = [
     metaDescription: "Learn how to configure DNS records on Bluehost hosting. Complete guide for setting up A, CNAME, MX, and TXT records with screenshots.",
     h1: "How to Configure DNS Records on Bluehost",
     introduction: "Bluehost is one of the most popular web hosting providers, powering millions of websites worldwide. This guide shows you how to manage DNS records in Bluehost's control panel, whether you're hosting email, adding subdomains, or integrating third-party services.",
+    affiliateUrl: "https://www.bluehost.com/hosting",
+    affiliateCta: "Start with Bluehost Hosting",
+    affiliateDescription: "WordPress recommended hosting starting at $2.95/mo",
     steps: [
       {
         title: "Log into Bluehost Control Panel",
@@ -1336,6 +1351,9 @@ export const providerGuides: ProviderGuide[] = [
     metaDescription: "Step-by-step guide for setting up DNS records on SiteGround hosting. Learn to configure A, MX, CNAME, and TXT records.",
     h1: "How to Set Up DNS Records on SiteGround",
     introduction: "SiteGround is a leading web hosting provider serving millions of sites. This guide explains how to manage DNS records in SiteGround's control panel for websites, email, and services.",
+    affiliateUrl: "https://www.siteground.com/web-hosting.htm",
+    affiliateCta: "Try SiteGround Premium Hosting",
+    affiliateDescription: "Top-rated hosting with excellent support",
     steps: [
       {
         title: "Access SiteGround Control Panel",
@@ -1446,6 +1464,9 @@ export const providerGuides: ProviderGuide[] = [
     metaDescription: "Complete guide for setting up DNS records on HostGator hosting. Learn to add A, MX, CNAME, and TXT records.",
     h1: "How to Set Up DNS Records on HostGator",
     introduction: "HostGator is one of the largest web hosting providers serving millions of customers. This guide shows how to manage DNS records in HostGator's control panel.",
+    affiliateUrl: "https://www.hostgator.com/web-hosting",
+    affiliateCta: "Get Started with HostGator",
+    affiliateDescription: "Affordable hosting with 45-day money-back guarantee",
     steps: [
       {
         title: "Access HostGator Control Panel",
