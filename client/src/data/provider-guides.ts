@@ -1351,7 +1351,7 @@ export const providerGuides: ProviderGuide[] = [
     metaDescription: "Step-by-step guide for setting up DNS records on SiteGround hosting. Learn to configure A, MX, CNAME, and TXT records.",
     h1: "How to Set Up DNS Records on SiteGround",
     introduction: "SiteGround is a leading web hosting provider serving millions of sites. This guide explains how to manage DNS records in SiteGround's control panel for websites, email, and services.",
-    affiliateUrl: "https://www.siteground.com/web-hosting.htm",
+    affiliateUrl: "https://www.siteground.com/index.htm?afcode=f5c86ce71650d92a83063c120b89a99e",
     affiliateCta: "Try SiteGround Premium Hosting",
     affiliateDescription: "Top-rated hosting with excellent support",
     steps: [
