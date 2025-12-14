@@ -114,6 +114,9 @@ export default function Home() {
               <Link href="/tools" className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">
                 Tools
               </Link>
+              <Link href="/blog" className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">
+                Blog
+              </Link>
               <Link href="/api-docs" className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">
                 API
               </Link>

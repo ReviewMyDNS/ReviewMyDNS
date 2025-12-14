@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu, X, Globe, Code, FileText, DollarSign } from "lucide-react";
+import { Menu, X, Globe, Code, FileText, DollarSign, BookOpen } from "lucide-react";
 import { Link } from "wouter";
 import { Logo } from "@/components/logo";
 
@@ -11,6 +11,7 @@ export default function MobileMenu() {
   const menuItems = [
     { name: "DNS Checker", href: "/", icon: Globe },
     { name: "Tools", href: "/tools", icon: Code },
+    { name: "Blog", href: "/blog", icon: BookOpen },
     { name: "API", href: "/api-docs", icon: Code },
     { name: "Terminology", href: "/documentation", icon: FileText },
     { name: "Pricing", href: "/pricing", icon: DollarSign },
