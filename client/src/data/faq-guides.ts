@@ -256,6 +256,334 @@ export const faqGuides: FaqGuide[] = [
         answer: "Rarely. Nameservers set once during domain setup. Only check if domain stops working. Nameservers shouldn't need changes unless you switch DNS providers or hosting. Check annually as sanity check during security review."
       }
     ]
+  },
+  {
+    slug: "nxdomain-error-fix",
+    category: "DNS Errors",
+    title: "NXDOMAIN Error - What It Means and How to Fix It",
+    metaDescription: "Getting NXDOMAIN errors? Learn what NXDOMAIN means, common causes, and step-by-step fixes to resolve domain not found errors.",
+    h1: "NXDOMAIN Error - What It Means and How to Fix It",
+    faqs: [
+      {
+        question: "What does NXDOMAIN mean?",
+        answer: "NXDOMAIN stands for 'Non-Existent Domain'. It means the DNS server couldn't find any records for the domain you requested. The domain either doesn't exist in DNS, has no records configured, or isn't reachable through the DNS hierarchy."
+      },
+      {
+        question: "What causes NXDOMAIN errors?",
+        answer: "Common causes: 1) Domain not registered (expired or never purchased), 2) DNS records not configured at registrar or DNS provider, 3) Nameservers incorrectly set or not responding, 4) Typo in domain name, 5) Domain suspended by registrar, 6) Recent DNS changes not propagated yet."
+      },
+      {
+        question: "How do I fix NXDOMAIN for my domain?",
+        answer: "Check: 1) Domain registration is active (WHOIS lookup), 2) Nameservers are correctly set at registrar, 3) DNS records exist at your DNS provider, 4) No typos in domain, 5) Wait 24-48 hours if you recently changed nameservers. Fix the first issue you find."
+      },
+      {
+        question: "Is NXDOMAIN the same as domain expired?",
+        answer: "Not always, but expired domains commonly show NXDOMAIN. When a domain expires, the registrar may remove DNS delegation, causing NXDOMAIN. Check WHOIS to see domain expiry date. Renew the domain if expired, then wait for DNS propagation."
+      },
+      {
+        question: "Why does NXDOMAIN appear for only some users?",
+        answer: "Different DNS servers cache at different times. If you recently fixed NXDOMAIN, some users still see error (cached result). If you recently caused NXDOMAIN (changed nameservers incorrectly), some users still work (cached old result). Wait for full propagation."
+      },
+      {
+        question: "Can firewall or ISP cause NXDOMAIN?",
+        answer: "Yes. Some ISPs and corporate firewalls return NXDOMAIN for blocked domains (censorship/security). Test with multiple DNS servers (8.8.8.8, 1.1.1.1). If different servers give different results, network filtering may be involved."
+      },
+      {
+        question: "How do I check if domain exists in DNS?",
+        answer: "Use DNS lookup tools: 1) Online: ReviewMyDNS global checker, 2) Command line: nslookup domain.com or dig domain.com. If all servers return NXDOMAIN, domain has no DNS records. If some servers find it, check those servers' configuration."
+      },
+      {
+        question: "NXDOMAIN after changing nameservers - what went wrong?",
+        answer: "After nameserver changes, DNS might return NXDOMAIN during propagation (24-48 hours). Or new nameservers don't have your records configured. Verify: 1) New nameserver addresses are correct, 2) DNS records exist at new DNS provider, 3) Wait for propagation to complete."
+      }
+    ]
+  },
+  {
+    slug: "servfail-error-fix",
+    category: "DNS Errors",
+    title: "SERVFAIL Error - Causes and Solutions for DNS Server Failure",
+    metaDescription: "SERVFAIL DNS error? Learn what causes DNS server failures and how to troubleshoot and fix SERVFAIL errors.",
+    h1: "SERVFAIL Error - Causes and Solutions",
+    faqs: [
+      {
+        question: "What does SERVFAIL mean?",
+        answer: "SERVFAIL (Server Failure) indicates the DNS server encountered an error while processing your query. Unlike NXDOMAIN (domain doesn't exist), SERVFAIL means something went wrong on the server side - the domain might exist but couldn't be resolved."
+      },
+      {
+        question: "What causes SERVFAIL errors?",
+        answer: "Common causes: 1) Authoritative nameservers down or unreachable, 2) DNSSEC validation failures, 3) Misconfigured DNS zones, 4) Network connectivity issues between resolvers and authoritative servers, 5) Nameserver timeout (overloaded or slow), 6) Circular CNAME references."
+      },
+      {
+        question: "How do I fix SERVFAIL for my domain?",
+        answer: "Troubleshoot: 1) Check if your nameservers are online (ping/traceroute), 2) Verify DNSSEC is correctly configured (or disable if broken), 3) Check for DNS zone syntax errors, 4) Test with different resolvers to isolate issue, 5) Contact DNS provider if their servers are down."
+      },
+      {
+        question: "Is SERVFAIL a temporary or permanent error?",
+        answer: "Can be either. Temporary: server overload, network glitch, brief outage. Permanent: misconfigured DNSSEC, broken zone file, nameservers completely down. Test over time - if SERVFAIL persists for hours, it's likely a configuration issue requiring fix."
+      },
+      {
+        question: "Why does SERVFAIL only happen on some DNS servers?",
+        answer: "Different resolvers have different behaviors: 1) Some enforce DNSSEC strictly (fail if broken), others don't, 2) Network routing varies (some resolvers reach your nameservers, others can't), 3) Caching differences (some cached good result before issue started)."
+      },
+      {
+        question: "Can DNSSEC cause SERVFAIL?",
+        answer: "Yes, very commonly. If DNSSEC is enabled but incorrectly configured (wrong signatures, expired keys, missing records), DNSSEC-validating resolvers return SERVFAIL instead of returning potentially forged data. Fix DNSSEC or disable it if not needed."
+      },
+      {
+        question: "How do I check if my nameservers are responding?",
+        answer: "Test: 1) Ping nameserver addresses, 2) Use dig/nslookup directly against nameservers: 'dig @ns1.example.com example.com', 3) Check DNS provider status page, 4) Use online DNS debugger tools. If nameservers don't respond, contact DNS provider."
+      },
+      {
+        question: "SERVFAIL after DNS changes - what happened?",
+        answer: "Recent DNS changes may have introduced errors: 1) Typos in zone file, 2) Invalid record format, 3) DNSSEC signature didn't update, 4) New nameservers not correctly configured. Review recent changes, test zone file validity, check DNSSEC status."
+      }
+    ]
+  },
+  {
+    slug: "spf-too-many-lookups-fix",
+    category: "Email DNS Errors",
+    title: "SPF Too Many DNS Lookups - How to Fix SPF PermError",
+    metaDescription: "SPF record exceeds 10 DNS lookup limit? Learn how to fix SPF PermError by optimizing your SPF record.",
+    h1: "SPF Too Many DNS Lookups - How to Fix It",
+    faqs: [
+      {
+        question: "What does 'SPF too many DNS lookups' mean?",
+        answer: "SPF (Sender Policy Framework) records are limited to 10 DNS lookups maximum. Each 'include:', 'a:', 'mx:', and 'redirect=' counts as a lookup. If your SPF exceeds 10 lookups, email servers return 'PermError' and may reject your emails or mark them as spam."
+      },
+      {
+        question: "How do I count my SPF lookups?",
+        answer: "Each mechanism that requires DNS: include: (1 lookup + nested includes), a: (1 lookup), mx: (1 lookup + 1 per MX record resolved), redirect= (1 lookup + target's lookups). Use online SPF checkers to count automatically. IP addresses (ip4:, ip6:) don't count."
+      },
+      {
+        question: "How do I fix SPF exceeding 10 lookups?",
+        answer: "Options: 1) Replace 'include:' with IP addresses (ip4:) where possible, 2) Remove unused services from SPF, 3) Use SPF flattening services that resolve includes to IPs, 4) Split into multiple domains with separate SPF, 5) Remove redundant includes."
+      },
+      {
+        question: "What is SPF flattening?",
+        answer: "SPF flattening replaces 'include:' mechanisms with the IP addresses they resolve to. Instead of 'include:_spf.google.com' (multiple lookups), you list Google's actual IPs. This reduces lookups but requires maintenance when provider IPs change. Use automated flattening services."
+      },
+      {
+        question: "Can I split SPF across multiple TXT records?",
+        answer: "No. You can only have ONE SPF record per domain. Multiple SPF records cause errors. However, you can use subdomains - send marketing email from marketing.example.com with its own SPF. Or use SPF macro expansion for advanced splitting."
+      },
+      {
+        question: "What services commonly cause SPF bloat?",
+        answer: "Each service you send email through adds lookups: Google Workspace (include:_spf.google.com), Microsoft 365 (include:spf.protection.outlook.com), Mailchimp, SendGrid, HubSpot, Salesforce, Zendesk, etc. 4-5 services can exceed limit. Audit which services actually send email."
+      },
+      {
+        question: "What happens if I exceed 10 lookups?",
+        answer: "Email servers receiving your email see 'PermError' (permanent error) in SPF check. This fails SPF authentication. Depending on DMARC policy and receiver settings, email may be rejected, quarantined (spam), or accepted but flagged. Email deliverability suffers significantly."
+      },
+      {
+        question: "Do nested includes count toward the limit?",
+        answer: "Yes! If you include:_spf.google.com, and Google's SPF has 3 more includes, that's 4 lookups from one include. This is why limits are exceeded quickly. Check the full resolution chain, not just your top-level SPF record."
+      }
+    ]
+  },
+  {
+    slug: "dmarc-fail-fix",
+    category: "Email DNS Errors",
+    title: "DMARC Fail - Why Emails Fail DMARC and How to Fix It",
+    metaDescription: "Emails failing DMARC authentication? Learn why DMARC fails happen and how to fix alignment issues.",
+    h1: "DMARC Fail - Why Emails Fail and How to Fix It",
+    faqs: [
+      {
+        question: "What does DMARC fail mean?",
+        answer: "DMARC (Domain-based Message Authentication, Reporting & Conformance) fail means your email didn't pass authentication checks. For DMARC to pass, email must pass EITHER SPF or DKIM, AND the domain must align. Failure means neither aligned authentication passed."
+      },
+      {
+        question: "Why does DMARC require alignment?",
+        answer: "Alignment means the domain in SPF/DKIM must match the 'From:' header domain. Without alignment, attackers could pass SPF for their domain but spoof your From: address. DMARC enforces that authenticated domain matches visible sender domain."
+      },
+      {
+        question: "What causes DMARC to fail?",
+        answer: "Common causes: 1) SPF record missing or incorrect, 2) DKIM not configured or broken, 3) Sending from unauthorized servers, 4) Email forwarding breaks authentication, 5) Third-party services not properly configured, 6) Subdomain vs root domain mismatch."
+      },
+      {
+        question: "How do I fix DMARC failures?",
+        answer: "Fix path: 1) Check DMARC reports for failure sources, 2) Ensure SPF includes all legitimate sending sources, 3) Configure DKIM for all sending services, 4) Verify alignment (same domain in From: and authenticated domain), 5) Set DMARC policy to 'none' while debugging."
+      },
+      {
+        question: "What is DMARC alignment mode (strict vs relaxed)?",
+        answer: "Relaxed (default): subdomain.example.com can align with example.com. Strict: exact domain match required. If using subdomains, relaxed alignment helps. Set with 'aspf=r' (relaxed SPF) and 'adkim=r' (relaxed DKIM) in DMARC record."
+      },
+      {
+        question: "Why do forwarded emails fail DMARC?",
+        answer: "Email forwarding breaks SPF (forwarder's IP not in your SPF) and may break DKIM (if forwarder modifies message). This is a known DMARC limitation. Solutions: ARC (Authenticated Received Chain) helps, or recipients whitelist forwarded sources."
+      },
+      {
+        question: "How do I read DMARC reports?",
+        answer: "DMARC aggregate reports (XML) show: sending IPs, pass/fail for SPF/DKIM/DMARC, alignment status. Look for: 1) Failed sources you don't recognize (potential spoofing), 2) Failed sources you do recognize (fix their authentication), 3) Volume patterns. Use DMARC report analyzers for easier reading."
+      },
+      {
+        question: "What DMARC policy should I use?",
+        answer: "Start with p=none (monitor only, no action on failures). Analyze reports, fix legitimate failures. Move to p=quarantine (spam folder) when confident. Finally p=reject (block failures) for full protection. Don't jump to reject without monitoring first - you'll block legitimate email."
+      }
+    ]
+  },
+  {
+    slug: "dnssec-validation-failed-fix",
+    category: "DNS Errors",
+    title: "DNSSEC Validation Failed - How to Fix DNSSEC Errors",
+    metaDescription: "DNSSEC validation failing? Learn how to troubleshoot and fix DNSSEC configuration errors.",
+    h1: "DNSSEC Validation Failed - How to Fix It",
+    faqs: [
+      {
+        question: "What is DNSSEC validation failure?",
+        answer: "DNSSEC adds cryptographic signatures to DNS records. Validation failure means the signature couldn't be verified - either signatures are wrong, expired, missing, or the chain of trust is broken. DNSSEC-validating resolvers will return SERVFAIL instead of potentially spoofed data."
+      },
+      {
+        question: "What causes DNSSEC to fail?",
+        answer: "Common causes: 1) DS record at registrar doesn't match DNSKEY at nameserver, 2) RRSIG signatures expired, 3) Zone not properly signed, 4) Key rollover done incorrectly, 5) Nameserver change without updating DS records, 6) Clock skew on signing servers."
+      },
+      {
+        question: "How do I check if DNSSEC is the problem?",
+        answer: "Compare results from DNSSEC-validating resolver (8.8.8.8) vs non-validating resolver. If Google DNS returns SERVFAIL but other resolvers work, DNSSEC is likely broken. Use online DNSSEC debuggers (like DNSViz) to see the full validation chain and find breaks."
+      },
+      {
+        question: "How do I fix DNSSEC validation errors?",
+        answer: "Fix depends on cause: 1) Update DS record at registrar to match current DNSKEY, 2) Re-sign zone if signatures expired, 3) If using managed DNSSEC, contact DNS provider, 4) As last resort, disable DNSSEC (remove DS record, wait 24-48 hours for propagation)."
+      },
+      {
+        question: "Can I just disable DNSSEC?",
+        answer: "Yes, but carefully. Remove DS record from registrar first, wait for TTL to expire (24-48 hours), then disable DNSSEC at DNS provider. If you remove in wrong order, you'll have broken DNSSEC during transition. Disabling is safe if you don't need DNSSEC security."
+      },
+      {
+        question: "Why did DNSSEC break after changing nameservers?",
+        answer: "Old DS record at registrar points to old nameserver's DNSKEY. New nameservers have different DNSKEYs. Mismatch = validation failure. Solution: Get new DS record from new DNS provider, update at registrar, wait for propagation. Or disable DNSSEC before migration."
+      },
+      {
+        question: "What is a DS record vs DNSKEY?",
+        answer: "DNSKEY: Public key stored at your nameserver (in your DNS zone). DS record: Hash of DNSKEY stored at parent zone (at your registrar). DS record at registrar must match DNSKEY at nameserver. If they don't match, DNSSEC validation fails."
+      },
+      {
+        question: "How often do DNSSEC signatures expire?",
+        answer: "Typically 1-4 weeks. Zone must be re-signed before signatures expire. Managed DNS providers do this automatically. If self-managing DNSSEC, you need automated re-signing. Expired signatures = DNSSEC failure for entire zone."
+      }
+    ]
+  },
+  {
+    slug: "mx-record-not-found-fix",
+    category: "Email DNS Errors",
+    title: "MX Record Not Found - How to Fix Email Delivery Failures",
+    metaDescription: "No MX record found for your domain? Learn why emails aren't being delivered and how to fix missing MX records.",
+    h1: "MX Record Not Found - How to Fix It",
+    faqs: [
+      {
+        question: "What does 'MX record not found' mean?",
+        answer: "MX (Mail Exchanger) records tell email servers where to deliver mail for your domain. If no MX record exists, sending servers don't know where to deliver email, causing delivery failures with errors like 'no mail exchanger' or 'MX lookup failed'."
+      },
+      {
+        question: "Why is my MX record missing?",
+        answer: "Common reasons: 1) MX record never created, 2) Accidentally deleted when editing DNS, 3) DNS provider changed and records not migrated, 4) Domain just registered (default records may not include MX), 5) Using wrong nameservers that don't have your records."
+      },
+      {
+        question: "How do I add an MX record?",
+        answer: "In your DNS provider: 1) Add record type 'MX', 2) Host/Name: @ (for root domain), 3) Value: your mail server hostname (e.g., mail.example.com or aspmx.l.google.com), 4) Priority: 10 (lower = higher priority), 5) TTL: 3600. Save and wait for propagation."
+      },
+      {
+        question: "What MX records do I need for Google Workspace?",
+        answer: "Google Workspace requires 5 MX records: ASPMX.L.GOOGLE.COM (priority 1), ALT1.ASPMX.L.GOOGLE.COM (priority 5), ALT2.ASPMX.L.GOOGLE.COM (priority 5), ALT3.ASPMX.L.GOOGLE.COM (priority 10), ALT4.ASPMX.L.GOOGLE.COM (priority 10). All point to @ (root domain)."
+      },
+      {
+        question: "What MX records do I need for Microsoft 365?",
+        answer: "Microsoft 365 typically uses one MX record: Host: @, Value: [your-domain].mail.protection.outlook.com, Priority: 0. Replace [your-domain] with your actual domain formatted per Microsoft's instructions (usually domain-com for example.com)."
+      },
+      {
+        question: "Can I have email without MX records?",
+        answer: "Technically, if no MX exists, senders should fall back to A record. But most modern servers don't do this - they require MX records. Without MX, email delivery is unreliable at best, completely broken at worst. Always configure MX records for email."
+      },
+      {
+        question: "Why does MX lookup show nothing after I added records?",
+        answer: "DNS propagation takes 15 minutes to 24 hours. Also check: 1) Record saved correctly (typos?), 2) Correct domain (@ not subdomain), 3) Using correct nameservers, 4) DNS provider shows record in dashboard. If record shows in dashboard but not in lookup, wait for propagation."
+      },
+      {
+        question: "What priority should I set for MX records?",
+        answer: "Lower number = higher priority. Primary mail server: 10. Backup: 20, 30, etc. If you have one mail server, priority 10 is fine. Multiple MX records with same priority distribute load. Different priorities create failover (lower priority first, higher if unavailable)."
+      }
+    ]
+  },
+  {
+    slug: "cname-root-domain-error-fix",
+    category: "DNS Errors",
+    title: "Cannot Add CNAME to Root Domain - How to Fix This Error",
+    metaDescription: "Getting error when adding CNAME to root domain? Learn why CNAME doesn't work on root domains and alternative solutions.",
+    h1: "Cannot Add CNAME to Root Domain - How to Fix It",
+    faqs: [
+      {
+        question: "Why can't I add CNAME to my root domain?",
+        answer: "DNS protocol (RFC 1034) prohibits CNAME records on root/apex domains (example.com without www). CNAME says 'this name is an alias for another name' - but root domains must have SOA and NS records, which can't coexist with CNAME. This is a fundamental DNS limitation."
+      },
+      {
+        question: "What is the difference between root domain and subdomain?",
+        answer: "Root domain (apex): example.com - no prefix. Subdomain: www.example.com, blog.example.com - has prefix. CNAME works on subdomains, not root domain. In DNS settings, root domain is usually represented as '@'."
+      },
+      {
+        question: "How do I point my root domain to another hostname?",
+        answer: "Options: 1) Use A record with IP address instead (ask host for IP), 2) Use ALIAS/ANAME record (if your DNS provider supports it), 3) Use Cloudflare's CNAME flattening, 4) Set up redirect from root to www (then CNAME www)."
+      },
+      {
+        question: "What is ALIAS or ANAME record?",
+        answer: "ALIAS/ANAME is a non-standard DNS record type that acts like CNAME but works on root domains. Your DNS provider resolves the alias and returns IP addresses. Supported by: Cloudflare (CNAME flattening), Route53 (Alias), DNSimple (ALIAS), NS1 (ALIAS)."
+      },
+      {
+        question: "How do I set up CNAME flattening on Cloudflare?",
+        answer: "On Cloudflare, add a CNAME record for root domain (@) normally. Cloudflare automatically 'flattens' it - resolves the target hostname and returns the IP addresses instead of CNAME. To external resolvers, it looks like an A record. Works transparently."
+      },
+      {
+        question: "Should I redirect root domain to www or vice versa?",
+        answer: "Either works, but choose one and be consistent: 1) www.example.com as primary: CNAME www to your host, redirect @ to www. 2) example.com as primary: A record @ to IP, CNAME www to @. Most modern sites prefer non-www (cleaner URL), but www allows CNAME flexibility."
+      },
+      {
+        question: "My hosting provider only gave me a hostname, not IP. Now what?",
+        answer: "Options: 1) Ask host for IP address (they may have one), 2) Use DNS provider with ALIAS/ANAME support, 3) Switch to Cloudflare for CNAME flattening, 4) Set up www as primary domain with CNAME, redirect root to www using registrar/host's redirect feature."
+      },
+      {
+        question: "Can I use multiple A records instead of CNAME?",
+        answer: "Yes. If your hosting provider uses multiple IPs (load balancing), add multiple A records for root domain, each pointing to different IP. This is commonly done for CDN setups. However, if IPs change, you must update all A records (CNAME would update automatically)."
+      }
+    ]
+  },
+  {
+    slug: "timeout-dns-query-fix",
+    category: "DNS Errors",
+    title: "DNS Query Timeout - Why DNS Is Slow and How to Fix It",
+    metaDescription: "DNS queries timing out? Learn what causes slow DNS resolution and how to fix DNS timeout issues.",
+    h1: "DNS Query Timeout - Causes and Solutions",
+    faqs: [
+      {
+        question: "What does DNS query timeout mean?",
+        answer: "DNS timeout means the resolver waited for a response but never received one within the allowed time (typically 2-5 seconds). The DNS server may be unreachable, overloaded, or the network path has problems. Timeouts prevent your browser from connecting to websites."
+      },
+      {
+        question: "What causes DNS timeouts?",
+        answer: "Common causes: 1) Nameservers are down or unreachable, 2) Network issues between you and DNS server, 3) DNS server overloaded (slow response), 4) Firewall blocking DNS traffic (UDP port 53), 5) ISP DNS issues, 6) Your nameservers poorly configured."
+      },
+      {
+        question: "How do I fix DNS timeouts on my computer?",
+        answer: "Try: 1) Switch to public DNS (8.8.8.8 or 1.1.1.1), 2) Flush DNS cache, 3) Restart router, 4) Check if other sites work (isolate the problem), 5) Disable VPN temporarily, 6) Check firewall isn't blocking DNS. If only your domain times out, problem is your nameservers."
+      },
+      {
+        question: "How do I fix DNS timeouts for my domain?",
+        answer: "If your domain times out for everyone: 1) Check if nameservers are online (ping them), 2) Verify nameserver addresses at registrar are correct, 3) Contact DNS provider about outages, 4) Check if your DNS zone has errors, 5) Consider switching to more reliable DNS provider."
+      },
+      {
+        question: "Why do only some DNS servers timeout for my domain?",
+        answer: "Different servers may have different network paths to your nameservers. Some routes may be blocked, congested, or have high latency. Also, some DNS providers have better global coverage than others. Test from multiple locations to identify pattern."
+      },
+      {
+        question: "Can high TTL cause timeouts?",
+        answer: "Not directly. TTL affects caching duration, not query speed. However, if your nameservers are slow/unreachable and TTL is low, DNS queries happen more often (each times out). High TTL would serve from cache more, masking timeout issues for cached queries."
+      },
+      {
+        question: "How do I test DNS response time?",
+        answer: "Use dig command: 'dig example.com +stats' shows query time in milliseconds. Normal: under 100ms. Slow: 100-500ms. Very slow: 500ms+. Test multiple times and against different nameservers. Online tools like ReviewMyDNS also show response times per server."
+      },
+      {
+        question: "Should I switch DNS providers if timeouts are frequent?",
+        answer: "Yes, if your current DNS provider has reliability issues. Major providers (Cloudflare, Route53, Google Cloud DNS) have 100% uptime SLAs and global anycast networks. Migration: set up records at new provider, update nameservers at registrar, wait 24-48 hours."
+      }
+    ]
   }
 ];
 

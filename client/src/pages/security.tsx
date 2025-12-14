@@ -152,6 +152,56 @@ export default function Security() {
         </div>
       </header>
 
+      {/* SEO Intro Content */}
+      <section className="bg-white border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            DNS Security Assessment - Comprehensive Security Audit
+          </h1>
+          <p className="text-lg text-gray-600 mb-6 max-w-3xl">
+            Analyze your domain's DNS security posture with our comprehensive assessment tool. 
+            Check DNSSEC status, email authentication (SPF, DKIM, DMARC), and identify potential 
+            vulnerabilities before attackers do.
+          </p>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <h3 className="font-semibold text-gray-900 mb-2">DNSSEC Validation</h3>
+              <p className="text-sm text-gray-600">
+                Check if DNSSEC is enabled and properly configured to prevent DNS spoofing.
+              </p>
+            </div>
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <h3 className="font-semibold text-gray-900 mb-2">Email Security</h3>
+              <p className="text-sm text-gray-600">
+                Verify SPF, DKIM, and DMARC configuration to protect against email spoofing.
+              </p>
+            </div>
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <h3 className="font-semibold text-gray-900 mb-2">Best Practices</h3>
+              <p className="text-sm text-gray-600">
+                Get actionable recommendations to improve your DNS security configuration.
+              </p>
+            </div>
+          </div>
+
+          <h2 className="text-2xl font-bold text-gray-900 mb-3">What We Check</h2>
+          <ul className="list-disc list-inside text-gray-600 space-y-2 mb-6">
+            <li><strong>DNSSEC:</strong> Protects against DNS cache poisoning and spoofing attacks</li>
+            <li><strong>SPF Records:</strong> Defines which servers can send email for your domain</li>
+            <li><strong>DKIM:</strong> Cryptographic email authentication signatures</li>
+            <li><strong>DMARC:</strong> Policy for handling authentication failures</li>
+            <li><strong>DNS Infrastructure:</strong> Redundancy, consistency, and configuration</li>
+            <li><strong>TTL Settings:</strong> Ensure values balance security and performance</li>
+          </ul>
+
+          <p className="text-gray-600">
+            Regular security assessments help catch misconfigurations before they lead to security 
+            breaches, email deliverability problems, or service outages.
+          </p>
+        </div>
+      </section>
+
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Scan Control */}

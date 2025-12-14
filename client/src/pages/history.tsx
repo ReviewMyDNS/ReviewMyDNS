@@ -65,7 +65,6 @@ export default function HistoryPage() {
   ];
 
   return (
-    <PlanGate feature="history" requiredPlan="pro">
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <header className="bg-white shadow-sm border-b border-gray-200">
@@ -83,6 +82,51 @@ export default function HistoryPage() {
         </div>
       </header>
 
+      {/* SEO Intro Content */}
+      <section className="bg-white border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            DNS History Tracking - Monitor Record Changes Over Time
+          </h1>
+          <p className="text-lg text-gray-600 mb-6 max-w-3xl">
+            Track your domain's DNS record history with our comprehensive logging system. 
+            See when records changed, identify performance trends, and maintain a complete audit 
+            trail of your DNS configuration.
+          </p>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <h3 className="font-semibold text-gray-900 mb-2">Change Detection</h3>
+              <p className="text-sm text-gray-600">
+                Automatic detection when DNS records change, with timestamps and old/new values.
+              </p>
+            </div>
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <h3 className="font-semibold text-gray-900 mb-2">Performance Trends</h3>
+              <p className="text-sm text-gray-600">
+                Track response time trends to identify DNS performance degradation early.
+              </p>
+            </div>
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <h3 className="font-semibold text-gray-900 mb-2">Audit Trail</h3>
+              <p className="text-sm text-gray-600">
+                Complete historical log for compliance, security reviews, and troubleshooting.
+              </p>
+            </div>
+          </div>
+
+          <h2 className="text-2xl font-bold text-gray-900 mb-3">Why Track DNS History?</h2>
+          <ul className="list-disc list-inside text-gray-600 space-y-2 mb-6">
+            <li>Detect unauthorized DNS changes that could indicate security breaches</li>
+            <li>Troubleshoot "when did this break?" by reviewing historical records</li>
+            <li>Maintain compliance audit trails for regulated industries</li>
+            <li>Correlate DNS changes with website issues or outages</li>
+            <li>Track TTL changes and their impact on propagation speed</li>
+          </ul>
+        </div>
+      </section>
+
+      <PlanGate feature="history" requiredPlan="pro">
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Controls */}
@@ -225,7 +269,7 @@ export default function HistoryPage() {
           </CardContent>
         </Card>
       </main>
+      </PlanGate>
     </div>
-    </PlanGate>
   );
 }

@@ -10,6 +10,14 @@ const faqSlugs = [
   'domain-nameservers-vs-dns-records',
   'what-is-dns-caching',
   'how-to-find-your-nameservers',
+  'nxdomain-error-fix',
+  'servfail-error-fix',
+  'spf-too-many-lookups-fix',
+  'dmarc-fail-fix',
+  'dnssec-validation-failed-fix',
+  'mx-record-not-found-fix',
+  'cname-root-domain-error-fix',
+  'timeout-dns-query-fix',
 ];
 
 // Provider guide slugs for programmatic SEO (synced with client/src/data/provider-guides.ts)

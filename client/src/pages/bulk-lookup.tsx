@@ -132,26 +132,69 @@ export default function BulkLookup() {
   };
 
   return (
-    <PlanGate feature="bulkLookup" requiredPlan="pro">
-      <div className="min-h-screen bg-gray-50">
-        {/* Header */}
-        <header className="bg-white shadow-sm border-b border-gray-200">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-between items-center h-16">
-              <div className="flex items-center">
-                <Link href="/">
-                  <div className="flex items-center cursor-pointer">
-                    <Logo size="sm" className="mr-2" />
-                    <h1 className="text-base md:text-xl font-bold text-gray-900">ReviewMyDNS</h1>
-                  </div>
-                </Link>
-              </div>
-              <MobileMenu />
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <header className="bg-white shadow-sm border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            <div className="flex items-center">
+              <Link href="/">
+                <div className="flex items-center cursor-pointer">
+                  <Logo size="sm" className="mr-2" />
+                  <h1 className="text-base md:text-xl font-bold text-gray-900">ReviewMyDNS</h1>
+                </div>
+              </Link>
+            </div>
+            <MobileMenu />
+          </div>
+        </div>
+      </header>
+
+      {/* SEO Intro Content */}
+      <section className="bg-white border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            Bulk DNS Lookup Tool - Check Multiple Domains at Once
+          </h1>
+          <p className="text-lg text-gray-600 mb-6 max-w-3xl">
+            Our bulk DNS lookup tool allows you to query DNS records for hundreds of domains simultaneously. 
+            Perfect for IT administrators, domain portfolio managers, and security professionals who need to 
+            audit multiple domains efficiently.
+          </p>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <h3 className="font-semibold text-gray-900 mb-2">Check 100+ Domains</h3>
+              <p className="text-sm text-gray-600">
+                Process up to 100 domains in a single batch, saving hours of manual lookups.
+              </p>
+            </div>
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <h3 className="font-semibold text-gray-900 mb-2">All Record Types</h3>
+              <p className="text-sm text-gray-600">
+                Query A, AAAA, CNAME, MX, TXT, NS, and SOA records for each domain.
+              </p>
+            </div>
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <h3 className="font-semibold text-gray-900 mb-2">Export Results</h3>
+              <p className="text-sm text-gray-600">
+                Download comprehensive CSV reports with response times and propagation status.
+              </p>
             </div>
           </div>
-        </header>
 
-        {/* Main Content */}
+          <h2 className="text-2xl font-bold text-gray-900 mb-3">When to Use Bulk DNS Lookup</h2>
+          <ul className="list-disc list-inside text-gray-600 space-y-2 mb-6">
+            <li>Auditing DNS configuration across a domain portfolio</li>
+            <li>Verifying DNS migration for multiple domains</li>
+            <li>Checking MX records to troubleshoot email delivery issues</li>
+            <li>Security audits to find misconfigured DNS records</li>
+            <li>Competitive analysis of how domains are configured</li>
+          </ul>
+        </div>
+      </section>
+
+      <PlanGate feature="bulkLookup" requiredPlan="pro">
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Input Section */}
@@ -170,10 +213,11 @@ export default function BulkLookup() {
                   onChange={(e) => setDomains(e.target.value)}
                   rows={8}
                   className="resize-none"
+                  data-testid="input-domains"
                 />
                 
                 <Select value={recordType} onValueChange={setRecordType}>
-                  <SelectTrigger>
+                  <SelectTrigger data-testid="select-record-type">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -191,6 +235,7 @@ export default function BulkLookup() {
                   onClick={handleBulkLookup}
                   disabled={!domains.trim() || isProcessing}
                   className="w-full"
+                  data-testid="button-bulk-lookup"
                 >
                   {isProcessing ? (
                     <>
@@ -229,7 +274,7 @@ export default function BulkLookup() {
                     </CardDescription>
                   </div>
                   {bulkResults.length > 0 && (
-                    <Button onClick={exportResults} variant="outline" size="sm">
+                    <Button onClick={exportResults} variant="outline" size="sm" data-testid="button-export">
                       <Download className="h-4 w-4 mr-2" />
                       Export CSV
                     </Button>
@@ -245,7 +290,7 @@ export default function BulkLookup() {
                 ) : (
                   <div className="space-y-3">
                     {bulkResults.map((result, index) => (
-                      <div key={index} className="flex items-center justify-between p-4 border rounded-lg">
+                      <div key={index} className="flex items-center justify-between p-4 border rounded-lg" data-testid={`result-row-${index}`}>
                         <div className="flex items-center space-x-3">
                           <div className="flex-shrink-0">
                             {result.status === 'pending' && (
@@ -290,7 +335,7 @@ export default function BulkLookup() {
           </div>
         </div>
       </main>
+      </PlanGate>
     </div>
-  </PlanGate>
   );
 }

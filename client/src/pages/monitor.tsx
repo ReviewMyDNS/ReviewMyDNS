@@ -50,7 +50,6 @@ export default function Monitor() {
   ];
 
   return (
-    <PlanGate feature="monitoring" requiredPlan="pro">
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <header className="bg-white shadow-sm border-b border-gray-200">
@@ -69,6 +68,54 @@ export default function Monitor() {
         </div>
       </header>
 
+      {/* SEO Intro Content */}
+      <section className="bg-white border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            DNS Monitoring - Real-Time Response Time Tracking
+          </h1>
+          <p className="text-lg text-gray-600 mb-6 max-w-3xl">
+            Monitor your domain's DNS resolution in real-time across global servers. Get instant alerts 
+            when DNS becomes slow or unreachable, and track performance trends to ensure optimal user experience.
+          </p>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <h3 className="font-semibold text-gray-900 mb-2">Real-Time Monitoring</h3>
+              <p className="text-sm text-gray-600">
+                Live response time updates every 5 seconds from DNS servers worldwide.
+              </p>
+            </div>
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <h3 className="font-semibold text-gray-900 mb-2">Global Coverage</h3>
+              <p className="text-sm text-gray-600">
+                Monitor from 50+ locations including Americas, Europe, Asia, and Oceania.
+              </p>
+            </div>
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <h3 className="font-semibold text-gray-900 mb-2">Alert System</h3>
+              <p className="text-sm text-gray-600">
+                Get notified when DNS response times exceed thresholds or servers go offline.
+              </p>
+            </div>
+          </div>
+
+          <h2 className="text-2xl font-bold text-gray-900 mb-3">Why Monitor DNS?</h2>
+          <p className="text-gray-600 mb-4">
+            DNS is the first step in every web request. Slow DNS means slow websites. Unreachable DNS 
+            means your entire domain is offline. Proactive monitoring catches issues before your users do.
+          </p>
+          <ul className="list-disc list-inside text-gray-600 space-y-2 mb-6">
+            <li>Detect DNS outages before users report "site is down"</li>
+            <li>Identify slow DNS servers affecting user experience</li>
+            <li>Monitor during DNS migrations to catch propagation issues</li>
+            <li>Track SLA compliance with your DNS provider</li>
+            <li>Correlate DNS performance with website analytics</li>
+          </ul>
+        </div>
+      </section>
+
+      <PlanGate feature="monitoring" requiredPlan="pro">
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Control Panel */}
@@ -175,7 +222,7 @@ export default function Monitor() {
           </CardContent>
         </Card>
       </main>
+      </PlanGate>
     </div>
-    </PlanGate>
   );
 }

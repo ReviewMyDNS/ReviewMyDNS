@@ -12,7 +12,6 @@ export default function Analytics() {
   const [selectedPeriod, setSelectedPeriod] = useState("7d");
 
   return (
-    <PlanGate feature="analytics" requiredPlan="pro">
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <header className="bg-white shadow-sm border-b border-gray-200">
@@ -31,6 +30,56 @@ export default function Analytics() {
         </div>
       </header>
 
+      {/* SEO Intro Content */}
+      <section className="bg-white border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            DNS Analytics Dashboard - Performance Insights & Reporting
+          </h1>
+          <p className="text-lg text-gray-600 mb-6 max-w-3xl">
+            Get comprehensive insights into your DNS performance with our analytics dashboard. 
+            Track query volumes, response times, success rates, and geographic performance 
+            across all your monitored domains.
+          </p>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <h3 className="font-semibold text-gray-900 mb-2">Performance Metrics</h3>
+              <p className="text-sm text-gray-600">
+                Track average response times, p95/p99 latencies, and success rates over time.
+              </p>
+            </div>
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <h3 className="font-semibold text-gray-900 mb-2">Geographic Analysis</h3>
+              <p className="text-sm text-gray-600">
+                See DNS performance breakdown by region: Americas, Europe, Asia, and more.
+              </p>
+            </div>
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <h3 className="font-semibold text-gray-900 mb-2">Export Reports</h3>
+              <p className="text-sm text-gray-600">
+                Download CSV or PDF reports for stakeholders, audits, and SLA reviews.
+              </p>
+            </div>
+          </div>
+
+          <h2 className="text-2xl font-bold text-gray-900 mb-3">What You Can Track</h2>
+          <ul className="list-disc list-inside text-gray-600 space-y-2 mb-6">
+            <li>Total DNS queries and trends over 24 hours, 7 days, 30 days, or 90 days</li>
+            <li>Success rate and failure patterns by DNS server and region</li>
+            <li>Response time distribution and performance outliers</li>
+            <li>Top performing and worst performing DNS servers</li>
+            <li>Regional performance comparison across continents</li>
+          </ul>
+
+          <p className="text-gray-600">
+            Use these insights to optimize your DNS configuration, choose better DNS providers, 
+            and ensure fast, reliable DNS resolution for users worldwide.
+          </p>
+        </div>
+      </section>
+
+      <PlanGate feature="analytics" requiredPlan="pro">
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Period Selector */}
@@ -233,7 +282,7 @@ export default function Analytics() {
           </CardContent>
         </Card>
       </main>
+      </PlanGate>
     </div>
-    </PlanGate>
   );
 }

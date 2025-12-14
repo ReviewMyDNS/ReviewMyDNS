@@ -170,6 +170,53 @@ export default function DnsCompare() {
         </div>
       </header>
 
+      {/* SEO Intro Content */}
+      <section className="bg-white border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            Compare DNS Providers - Test DNS Resolution Across Services
+          </h1>
+          <p className="text-lg text-gray-600 mb-6 max-w-3xl">
+            Compare how major DNS providers like Google DNS, Cloudflare, OpenDNS, and Quad9 resolve your domain. 
+            Identify inconsistencies, caching differences, and propagation issues across different DNS infrastructure.
+          </p>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <h3 className="font-semibold text-gray-900 mb-2">Multi-Provider Testing</h3>
+              <p className="text-sm text-gray-600">
+                Test your domain against Google, Cloudflare, OpenDNS, and Quad9 simultaneously.
+              </p>
+            </div>
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <h3 className="font-semibold text-gray-900 mb-2">Identify Differences</h3>
+              <p className="text-sm text-gray-600">
+                Automatically detect when different DNS providers return different results.
+              </p>
+            </div>
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <h3 className="font-semibold text-gray-900 mb-2">Propagation Insights</h3>
+              <p className="text-sm text-gray-600">
+                See which providers have propagated your DNS changes and which are lagging behind.
+              </p>
+            </div>
+          </div>
+
+          <h2 className="text-2xl font-bold text-gray-900 mb-3">Why Compare DNS Providers?</h2>
+          <p className="text-gray-600 mb-4">
+            Different DNS providers may cache your records differently, propagate changes at different speeds, 
+            or even return different results due to geo-location or load balancing. Understanding these differences 
+            helps you troubleshoot issues where "it works for some users but not others."
+          </p>
+          <ul className="list-disc list-inside text-gray-600 space-y-2 mb-6">
+            <li>Debug "works for me" issues where different users see different DNS results</li>
+            <li>Verify DNS propagation across major public resolvers</li>
+            <li>Identify caching inconsistencies between providers</li>
+            <li>Test before recommending users switch DNS providers</li>
+          </ul>
+        </div>
+      </section>
+
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Input Section */}
