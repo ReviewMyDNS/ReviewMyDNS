@@ -31,6 +31,8 @@ import Embed from "@/pages/embed";
 import Widget from "@/pages/widget";
 import Guide from "@/pages/guide";
 import FaqPage from "@/pages/faq";
+import Blog from "@/pages/blog";
+import BlogArticle from "@/pages/blog-article";
 
 function Router() {
   return (
@@ -61,6 +63,8 @@ function Router() {
       <Route path="/widget" component={Widget} />
       <Route path="/guides/:slug" component={Guide} />
       <Route path="/faq/:slug" component={FaqPage} />
+      <Route path="/blog" component={Blog} />
+      <Route path="/blog/:slug" component={BlogArticle} />
       <Route component={NotFound} />
     </Switch>
   );

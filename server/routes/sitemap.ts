@@ -20,6 +20,15 @@ const faqSlugs = [
   'timeout-dns-query-fix',
 ];
 
+// Blog article slugs (synced with client/src/data/blog-articles.ts)
+const blogSlugs = [
+  'dns-propagation-myths-debunked',
+  'migrate-dns-providers-safely',
+  'debug-email-delivery-dns',
+  'dns-ttl-guide',
+  'cloudflare-vs-route53-dns-comparison',
+];
+
 // Provider guide slugs for programmatic SEO (synced with client/src/data/provider-guides.ts)
 const providerGuideSlugs = [
   'cloudflare-dns-setup',
@@ -88,6 +97,22 @@ router.get('/sitemap.xml', (req, res) => {
     urls.push({
       loc: `/faq/${slug}`,
       priority: '0.7',
+      changefreq: 'monthly'
+    });
+  });
+
+  // Add blog index page
+  urls.push({
+    loc: '/blog',
+    priority: '0.9',
+    changefreq: 'weekly'
+  });
+
+  // Add blog article pages
+  blogSlugs.forEach(slug => {
+    urls.push({
+      loc: `/blog/${slug}`,
+      priority: '0.8',
       changefreq: 'monthly'
     });
   });
