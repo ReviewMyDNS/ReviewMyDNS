@@ -30,6 +30,7 @@ import TxtRecordChecker from "@/pages/txt-record-checker";
 import Embed from "@/pages/embed";
 import Widget from "@/pages/widget";
 import Guide from "@/pages/guide";
+import GuidesIndex from "@/pages/guides-index";
 import FaqPage from "@/pages/faq";
 import Blog from "@/pages/blog";
 import BlogArticle from "@/pages/blog-article";
@@ -61,6 +62,7 @@ function Router() {
       <Route path="/txt-record-checker" component={TxtRecordChecker} />
       <Route path="/embed" component={Embed} />
       <Route path="/widget" component={Widget} />
+      <Route path="/guides" component={GuidesIndex} />
       <Route path="/guides/:slug" component={Guide} />
       <Route path="/faq/:slug" component={FaqPage} />
       <Route path="/blog" component={Blog} />
