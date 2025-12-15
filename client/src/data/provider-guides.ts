@@ -256,7 +256,7 @@ export const providerGuides: ProviderGuide[] = [
     metaDescription: "Learn how to configure DNS records on Namecheap with our step-by-step guide. Set up A, CNAME, MX, and TXT records for your domain easily.",
     h1: "How to Set Up DNS Records on Namecheap",
     introduction: "Namecheap is a popular domain registrar known for affordable domains and user-friendly DNS management. This guide will show you how to configure DNS records on Namecheap, whether you're hosting a website, setting up email, or verifying domain ownership.",
-    affiliateUrl: "https://www.namecheap.com/domains/",
+    affiliateUrl: "https://namecheap.pxf.io/c/6787068/1632743/5618",
     affiliateCta: "Get Affordable Domains at Namecheap",
     affiliateDescription: "Low-cost domains with free WhoisGuard privacy",
     steps: [
