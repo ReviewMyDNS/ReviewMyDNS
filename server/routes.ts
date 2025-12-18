@@ -29,6 +29,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Setup session middleware
   app.use(createSessionMiddleware());
 
+  // Google Search Console verification
+  app.get('/google7e2da050c003b930.html', (req, res) => {
+    res.type('text/html').send('google-site-verification: google7e2da050c003b930.html');
+  });
+
   // Auth endpoints
   app.post('/api/auth/signup', async (req, res) => {
     try {
