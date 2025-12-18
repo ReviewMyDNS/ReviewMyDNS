@@ -585,9 +585,6 @@ export const providerGuides: ProviderGuide[] = [
     metaDescription: "Learn how to configure DNS records on Bluehost hosting. Complete guide for setting up A, CNAME, MX, and TXT records with screenshots.",
     h1: "How to Configure DNS Records on Bluehost",
     introduction: "Bluehost is one of the most popular web hosting providers, powering millions of websites worldwide. This guide shows you how to manage DNS records in Bluehost's control panel, whether you're hosting email, adding subdomains, or integrating third-party services.",
-    affiliateUrl: "https://www.bluehost.com/hosting",
-    affiliateCta: "Start with Bluehost Hosting",
-    affiliateDescription: "WordPress recommended hosting starting at $2.95/mo",
     steps: [
       {
         title: "Log into Bluehost Control Panel",
