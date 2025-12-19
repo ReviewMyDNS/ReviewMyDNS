@@ -5,6 +5,11 @@ import { startCleanupJob } from "./rate-limiter";
 
 const app = express();
 
+// Trust proxy for production (required for secure cookies behind reverse proxy)
+if (process.env.NODE_ENV === 'production') {
+  app.set('trust proxy', 1);
+}
+
 // Stripe webhook needs raw body for signature verification
 // Apply express.raw() to webhook route BEFORE express.json()
 app.post('/api/stripe/webhook', express.raw({ type: 'application/json' }), (req, res, next) => {
