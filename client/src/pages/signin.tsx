@@ -41,6 +41,7 @@ export default function SignIn() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/auth/user"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/usage/stats"] });
       toast({
         title: "Welcome back!",
         description: "You've successfully signed in.",
@@ -65,6 +66,7 @@ export default function SignIn() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/auth/user"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/usage/stats"] });
       toast({
         title: "Account created!",
         description: "Welcome to ReviewMyDNS.",
