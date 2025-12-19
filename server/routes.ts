@@ -4,7 +4,7 @@ import { storage } from "./storage";
 import { performDnsLookup } from "./services/dns-resolver";
 import { insertDnsLookupSchema, signupSchema, signinSchema, users, PLAN_LIMITS, insertEmailCaptureSchema } from "@shared/schema";
 import { ZodError } from "zod";
-import { createSessionMiddleware, requireAuth, hashPassword, verifyPassword, sanitizeUser } from "./auth";
+import { createSessionMiddleware, requireAuth, optionalAuth, hashPassword, verifyPassword, sanitizeUser } from "./auth";
 import { getPlanTier } from "./middleware/plan-guard";
 import { checkRateLimit, logUsage, getAnonymousId } from "./rate-limiter";
 import Stripe from "stripe";
@@ -111,7 +111,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Get usage stats for current user/anonymous session
-  app.get('/api/usage/stats', async (req, res) => {
+  app.get('/api/usage/stats', optionalAuth, async (req, res) => {
     try {
       const userPlan = getPlanTier(req.user);
       const planLimits = PLAN_LIMITS[userPlan];

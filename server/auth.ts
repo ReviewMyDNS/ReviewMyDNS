@@ -50,6 +50,18 @@ export function createSessionMiddleware() {
   });
 }
 
+export async function optionalAuth(req: Request, res: Response, next: NextFunction) {
+  if (req.session.userId) {
+    const user = await storage.getUser(req.session.userId);
+    if (user) {
+      req.user = user;
+    } else {
+      req.session.userId = undefined;
+    }
+  }
+  next();
+}
+
 export async function requireAuth(req: Request, res: Response, next: NextFunction) {
   if (!req.session.userId) {
     return res.status(401).json({ error: 'Authentication required' });
