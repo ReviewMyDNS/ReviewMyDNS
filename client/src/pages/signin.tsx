@@ -45,7 +45,7 @@ export default function SignIn() {
         title: "Welcome back!",
         description: "You've successfully signed in.",
       });
-      setLocation("/pricing");
+      setLocation("/dashboard");
     },
     onError: (error: any) => {
       const message = error.message || "Failed to sign in";
@@ -69,7 +69,7 @@ export default function SignIn() {
         title: "Account created!",
         description: "Welcome to ReviewMyDNS.",
       });
-      setLocation("/pricing");
+      setLocation("/dashboard");
     },
     onError: (error: any) => {
       const message = error.message || "Failed to create account";
