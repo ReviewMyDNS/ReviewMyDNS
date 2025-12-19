@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
@@ -17,20 +17,8 @@ export default function Subscribe() {
   const urlParams = new URLSearchParams(window.location.search);
   const plan = urlParams.get('plan') || 'pro';
 
-  useEffect(() => {
-    if (!isLoading && !isAuthenticated) {
-      toast({
-        title: "Login Required",
-        description: "Please log in to subscribe to a plan.",
-        variant: "destructive",
-      });
-      setTimeout(() => {
-        window.location.href = "/signin";
-      }, 1000);
-    }
-  }, [isAuthenticated, isLoading, toast]);
-
-  const handleCheckout = async () => {
+  const handleCheckout = useCallback(async () => {
+    if (isRedirecting) return;
     setIsRedirecting(true);
     
     try {
@@ -38,10 +26,9 @@ export default function Subscribe() {
       const data = await res.json();
       
       if (data.url) {
-        // Redirect to Stripe Checkout
         window.location.href = data.url;
       } else {
-        throw new Error("No checkout URL returned");
+        throw new Error(data.message || "No checkout URL returned");
       }
     } catch (error: any) {
       console.error("Checkout error:", error);
@@ -52,7 +39,27 @@ export default function Subscribe() {
       });
       setIsRedirecting(false);
     }
-  };
+  }, [plan, toast, isRedirecting]);
+
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated) {
+      toast({
+        title: "Login Required",
+        description: "Please log in to subscribe to a plan.",
+        variant: "destructive",
+      });
+      setTimeout(() => {
+        window.location.href = `/signin?redirect=/subscribe?plan=${plan}`;
+      }, 1000);
+    }
+  }, [isAuthenticated, isLoading, toast, plan]);
+
+  // Auto-start checkout when authenticated
+  useEffect(() => {
+    if (!isLoading && isAuthenticated && !isRedirecting) {
+      handleCheckout();
+    }
+  }, [isLoading, isAuthenticated, handleCheckout]);
 
   if (isLoading) {
     return (
