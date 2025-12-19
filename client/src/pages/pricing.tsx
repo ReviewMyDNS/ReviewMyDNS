@@ -12,7 +12,8 @@ import { useAuth } from "@/hooks/useAuth";
 
 export default function Pricing() {
   const [isYearly, setIsYearly] = useState(false);
-  const { isAuthenticated, logout } = useAuth();
+  const { user, isAuthenticated, logout } = useAuth();
+  const currentPlan = user?.subscriptionPlan?.toLowerCase() || 'free';
 
   const plans = [
     {
@@ -238,22 +239,32 @@ export default function Pricing() {
                 </CardHeader>
                 
                 <CardContent>
-                  <Link href={
-                    plan.name === "Free" ? "/signin?tab=signup" :
-                    plan.name === "Enterprise" ? "/subscribe?plan=enterprise" :
-                    plan.name === "Team" ? "/subscribe?plan=team" :
-                    "/subscribe?plan=pro"
-                  }>
+                  {currentPlan === plan.name.toLowerCase() ? (
                     <Button 
-                      className={`w-full mb-6 ${
-                        plan.popular ? 'bg-blue-600 hover:bg-blue-700' : ''
-                      }`}
-                      variant={plan.buttonVariant}
-                      data-testid={`button-${plan.name.toLowerCase()}-plan`}
+                      className="w-full mb-6 bg-green-600 hover:bg-green-700"
+                      disabled
+                      data-testid={`button-${plan.name.toLowerCase()}-plan-current`}
                     >
-                      {plan.buttonText}
+                      Current Plan
                     </Button>
-                  </Link>
+                  ) : (
+                    <Link href={
+                      plan.name === "Free" ? "/signin?tab=signup" :
+                      plan.name === "Enterprise" ? "/subscribe?plan=enterprise" :
+                      plan.name === "Team" ? "/subscribe?plan=team" :
+                      "/subscribe?plan=pro"
+                    }>
+                      <Button 
+                        className={`w-full mb-6 ${
+                          plan.popular ? 'bg-blue-600 hover:bg-blue-700' : ''
+                        }`}
+                        variant={plan.buttonVariant}
+                        data-testid={`button-${plan.name.toLowerCase()}-plan`}
+                      >
+                        {plan.buttonText}
+                      </Button>
+                    </Link>
+                  )}
                   
                   <div className="space-y-3">
                     {plan.features.map((feature, index) => (
