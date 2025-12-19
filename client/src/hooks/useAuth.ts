@@ -1,8 +1,13 @@
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { apiRequest, queryClient } from "@/lib/queryClient";
+import type { User } from "@shared/schema";
+
+interface AuthResponse {
+  user: Omit<User, 'passwordHash'>;
+}
 
 export function useAuth() {
-  const { data, isLoading } = useQuery({
+  const { data, isLoading } = useQuery<AuthResponse>({
     queryKey: ["/api/auth/user"],
     retry: false,
   });
