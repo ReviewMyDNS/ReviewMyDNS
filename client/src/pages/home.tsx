@@ -10,7 +10,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { Globe, User, Menu, Lock, BarChart3, Zap, Share2, Copy, Check, RefreshCw } from "lucide-react";
+import { Globe, User, Menu, Lock, BarChart3, Zap, Share2, Copy, Check, RefreshCw, LogOut } from "lucide-react";
 import { Link } from "wouter";
 import type { DnsLookupWithResults } from "@shared/schema";
 import { useToast } from "@/hooks/use-toast";
@@ -19,6 +19,7 @@ import MobileMenu from "@/components/mobile-menu";
 import { useMutation } from "@tanstack/react-query";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { EmailCapturePopup } from "@/components/email-capture-popup";
+import { useAuth } from "@/hooks/useAuth";
 
 // Mobile-optimized home page
 export default function Home() {
@@ -27,6 +28,7 @@ export default function Home() {
   const [copied, setCopied] = useState(false);
   const [lastLookupParams, setLastLookupParams] = useState<{ domain: string; recordType: string } | null>(null);
   const { toast } = useToast();
+  const { user, isAuthenticated, logout } = useAuth();
 
   const handleLookupComplete = (results: DnsLookupWithResults) => {
     setLookupResults(results);
@@ -135,12 +137,26 @@ export default function Home() {
                 <Link href="/pricing">
                   <Button variant="ghost">Pricing</Button>
                 </Link>
-                <Link href="/signin">
-                  <Button variant="ghost">Sign In</Button>
-                </Link>
-                <Link href="/signin?tab=signup">
-                  <Button>Sign Up</Button>
-                </Link>
+                {isAuthenticated ? (
+                  <>
+                    <Link href="/dashboard">
+                      <Button variant="ghost">Dashboard</Button>
+                    </Link>
+                    <Button variant="outline" onClick={() => logout()} data-testid="button-signout-header">
+                      <LogOut className="h-4 w-4 mr-2" />
+                      Sign Out
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Link href="/signin">
+                      <Button variant="ghost">Sign In</Button>
+                    </Link>
+                    <Link href="/signin?tab=signup">
+                      <Button>Sign Up</Button>
+                    </Link>
+                  </>
+                )}
               </div>
               
               {/* Mobile Menu */}

@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu, X, Globe, Code, FileText, DollarSign, BookOpen, Map } from "lucide-react";
+import { Menu, X, Globe, Code, FileText, DollarSign, BookOpen, Map, LogOut, LayoutDashboard } from "lucide-react";
 import { Link } from "wouter";
 import { Logo } from "@/components/logo";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function MobileMenu() {
   const [isOpen, setIsOpen] = useState(false);
+  const { isAuthenticated, logout } = useAuth();
 
   const menuItems = [
     { name: "DNS Checker", href: "/", icon: Globe },
@@ -65,23 +67,52 @@ export default function MobileMenu() {
 
           {/* Authentication Buttons */}
           <div className="p-4 border-t space-y-3">
-            <Link href="/signin">
-              <Button
-                variant="outline"
-                className="w-full"
-                onClick={() => setIsOpen(false)}
-              >
-                Sign In
-              </Button>
-            </Link>
-            <Link href="/signin?tab=signup">
-              <Button
-                className="w-full"
-                onClick={() => setIsOpen(false)}
-              >
-                Sign Up
-              </Button>
-            </Link>
+            {isAuthenticated ? (
+              <>
+                <Link href="/dashboard">
+                  <Button
+                    variant="outline"
+                    className="w-full"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    <LayoutDashboard className="h-4 w-4 mr-2" />
+                    Dashboard
+                  </Button>
+                </Link>
+                <Button
+                  variant="destructive"
+                  className="w-full"
+                  onClick={() => {
+                    logout();
+                    setIsOpen(false);
+                  }}
+                  data-testid="button-signout-mobile"
+                >
+                  <LogOut className="h-4 w-4 mr-2" />
+                  Sign Out
+                </Button>
+              </>
+            ) : (
+              <>
+                <Link href="/signin">
+                  <Button
+                    variant="outline"
+                    className="w-full"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    Sign In
+                  </Button>
+                </Link>
+                <Link href="/signin?tab=signup">
+                  <Button
+                    className="w-full"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    Sign Up
+                  </Button>
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </SheetContent>
