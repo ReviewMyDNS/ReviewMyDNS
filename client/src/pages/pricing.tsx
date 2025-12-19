@@ -89,8 +89,8 @@ export default function Pricing() {
     {
       name: "Enterprise",
       description: "For large organizations",
-      monthlyPrice: 49,
-      yearlyPrice: 490,
+      monthlyPrice: 149,
+      yearlyPrice: 1490,
       icon: Crown,
       color: "text-purple-600",
       bgColor: "bg-purple-50",
@@ -223,7 +223,7 @@ export default function Pricing() {
                 
                 <CardContent>
                   <Link href={
-                    plan.name === "Free" ? "/api/login" :
+                    plan.name === "Free" ? "/signin?tab=signup" :
                     plan.name === "Enterprise" ? "/subscribe?plan=enterprise" :
                     plan.name === "Team" ? "/subscribe?plan=team" :
                     "/subscribe?plan=pro"
@@ -328,8 +328,8 @@ export default function Pricing() {
                       { name: "Query History", free: "✗", pro: "30 days", enterprise: "Unlimited" },
                       { name: "Export Formats", free: "✗", pro: "CSV, JSON", enterprise: "All formats" },
                       { name: "Monitoring Alerts", free: "✗", pro: "✓", enterprise: "✓" },
-                      { name: "API Access", free: "✗", pro: "10k/month", enterprise: "Unlimited" },
-                      { name: "Team Members", free: "1", pro: "5", enterprise: "Unlimited" },
+                      { name: "API Access", free: "✗", pro: "25k/month", enterprise: "Unlimited" },
+                      { name: "Team Members", free: "1", pro: "1", enterprise: "Unlimited" },
                       { name: "Support", free: "Community", pro: "Priority", enterprise: "Dedicated" },
                     ].map((feature, index) => (
                       <tr key={index} className="border-b border-gray-100 last:border-b-0">

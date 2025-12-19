@@ -72,28 +72,41 @@ export default function Subscribe() {
 
   const planDetails = plan === 'enterprise' ? {
     name: 'Enterprise',
-    price: '$49',
+    price: '$149',
     features: [
-      "Unlimited DNS lookups",
-      "50+ global DNS servers",
-      "Real-time propagation monitoring",
-      "Historical DNS tracking",
-      "Performance analytics",
-      "Email notifications",
-      "API access (unlimited)",
-      "Dedicated support"
+      "Everything in Team, plus:",
+      "Unlimited team seats",
+      "SSO authentication (SAML, OAuth)",
+      "Advanced audit logs",
+      "Custom API quotas",
+      "Dedicated account manager",
+      "99.9% SLA guarantee",
+      "24/7 premium support"
+    ]
+  } : plan === 'team' ? {
+    name: 'Team',
+    price: '$59',
+    features: [
+      "Everything in Pro, plus:",
+      "5 team seats included",
+      "Shared lookup history",
+      "Scheduled monitoring",
+      "Slack/Webhook integrations",
+      "Advanced alerting rules",
+      "Team dashboard",
+      "API access (100k calls/month)"
     ]
   } : {
     name: 'Pro',
     price: '$19',
     features: [
       "Unlimited DNS lookups",
-      "50+ global DNS servers",
-      "Real-time propagation monitoring",
-      "Historical DNS tracking",
-      "Performance analytics",
-      "Email notifications",
-      "API access (5,000 requests/month)",
+      "All DNS record types",
+      "Bulk lookup (500 domains/day)",
+      "30-day historical tracking",
+      "Performance analytics dashboard",
+      "API access (25,000 calls/month)",
+      "Email alerts for DNS changes",
       "Priority support"
     ]
   };
