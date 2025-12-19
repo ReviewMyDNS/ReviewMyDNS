@@ -4,13 +4,15 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
-import { ArrowLeft, Globe, Check, X, Zap, Crown, Users, BarChart3, Bell, Shield, Clock } from "lucide-react";
+import { ArrowLeft, Globe, Check, X, Zap, Crown, Users, BarChart3, Bell, Shield, Clock, LogOut } from "lucide-react";
 import { Link } from "wouter";
 import { Logo } from "@/components/logo";
 import MobileMenu from "@/components/mobile-menu";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function Pricing() {
   const [isYearly, setIsYearly] = useState(false);
+  const { isAuthenticated, logout } = useAuth();
 
   const plans = [
     {
@@ -128,12 +130,26 @@ export default function Pricing() {
             </div>
             <div className="flex items-center space-x-2">
               <div className="hidden md:flex items-center space-x-2">
-                <Link href="/signin">
-                  <Button variant="ghost">Sign In</Button>
-                </Link>
-                <Link href="/signin?tab=signup">
-                  <Button>Sign Up</Button>
-                </Link>
+                {isAuthenticated ? (
+                  <>
+                    <Link href="/dashboard">
+                      <Button variant="ghost">Dashboard</Button>
+                    </Link>
+                    <Button variant="outline" onClick={() => logout()}>
+                      <LogOut className="h-4 w-4 mr-2" />
+                      Sign Out
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Link href="/signin">
+                      <Button variant="ghost">Sign In</Button>
+                    </Link>
+                    <Link href="/signin?tab=signup">
+                      <Button>Sign Up</Button>
+                    </Link>
+                  </>
+                )}
               </div>
               <MobileMenu />
             </div>
