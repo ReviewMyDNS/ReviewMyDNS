@@ -1,4 +1,4 @@
-import { dnsLookups, dnsServers, dnsResults, users, emailCaptures, type DnsLookup, type DnsServer, type DnsResult, type InsertDnsLookup, type InsertDnsServer, type InsertDnsResult, type DnsLookupWithResults, type User, type UpsertUser, type InsertEmailCapture, type EmailCapture } from "@shared/schema";
+import { dnsLookups, dnsServers, dnsResults, users, emailCaptures, analyticsEvents, type DnsLookup, type DnsServer, type DnsResult, type InsertDnsLookup, type InsertDnsServer, type InsertDnsResult, type DnsLookupWithResults, type User, type UpsertUser, type InsertEmailCapture, type EmailCapture, type InsertAnalyticsEvent, type AnalyticsEvent } from "@shared/schema";
 import { db } from "./db";
 import { eq } from "drizzle-orm";
 import { nanoid } from "nanoid";
@@ -28,6 +28,20 @@ export interface IStorage {
   
   // Email capture
   captureEmail(capture: InsertEmailCapture): Promise<EmailCapture>;
+  
+  // Analytics
+  logAnalyticsEvent(event: InsertAnalyticsEvent): Promise<AnalyticsEvent>;
+  getAnalyticsSummary(days?: number): Promise<{
+    totalPageviews: number;
+    uniqueVisitors: number;
+    totalEvents: number;
+    topPages: { pathname: string; count: number }[];
+    topReferrers: { referrer: string; count: number }[];
+    topBrowsers: { browser: string; count: number }[];
+    topDevices: { device: string; count: number }[];
+    pageviewsByDay: { date: string; count: number }[];
+    visitorsByDay: { date: string; count: number }[];
+  }>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -252,6 +266,106 @@ export class DatabaseStorage implements IStorage {
       .values(capture)
       .returning();
     return captured;
+  }
+
+  async logAnalyticsEvent(event: InsertAnalyticsEvent): Promise<AnalyticsEvent> {
+    const [logged] = await db
+      .insert(analyticsEvents)
+      .values(event)
+      .returning();
+    return logged;
+  }
+
+  async getAnalyticsSummary(days: number = 30): Promise<{
+    totalPageviews: number;
+    uniqueVisitors: number;
+    totalEvents: number;
+    topPages: { pathname: string; count: number }[];
+    topReferrers: { referrer: string; count: number }[];
+    topBrowsers: { browser: string; count: number }[];
+    topDevices: { device: string; count: number }[];
+    pageviewsByDay: { date: string; count: number }[];
+    visitorsByDay: { date: string; count: number }[];
+  }> {
+    const startDate = new Date();
+    startDate.setDate(startDate.getDate() - days);
+
+    const allEvents = await db
+      .select()
+      .from(analyticsEvents)
+      .where(eq(analyticsEvents.eventType, 'pageview'));
+
+    const filteredEvents = allEvents.filter(e => e.createdAt && e.createdAt >= startDate);
+
+    const uniqueVisitors = new Set(filteredEvents.map(e => e.visitorId)).size;
+    const customEvents = allEvents.filter(e => e.eventType === 'event');
+
+    const pageCount: Record<string, number> = {};
+    const referrerCount: Record<string, number> = {};
+    const browserCount: Record<string, number> = {};
+    const deviceCount: Record<string, number> = {};
+    const dayCount: Record<string, number> = {};
+    const visitorDayCount: Record<string, Set<string>> = {};
+
+    for (const event of filteredEvents) {
+      if (event.pathname) {
+        pageCount[event.pathname] = (pageCount[event.pathname] || 0) + 1;
+      }
+      if (event.referrer && event.referrer !== '') {
+        referrerCount[event.referrer] = (referrerCount[event.referrer] || 0) + 1;
+      }
+      if (event.browser) {
+        browserCount[event.browser] = (browserCount[event.browser] || 0) + 1;
+      }
+      if (event.device) {
+        deviceCount[event.device] = (deviceCount[event.device] || 0) + 1;
+      }
+      if (event.createdAt) {
+        const day = event.createdAt.toISOString().split('T')[0];
+        dayCount[day] = (dayCount[day] || 0) + 1;
+        if (!visitorDayCount[day]) visitorDayCount[day] = new Set();
+        visitorDayCount[day].add(event.visitorId);
+      }
+    }
+
+    const topPages = Object.entries(pageCount)
+      .map(([pathname, count]) => ({ pathname, count }))
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 10);
+
+    const topReferrers = Object.entries(referrerCount)
+      .map(([referrer, count]) => ({ referrer, count }))
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 10);
+
+    const topBrowsers = Object.entries(browserCount)
+      .map(([browser, count]) => ({ browser, count }))
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 5);
+
+    const topDevices = Object.entries(deviceCount)
+      .map(([device, count]) => ({ device, count }))
+      .sort((a, b) => b.count - a.count);
+
+    const pageviewsByDay = Object.entries(dayCount)
+      .map(([date, count]) => ({ date, count }))
+      .sort((a, b) => a.date.localeCompare(b.date));
+
+    const visitorsByDay = Object.entries(visitorDayCount)
+      .map(([date, visitors]) => ({ date, count: visitors.size }))
+      .sort((a, b) => a.date.localeCompare(b.date));
+
+    return {
+      totalPageviews: filteredEvents.length,
+      uniqueVisitors,
+      totalEvents: customEvents.length,
+      topPages,
+      topReferrers,
+      topBrowsers,
+      topDevices,
+      pageviewsByDay,
+      visitorsByDay,
+    };
   }
 }
 

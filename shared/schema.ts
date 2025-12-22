@@ -247,3 +247,50 @@ export const insertEmailCaptureSchema = createInsertSchema(emailCaptures).pick({
 
 export type InsertEmailCapture = z.infer<typeof insertEmailCaptureSchema>;
 export type EmailCapture = typeof emailCaptures.$inferSelect;
+
+// Analytics events table for self-hosted analytics
+export const analyticsEvents = pgTable("analytics_events", {
+  id: serial("id").primaryKey(),
+  sessionId: varchar("session_id", { length: 64 }).notNull(),
+  visitorId: varchar("visitor_id", { length: 64 }).notNull(),
+  eventType: varchar("event_type", { length: 50 }).notNull(), // 'pageview', 'event', 'identify'
+  eventName: varchar("event_name", { length: 100 }), // for custom events
+  pathname: text("pathname"),
+  referrer: text("referrer"),
+  userAgent: text("user_agent"),
+  country: varchar("country", { length: 2 }),
+  browser: varchar("browser", { length: 50 }),
+  os: varchar("os", { length: 50 }),
+  device: varchar("device", { length: 20 }), // 'desktop', 'mobile', 'tablet'
+  screenWidth: integer("screen_width"),
+  screenHeight: integer("screen_height"),
+  properties: jsonb("properties"), // custom event properties
+  userId: varchar("user_id"),
+  createdAt: timestamp("created_at").defaultNow(),
+}, (table) => ({
+  sessionIdx: index("analytics_session_idx").on(table.sessionId),
+  visitorIdx: index("analytics_visitor_idx").on(table.visitorId),
+  createdAtIdx: index("analytics_created_at_idx").on(table.createdAt),
+  eventTypeIdx: index("analytics_event_type_idx").on(table.eventType),
+}));
+
+export const insertAnalyticsEventSchema = createInsertSchema(analyticsEvents).pick({
+  sessionId: true,
+  visitorId: true,
+  eventType: true,
+  eventName: true,
+  pathname: true,
+  referrer: true,
+  userAgent: true,
+  country: true,
+  browser: true,
+  os: true,
+  device: true,
+  screenWidth: true,
+  screenHeight: true,
+  properties: true,
+  userId: true,
+});
+
+export type InsertAnalyticsEvent = z.infer<typeof insertAnalyticsEventSchema>;
+export type AnalyticsEvent = typeof analyticsEvents.$inferSelect;

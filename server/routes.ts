@@ -13,6 +13,31 @@ import { eq } from "drizzle-orm";
 import sitemapRoutes from "./routes/sitemap";
 import { trackSignup, trackLogin, trackDnsLookup, trackSubscription, extractClientId } from "./services/analytics";
 
+// Helper functions for user agent parsing
+function detectBrowser(userAgent: string): string {
+  if (userAgent.includes('Firefox')) return 'Firefox';
+  if (userAgent.includes('Edg')) return 'Edge';
+  if (userAgent.includes('Chrome')) return 'Chrome';
+  if (userAgent.includes('Safari')) return 'Safari';
+  if (userAgent.includes('Opera') || userAgent.includes('OPR')) return 'Opera';
+  return 'Other';
+}
+
+function detectOS(userAgent: string): string {
+  if (userAgent.includes('Windows')) return 'Windows';
+  if (userAgent.includes('Mac OS')) return 'macOS';
+  if (userAgent.includes('Linux')) return 'Linux';
+  if (userAgent.includes('Android')) return 'Android';
+  if (userAgent.includes('iOS') || userAgent.includes('iPhone') || userAgent.includes('iPad')) return 'iOS';
+  return 'Other';
+}
+
+function detectDevice(userAgent: string): string {
+  if (/Mobi|Android.*Mobile|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent)) return 'mobile';
+  if (/iPad|Android(?!.*Mobile)|Tablet/i.test(userAgent)) return 'tablet';
+  return 'desktop';
+}
+
 if (!process.env.STRIPE_SECRET_KEY) {
   throw new Error('Missing required Stripe secret: STRIPE_SECRET_KEY');
 }
@@ -552,6 +577,56 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error capturing email:", error);
       res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // Analytics tracking endpoint (public - for logging events)
+  app.post("/api/analytics/track", async (req, res) => {
+    try {
+      const { sessionId, visitorId, eventType, eventName, pathname, referrer, properties } = req.body;
+      
+      if (!sessionId || !visitorId || !eventType) {
+        return res.status(400).json({ error: "Missing required fields" });
+      }
+
+      const userAgent = req.headers['user-agent'] || '';
+      const browser = detectBrowser(userAgent);
+      const os = detectOS(userAgent);
+      const device = detectDevice(userAgent);
+
+      await storage.logAnalyticsEvent({
+        sessionId,
+        visitorId,
+        eventType,
+        eventName,
+        pathname,
+        referrer: referrer || req.headers['referer'] || '',
+        userAgent,
+        browser,
+        os,
+        device,
+        screenWidth: req.body.screenWidth,
+        screenHeight: req.body.screenHeight,
+        properties,
+        userId: req.user?.id || null,
+      });
+
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Analytics tracking error:", error);
+      res.status(500).json({ error: "Failed to track event" });
+    }
+  });
+
+  // Analytics dashboard endpoint (protected - admin only)
+  app.get("/api/analytics/summary", requireAuth, async (req, res) => {
+    try {
+      const days = parseInt(req.query.days as string) || 30;
+      const summary = await storage.getAnalyticsSummary(days);
+      res.json(summary);
+    } catch (error) {
+      console.error("Analytics summary error:", error);
+      res.status(500).json({ error: "Failed to get analytics" });
     }
   });
 
