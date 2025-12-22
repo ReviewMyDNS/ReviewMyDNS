@@ -11,6 +11,7 @@ import Stripe from "stripe";
 import { db } from "./db";
 import { eq } from "drizzle-orm";
 import sitemapRoutes from "./routes/sitemap";
+import { trackSignup, trackLogin, trackDnsLookup, trackSubscription, extractClientId } from "./services/analytics";
 
 if (!process.env.STRIPE_SECRET_KEY) {
   throw new Error('Missing required Stripe secret: STRIPE_SECRET_KEY');
@@ -57,6 +58,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Create session
       req.session.userId = user.id;
       
+      // Track signup event
+      const clientId = extractClientId(req.headers.cookie);
+      trackSignup(clientId, user.id, user.email).catch(console.error);
+      
       res.json({ user: sanitizeUser(user) });
     } catch (error) {
       if (error instanceof ZodError) {
@@ -85,6 +90,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // Create session
       req.session.userId = user.id;
+      
+      // Track login event
+      const clientId = extractClientId(req.headers.cookie);
+      trackLogin(clientId, user.id, user.subscriptionPlan || 'free').catch(console.error);
       
       res.json({ user: sanitizeUser(user) });
     } catch (error) {
@@ -177,6 +186,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // Log usage
       await logUsage(userId, anonymousId, "dns_lookup");
+      
+      // Track DNS lookup event
+      const clientId = extractClientId(req.headers.cookie);
+      trackDnsLookup(clientId, validatedData.domain, validatedData.recordType, userId || undefined, userPlan).catch(console.error);
       
       // Create the lookup record with userId
       const lookup = await storage.createDnsLookup({
@@ -505,6 +518,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
                 updatedAt: new Date(),
               })
               .where(eq(users.id, userId));
+            
+            // Track subscription event
+            const priceAmount = plan === 'enterprise' ? 99 : plan === 'team' ? 49 : 19;
+            const clientId = extractClientId(req.headers.cookie);
+            trackSubscription(clientId, userId, plan, priceAmount).catch(console.error);
           }
         }
       }
