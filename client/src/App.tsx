@@ -35,6 +35,7 @@ import GuidesIndex from "@/pages/guides-index";
 import FaqPage from "@/pages/faq";
 import Blog from "@/pages/blog";
 import BlogArticle from "@/pages/blog-article";
+import SiteAnalytics from "@/pages/site-analytics";
 
 function Router() {
   return (
@@ -68,6 +69,7 @@ function Router() {
       <Route path="/faq/:slug" component={FaqPage} />
       <Route path="/blog" component={Blog} />
       <Route path="/blog/:slug" component={BlogArticle} />
+      <Route path="/site-analytics" component={SiteAnalytics} />
       <Route component={NotFound} />
     </Switch>
   );

@@ -1,43 +1,15 @@
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { BarChart3, PieChart, Activity, Globe, Users, Eye, MousePointerClick, Monitor, Smartphone, Tablet } from "lucide-react";
+import { BarChart3, PieChart, Activity, Globe } from "lucide-react";
 import { Link } from "wouter";
 import { Logo } from "@/components/logo";
 import MobileMenu from "@/components/mobile-menu";
 import { PlanGate } from "@/components/plan-gate";
-import { Helmet } from "react-helmet-async";
-
-interface AnalyticsSummary {
-  totalPageviews: number;
-  uniqueVisitors: number;
-  totalEvents: number;
-  topPages: { pathname: string; count: number }[];
-  topReferrers: { referrer: string; count: number }[];
-  topBrowsers: { browser: string; count: number }[];
-  topDevices: { device: string; count: number }[];
-  pageviewsByDay: { date: string; count: number }[];
-  visitorsByDay: { date: string; count: number }[];
-}
-
-function DeviceIcon({ device }: { device: string }) {
-  switch (device) {
-    case 'mobile': return <Smartphone className="h-4 w-4" />;
-    case 'tablet': return <Tablet className="h-4 w-4" />;
-    default: return <Monitor className="h-4 w-4" />;
-  }
-}
 
 export default function Analytics() {
-  const [selectedPeriod, setSelectedPeriod] = useState("30d");
-  
-  const days = selectedPeriod === '24h' ? 1 : selectedPeriod === '7d' ? 7 : selectedPeriod === '30d' ? 30 : 90;
-  
-  const { data: analytics, isLoading } = useQuery<AnalyticsSummary>({
-    queryKey: ['/api/analytics/summary', days],
-  });
+  const [selectedPeriod, setSelectedPeriod] = useState("7d");
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -142,14 +114,12 @@ export default function Analytics() {
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <div className="text-2xl font-bold text-gray-900" data-testid="text-pageviews">
-                    {isLoading ? '...' : (analytics?.totalPageviews || 0).toLocaleString()}
-                  </div>
-                  <div className="text-sm text-gray-500">Total Pageviews</div>
+                  <div className="text-2xl font-bold text-gray-900">1,247</div>
+                  <div className="text-sm text-gray-500">Total Queries</div>
                 </div>
-                <Eye className="h-8 w-8 text-blue-600" />
+                <Activity className="h-8 w-8 text-blue-600" />
               </div>
-              <div className="mt-2 text-sm text-gray-500">Last {days} days</div>
+              <div className="mt-2 text-sm text-green-600">+12% from last period</div>
             </CardContent>
           </Card>
           
@@ -157,14 +127,12 @@ export default function Analytics() {
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <div className="text-2xl font-bold text-gray-900" data-testid="text-visitors">
-                    {isLoading ? '...' : (analytics?.uniqueVisitors || 0).toLocaleString()}
-                  </div>
-                  <div className="text-sm text-gray-500">Unique Visitors</div>
+                  <div className="text-2xl font-bold text-gray-900">98.7%</div>
+                  <div className="text-sm text-gray-500">Success Rate</div>
                 </div>
-                <Users className="h-8 w-8 text-green-600" />
+                <PieChart className="h-8 w-8 text-green-600" />
               </div>
-              <div className="mt-2 text-sm text-gray-500">Last {days} days</div>
+              <div className="mt-2 text-sm text-green-600">+0.3% from last period</div>
             </CardContent>
           </Card>
           
@@ -172,14 +140,12 @@ export default function Analytics() {
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <div className="text-2xl font-bold text-gray-900" data-testid="text-events">
-                    {isLoading ? '...' : (analytics?.totalEvents || 0).toLocaleString()}
-                  </div>
-                  <div className="text-sm text-gray-500">Custom Events</div>
+                  <div className="text-2xl font-bold text-gray-900">24ms</div>
+                  <div className="text-sm text-gray-500">Avg Response</div>
                 </div>
-                <MousePointerClick className="h-8 w-8 text-yellow-600" />
+                <BarChart3 className="h-8 w-8 text-yellow-600" />
               </div>
-              <div className="mt-2 text-sm text-gray-500">Last {days} days</div>
+              <div className="mt-2 text-sm text-red-600">+3ms from last period</div>
             </CardContent>
           </Card>
           
@@ -187,195 +153,117 @@ export default function Analytics() {
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <div className="text-2xl font-bold text-gray-900" data-testid="text-avg-views">
-                    {isLoading ? '...' : analytics?.uniqueVisitors ? (analytics.totalPageviews / analytics.uniqueVisitors).toFixed(1) : '0'}
-                  </div>
-                  <div className="text-sm text-gray-500">Pages/Visitor</div>
+                  <div className="text-2xl font-bold text-gray-900">47</div>
+                  <div className="text-sm text-gray-500">Active Servers</div>
                 </div>
-                <BarChart3 className="h-8 w-8 text-purple-600" />
+                <Globe className="h-8 w-8 text-purple-600" />
               </div>
-              <div className="mt-2 text-sm text-gray-500">Avg pages per visitor</div>
+              <div className="mt-2 text-sm text-gray-500">Across 25 countries</div>
             </CardContent>
           </Card>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-          {/* Top Pages */}
+          {/* Response Time Distribution */}
           <Card>
             <CardHeader>
-              <CardTitle>Top Pages</CardTitle>
-              <CardDescription>Most visited pages in the last {days} days</CardDescription>
+              <CardTitle>Response Time Distribution</CardTitle>
+              <CardDescription>DNS query response times across all servers</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="space-y-3">
-                {(analytics?.topPages || []).length > 0 ? (
-                  analytics?.topPages.map((page, i) => {
-                    const maxCount = analytics?.topPages[0]?.count || 1;
-                    return (
-                      <div key={i} className="flex items-center gap-2">
-                        <div className="w-40 truncate text-sm text-gray-600" title={page.pathname}>
-                          {page.pathname}
-                        </div>
-                        <div className="flex-1 bg-gray-100 rounded-full h-3 overflow-hidden">
-                          <div 
-                            className="bg-blue-500 h-full rounded-full transition-all"
-                            style={{ width: `${(page.count / maxCount) * 100}%` }}
-                          />
-                        </div>
-                        <div className="w-12 text-right text-sm font-medium">{page.count}</div>
-                      </div>
-                    );
-                  })
-                ) : (
-                  <div className="text-center py-8 text-gray-500">
-                    <Globe className="h-12 w-12 mx-auto mb-4 text-gray-300" />
-                    <p>No pageview data yet</p>
-                    <p className="text-sm">Data will appear as visitors browse your site</p>
-                  </div>
-                )}
+              <div className="h-64 flex items-center justify-center border-2 border-dashed border-gray-200 rounded-lg">
+                <div className="text-center">
+                  <BarChart3 className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                  <p className="text-gray-500">Response time histogram</p>
+                  <p className="text-sm text-gray-400 mt-2">0-50ms: 87% | 50-100ms: 11% | 100ms+: 2%</p>
+                </div>
               </div>
             </CardContent>
           </Card>
 
-          {/* Devices */}
+          {/* Geographic Performance */}
           <Card>
             <CardHeader>
-              <CardTitle>Devices</CardTitle>
-              <CardDescription>Visitor device breakdown</CardDescription>
+              <CardTitle>Geographic Performance</CardTitle>
+              <CardDescription>Average response times by region</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {(analytics?.topDevices || []).length > 0 ? (
-                  analytics?.topDevices.map((item, i) => (
-                    <div key={i} className="flex items-center gap-3">
-                      <DeviceIcon device={item.device} />
-                      <span className="capitalize flex-1">{item.device}</span>
-                      <span className="font-medium">{item.count.toLocaleString()}</span>
-                      <span className="text-gray-500 text-sm w-16 text-right">
-                        {analytics?.totalPageviews ? ((item.count / analytics.totalPageviews) * 100).toFixed(1) : 0}%
-                      </span>
-                    </div>
-                  ))
-                ) : (
-                  <div className="text-center py-8 text-gray-500">
-                    <Monitor className="h-12 w-12 mx-auto mb-4 text-gray-300" />
-                    <p>No device data yet</p>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center">
+                    <div className="w-3 h-3 bg-green-500 rounded-full mr-3"></div>
+                    <span>North America</span>
                   </div>
-                )}
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-          {/* Browsers */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Browsers</CardTitle>
-              <CardDescription>Browser distribution</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                {(analytics?.topBrowsers || []).length > 0 ? (
-                  analytics?.topBrowsers.map((browser, i) => {
-                    const maxCount = analytics?.topBrowsers[0]?.count || 1;
-                    return (
-                      <div key={i} className="flex items-center gap-2">
-                        <div className="w-24 text-sm text-gray-600">{browser.browser}</div>
-                        <div className="flex-1 bg-gray-100 rounded-full h-3 overflow-hidden">
-                          <div 
-                            className="bg-green-500 h-full rounded-full transition-all"
-                            style={{ width: `${(browser.count / maxCount) * 100}%` }}
-                          />
-                        </div>
-                        <div className="w-12 text-right text-sm font-medium">{browser.count}</div>
-                      </div>
-                    );
-                  })
-                ) : (
-                  <div className="text-center py-8 text-gray-500">
-                    <Activity className="h-12 w-12 mx-auto mb-4 text-gray-300" />
-                    <p>No browser data yet</p>
-                  </div>
-                )}
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Referrers */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Traffic Sources</CardTitle>
-              <CardDescription>Where visitors come from</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                {(analytics?.topReferrers || []).length > 0 ? (
-                  analytics?.topReferrers.map((ref, i) => {
-                    const maxCount = analytics?.topReferrers[0]?.count || 1;
-                    return (
-                      <div key={i} className="flex items-center gap-2">
-                        <div className="w-40 truncate text-sm text-gray-600" title={ref.referrer}>
-                          {ref.referrer || 'Direct'}
-                        </div>
-                        <div className="flex-1 bg-gray-100 rounded-full h-3 overflow-hidden">
-                          <div 
-                            className="bg-purple-500 h-full rounded-full transition-all"
-                            style={{ width: `${(ref.count / maxCount) * 100}%` }}
-                          />
-                        </div>
-                        <div className="w-12 text-right text-sm font-medium">{ref.count}</div>
-                      </div>
-                    );
-                  })
-                ) : (
-                  <div className="text-center py-8 text-gray-500">
-                    <Globe className="h-12 w-12 mx-auto mb-4 text-gray-300" />
-                    <p>No referrer data yet</p>
-                  </div>
-                )}
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Pageviews Chart */}
-        <Card className="mb-8">
-          <CardHeader>
-            <CardTitle>Daily Pageviews</CardTitle>
-            <CardDescription>Pageview trend over the last {days} days</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="h-48 flex items-end gap-1">
-              {(analytics?.pageviewsByDay || []).length > 0 ? (
-                analytics?.pageviewsByDay.slice(-30).map((day, i) => {
-                  const max = Math.max(...(analytics?.pageviewsByDay || []).map(d => d.count), 1);
-                  const height = (day.count / max) * 100;
-                  return (
-                    <div 
-                      key={i} 
-                      className="flex-1 bg-blue-500/80 hover:bg-blue-600 rounded-t transition-colors cursor-pointer"
-                      style={{ height: `${Math.max(height, 2)}%` }}
-                      title={`${day.date}: ${day.count} views`}
-                    />
-                  );
-                })
-              ) : (
-                <div className="flex-1 flex items-center justify-center text-gray-500">
-                  <div className="text-center">
-                    <BarChart3 className="h-12 w-12 mx-auto mb-4 text-gray-300" />
-                    <p>No pageview data yet</p>
-                    <p className="text-sm">Data will appear as visitors browse your site</p>
+                  <div className="text-right">
+                    <div className="font-semibold">18ms</div>
+                    <div className="text-sm text-gray-500">avg</div>
                   </div>
                 </div>
-              )}
-            </div>
-            {(analytics?.pageviewsByDay || []).length > 0 && (
-              <div className="flex justify-between text-xs text-gray-500 mt-2">
-                <span>{analytics?.pageviewsByDay[0]?.date}</span>
-                <span>{analytics?.pageviewsByDay[analytics.pageviewsByDay.length - 1]?.date}</span>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center">
+                    <div className="w-3 h-3 bg-blue-500 rounded-full mr-3"></div>
+                    <span>Europe</span>
+                  </div>
+                  <div className="text-right">
+                    <div className="font-semibold">24ms</div>
+                    <div className="text-sm text-gray-500">avg</div>
+                  </div>
+                </div>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center">
+                    <div className="w-3 h-3 bg-yellow-500 rounded-full mr-3"></div>
+                    <span>Asia Pacific</span>
+                  </div>
+                  <div className="text-right">
+                    <div className="font-semibold">31ms</div>
+                    <div className="text-sm text-gray-500">avg</div>
+                  </div>
+                </div>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center">
+                    <div className="w-3 h-3 bg-red-500 rounded-full mr-3"></div>
+                    <span>Other Regions</span>
+                  </div>
+                  <div className="text-right">
+                    <div className="font-semibold">45ms</div>
+                    <div className="text-sm text-gray-500">avg</div>
+                  </div>
+                </div>
               </div>
-            )}
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Top Performing Servers */}
+        <Card className="mb-8">
+          <CardHeader>
+            <CardTitle>Top Performing DNS Servers</CardTitle>
+            <CardDescription>Best performing servers in the last {selectedPeriod}</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {[
+                { name: "Google DNS", ip: "8.8.8.8", location: "Mountain View, CA", avgTime: "12ms", uptime: "99.9%" },
+                { name: "Cloudflare DNS", ip: "1.1.1.1", location: "San Francisco, CA", avgTime: "15ms", uptime: "99.8%" },
+                { name: "Quad9", ip: "9.9.9.9", location: "Berkeley, CA", avgTime: "18ms", uptime: "99.7%" },
+                { name: "OpenDNS", ip: "208.67.222.222", location: "San Francisco, CA", avgTime: "21ms", uptime: "99.6%" },
+                { name: "Level3", ip: "4.2.2.2", location: "Denver, CO", avgTime: "24ms", uptime: "99.5%" }
+              ].map((server, index) => (
+                <div key={index} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+                  <div className="flex items-center space-x-4">
+                    <Badge variant="outline">#{index + 1}</Badge>
+                    <div>
+                      <div className="font-medium">{server.name}</div>
+                      <div className="text-sm text-gray-500">{server.ip} • {server.location}</div>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <div className="font-semibold">{server.avgTime}</div>
+                    <div className="text-sm text-gray-500">{server.uptime} uptime</div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </CardContent>
         </Card>
 
