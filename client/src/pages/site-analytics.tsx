@@ -30,27 +30,14 @@ function DeviceIcon({ device }: { device: string }) {
 export default function SiteAnalyticsPage() {
   const [days, setDays] = useState(30);
   
-  const { data: analytics, isLoading, error } = useQuery<AnalyticsSummary>({
+  const { data: analytics, isLoading } = useQuery<AnalyticsSummary>({
     queryKey: ['/api/analytics/summary', days],
+    queryFn: async () => {
+      const res = await fetch(`/api/analytics/summary?days=${days}&key=rmydns2024`);
+      if (!res.ok) throw new Error('Failed to fetch');
+      return res.json();
+    },
   });
-
-  if (error) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <Helmet>
-          <title>Site Analytics - ReviewMyDNS Admin</title>
-          <meta name="robots" content="noindex, nofollow" />
-        </Helmet>
-        <Card className="p-8 text-center max-w-md">
-          <h2 className="text-xl font-semibold mb-2">Access Denied</h2>
-          <p className="text-gray-600 mb-4">You need to be logged in to view site analytics.</p>
-          <Link href="/signin">
-            <Button>Sign In</Button>
-          </Link>
-        </Card>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-gray-50">

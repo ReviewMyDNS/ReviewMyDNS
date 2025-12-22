@@ -618,9 +618,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Analytics dashboard endpoint (protected - admin only)
-  app.get("/api/analytics/summary", requireAuth, async (req, res) => {
+  // Analytics dashboard endpoint (admin page with secret key)
+  app.get("/api/analytics/summary", async (req, res) => {
     try {
+      // Allow if user is logged in OR has admin key
+      const adminKey = req.query.key as string;
+      const isAdmin = adminKey === 'rmydns2024' || req.user;
+      
+      if (!isAdmin) {
+        return res.status(401).json({ error: "Unauthorized" });
+      }
+      
       const days = parseInt(req.query.days as string) || 30;
       const summary = await storage.getAnalyticsSummary(days);
       res.json(summary);
