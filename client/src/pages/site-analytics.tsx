@@ -30,7 +30,7 @@ function DeviceIcon({ device }: { device: string }) {
 export default function SiteAnalyticsPage() {
   const [days, setDays] = useState(30);
   
-  const { data: analytics, isLoading } = useQuery<AnalyticsSummary>({
+  const { data: analytics, isLoading, error } = useQuery<AnalyticsSummary>({
     queryKey: ['/api/analytics/summary', days],
     queryFn: async () => {
       const res = await fetch(`/api/analytics/summary?days=${days}&key=rmydns2024`);
@@ -38,6 +38,18 @@ export default function SiteAnalyticsPage() {
       return res.json();
     },
   });
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <Card className="p-8 text-center max-w-md">
+          <h2 className="text-xl font-semibold mb-2">Unable to Load Analytics</h2>
+          <p className="text-gray-600 mb-4">There was a problem loading the analytics data. Please try refreshing.</p>
+          <Button onClick={() => window.location.reload()}>Refresh Page</Button>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
