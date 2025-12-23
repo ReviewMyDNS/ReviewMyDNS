@@ -2402,6 +2402,403 @@ DNS history is your debugging superpower. When something breaks, history tells y
 - [15 Common DNS Misconfigurations](/blog/common-dns-misconfigurations) — Know what to look for in your audit
 - [How to Move DNS Providers Without Downtime](/blog/dns-migration-checklist) — Use history to verify migrations
     `
+  },
+  {
+    slug: "how-to-read-dns-records",
+    title: "How to Read DNS Records: A Beginner's Reference Guide",
+    description: "Learn what each DNS record type means, when you need it, and how to interpret lookup results. A practical reference for A, AAAA, CNAME, MX, TXT, NS, SOA, CAA, and more.",
+    publishedDate: "2024-12-23",
+    author: "ReviewMyDNS Team",
+    category: "DNS Basics",
+    readTime: "10 min read",
+    heroImage: "/blog/dns-basics.svg",
+    content: \`
+## Introduction
+
+DNS records are the instructions that tell the internet how to find your website, where to send your email, and how to verify your domain. But if you've ever looked at raw DNS output, it can seem like a foreign language.
+
+This guide is a practical reference for reading and understanding DNS records. We'll cover:
+
+- What each common record type means,
+- When you'd use each one,
+- How to interpret lookup results,
+- What to look for when something's wrong.
+
+By the end, you'll be able to look at any DNS lookup result and understand exactly what it's telling you.
+
+## The Anatomy of a DNS Record
+
+Every DNS record has the same basic structure:
+
+\\\`\\\`\\\`
+name    TTL    class    type    value
+\\\`\\\`\\\`
+
+**Example:**
+
+\\\`\\\`\\\`
+example.com.    300    IN    A    93.184.216.34
+\\\`\\\`\\\`
+
+**Breaking it down:**
+
+| Field | Example | Meaning |
+|-------|---------|---------|
+| Name | example.com. | The domain or hostname this record is for |
+| TTL | 300 | Time To Live—how long to cache (in seconds) |
+| Class | IN | Internet class (almost always "IN") |
+| Type | A | The record type (A, MX, CNAME, etc.) |
+| Value | 93.184.216.34 | The data returned for this record |
+
+The trailing dot after the domain name indicates it's a fully qualified domain name (FQDN). You'll often see this in raw DNS output.
+
+## A Record (Address Record)
+
+**Purpose:** Maps a domain name to an IPv4 address.
+
+**Example:**
+
+\\\`\\\`\\\`
+example.com.    300    IN    A    93.184.216.34
+\\\`\\\`\\\`
+
+**What it means:**
+- When someone requests example.com, DNS returns this IP address.
+- This is how browsers know which server to connect to.
+
+**Common uses:**
+- Pointing your domain to your web server
+- Pointing subdomains (api.example.com, app.example.com) to specific servers
+
+**What to check:**
+- Is the IP correct for your server?
+- If you have multiple A records, are they all valid? (Load balancing or redundancy)
+- After a migration, are you seeing the new IP yet?
+
+## AAAA Record (IPv6 Address)
+
+**Purpose:** Maps a domain name to an IPv6 address.
+
+**Example:**
+
+\\\`\\\`\\\`
+example.com.    300    IN    AAAA    2606:2800:220:1:248:1893:25c8:1946
+\\\`\\\`\\\`
+
+**What it means:**
+- Same as an A record, but for the newer IPv6 protocol.
+- Devices that support IPv6 may prefer these.
+
+**Do you need it?**
+- If your server has an IPv6 address, adding AAAA records helps with performance and future-proofing.
+- If you don't have IPv6, it's fine to omit these.
+
+## CNAME Record (Canonical Name)
+
+**Purpose:** Creates an alias—points one name to another name.
+
+**Example:**
+
+\\\`\\\`\\\`
+www.example.com.    300    IN    CNAME    example.com.
+\\\`\\\`\\\`
+
+**What it means:**
+- "www.example.com is an alias for example.com"
+- DNS will then look up example.com to get the actual IP.
+
+**Common uses:**
+- Making www.example.com point to example.com
+- Pointing to CDN or SaaS provider hostnames (e.g., mysite.cdn.provider.com)
+
+**Important rules:**
+- A CNAME cannot coexist with other records at the same name.
+- You can't put a CNAME at the root domain (example.com)—only on subdomains.
+- Some providers use "CNAME flattening" or "ALIAS" records to work around this.
+
+**What to check:**
+- Is the target hostname correct?
+- Does the target actually resolve?
+- Watch for CNAME chains (CNAME → CNAME → CNAME)—too many can slow things down.
+
+## MX Record (Mail Exchange)
+
+**Purpose:** Specifies which mail servers accept email for your domain.
+
+**Example:**
+
+\\\`\\\`\\\`
+example.com.    3600    IN    MX    10 mail.example.com.
+example.com.    3600    IN    MX    20 backup-mail.example.com.
+\\\`\\\`\\\`
+
+**What it means:**
+- Email for example.com should be sent to mail.example.com.
+- The number (10, 20) is the priority—lower is preferred.
+- If mail.example.com is unavailable, try backup-mail.example.com.
+
+**Common uses:**
+- Pointing to your email provider (Google Workspace, Microsoft 365, etc.)
+- Setting up backup mail servers
+
+**What to check:**
+- Are the hostnames correct for your email provider?
+- Do the hostnames resolve to valid IP addresses?
+- Are priorities set correctly (primary should have lowest number)?
+
+## TXT Record (Text)
+
+**Purpose:** Stores arbitrary text data, often used for verification and email security.
+
+**Example:**
+
+\\\`\\\`\\\`
+example.com.    300    IN    TXT    "v=spf1 include:_spf.google.com ~all"
+\\\`\\\`\\\`
+
+**Common uses:**
+
+### SPF (Sender Policy Framework)
+Tells receiving mail servers which IPs are allowed to send email for your domain.
+
+\\\`\\\`\\\`
+"v=spf1 include:_spf.google.com include:sendgrid.net ~all"
+\\\`\\\`\\\`
+
+### DKIM (DomainKeys Identified Mail)
+Published at a specific selector subdomain (e.g., selector1._domainkey.example.com).
+
+\\\`\\\`\\\`
+"v=DKIM1; k=rsa; p=MIGfMA0G..."
+\\\`\\\`\\\`
+
+### DMARC (Domain-based Message Authentication)
+Published at _dmarc.example.com. Tells receivers how to handle failed SPF/DKIM.
+
+\\\`\\\`\\\`
+"v=DMARC1; p=quarantine; rua=mailto:reports@example.com"
+\\\`\\\`\\\`
+
+### Domain verification
+Services like Google, Microsoft, Mailchimp ask you to add TXT records to prove you own the domain.
+
+\\\`\\\`\\\`
+"google-site-verification=abc123xyz..."
+\\\`\\\`\\\`
+
+**What to check:**
+- Is the SPF record valid? (Use our [Security Check](/security) to validate)
+- Only one SPF record per domain (multiple causes failures)
+- Are DKIM selectors correctly published?
+- Is DMARC set up and reporting to you?
+
+## NS Record (Name Server)
+
+**Purpose:** Specifies which DNS servers are authoritative for your domain.
+
+**Example:**
+
+\\\`\\\`\\\`
+example.com.    86400    IN    NS    ns1.dnsprovider.com.
+example.com.    86400    IN    NS    ns2.dnsprovider.com.
+\\\`\\\`\\\`
+
+**What it means:**
+- "For example.com, ask ns1.dnsprovider.com or ns2.dnsprovider.com for answers."
+- These are set at your domain registrar and tell the world where to find your DNS.
+
+**What to check:**
+- Do these match what your DNS provider expects?
+- After a migration, are the old NS records still showing? (Propagation in progress)
+- Having at least 2 NS records is standard for redundancy.
+
+## SOA Record (Start of Authority)
+
+**Purpose:** Contains metadata about the DNS zone.
+
+**Example:**
+
+\\\`\\\`\\\`
+example.com.    86400    IN    SOA    ns1.dnsprovider.com. admin.example.com. (
+                              2024122301 ; Serial
+                              7200       ; Refresh
+                              3600       ; Retry
+                              1209600    ; Expire
+                              86400 )    ; Minimum TTL
+\\\`\\\`\\\`
+
+**What it means:**
+
+| Field | Example | Meaning |
+|-------|---------|---------|
+| Primary NS | ns1.dnsprovider.com | Primary nameserver for the zone |
+| Admin email | admin.example.com | Hostmaster email (@ becomes .) |
+| Serial | 2024122301 | Zone version number (changes on updates) |
+| Refresh | 7200 | How often secondary servers check for updates |
+| Retry | 3600 | Retry interval if refresh fails |
+| Expire | 1209600 | When secondary stops serving if it can't reach primary |
+| Minimum TTL | 86400 | Default negative caching TTL |
+
+**What to check:**
+- Serial number should increase with each change (some providers auto-manage this).
+- SOA exists at the root of your domain—if it's missing, something is seriously wrong.
+
+## CAA Record (Certification Authority Authorization)
+
+**Purpose:** Specifies which Certificate Authorities (CAs) can issue SSL certificates for your domain.
+
+**Example:**
+
+\\\`\\\`\\\`
+example.com.    300    IN    CAA    0 issue "letsencrypt.org"
+example.com.    300    IN    CAA    0 issuewild "letsencrypt.org"
+example.com.    300    IN    CAA    0 iodef "mailto:security@example.com"
+\\\`\\\`\\\`
+
+**What it means:**
+- Only Let's Encrypt can issue certificates for this domain.
+- \\\`issue\\\` controls regular certs, \\\`issuewild\\\` controls wildcard certs.
+- \\\`iodef\\\` specifies where to send violation reports.
+
+**Do you need it?**
+- CAA is optional but recommended for security.
+- If you don't have CAA records, any CA can issue certs for your domain.
+
+**What to check:**
+- Does your CAA record include your actual CA? (Let's Encrypt, DigiCert, Sectigo, etc.)
+- If SSL cert issuance is failing, check if CAA is blocking it.
+
+## PTR Record (Pointer / Reverse DNS)
+
+**Purpose:** Maps an IP address back to a domain name (reverse of A record).
+
+**Example:**
+
+\\\`\\\`\\\`
+34.216.184.93.in-addr.arpa.    86400    IN    PTR    example.com.
+\\\`\\\`\\\`
+
+**What it means:**
+- "The IP 93.184.216.34 belongs to example.com."
+- Used for reverse lookups, especially in email (receiving servers check if your sending IP has a PTR).
+
+**Where it's configured:**
+- PTR records are managed by whoever controls the IP address—usually your hosting provider.
+- You typically request this through your host's control panel.
+
+**What to check:**
+- If sending email from your own server, PTR should resolve to your mail hostname.
+- Mismatched or missing PTR can cause email deliverability issues.
+
+## SRV Record (Service)
+
+**Purpose:** Specifies the location of specific services (hostname and port).
+
+**Example:**
+
+\\\`\\\`\\\`
+_sip._tcp.example.com.    300    IN    SRV    10 5 5060 sipserver.example.com.
+\\\`\\\`\\\`
+
+**Format breakdown:**
+\\\`\\\`\\\`
+_service._protocol.domain.    TTL    IN    SRV    priority weight port target
+\\\`\\\`\\\`
+
+**Common uses:**
+- VoIP/SIP services
+- XMPP/Jabber messaging
+- LDAP directory services
+- Microsoft services (like Skype for Business)
+
+**What to check:**
+- Service name and protocol match what's expected (_sip._tcp, _xmpp-client._tcp, etc.)
+- Target hostname resolves correctly
+- Port number matches the service's expected port
+
+## Reading Lookup Results: What to Look For
+
+When you [run a DNS lookup](/), here's what to check:
+
+### Consistency across locations
+- Do all servers return the same values?
+- If not, propagation may still be in progress.
+
+### Expected values
+- Is the IP address what you expect?
+- Are MX records pointing to your actual mail provider?
+- Are TXT records complete and properly formatted?
+
+### Response status
+- **NOERROR:** Record found successfully.
+- **NXDOMAIN:** Domain or subdomain doesn't exist.
+- **SERVFAIL:** Server error—often DNSSEC issues or misconfigured nameservers.
+- **REFUSED:** Server refused to answer (shouldn't happen for your own domain).
+
+### TTL values
+- Very low TTLs (60–300) = Records refresh quickly, good for changes.
+- Very high TTLs (86400) = Cached for a day, changes take longer to propagate.
+
+## Common Patterns You'll See
+
+### Website hosting
+\\\`\\\`\\\`
+example.com.        A      93.184.216.34
+www.example.com.    CNAME  example.com.
+\\\`\\\`\\\`
+
+### Email with Google Workspace
+\\\`\\\`\\\`
+example.com.    MX    1 aspmx.l.google.com.
+example.com.    MX    5 alt1.aspmx.l.google.com.
+example.com.    TXT   "v=spf1 include:_spf.google.com ~all"
+\\\`\\\`\\\`
+
+### CDN setup (Cloudflare, etc.)
+\\\`\\\`\\\`
+example.com.        A      104.21.45.67        (Cloudflare IP)
+example.com.        AAAA   2606:4700:3030::...  (Cloudflare IPv6)
+\\\`\\\`\\\`
+
+### Subdomain delegation
+\\\`\\\`\\\`
+blog.example.com.    NS    ns1.blogprovider.com.
+blog.example.com.    NS    ns2.blogprovider.com.
+\\\`\\\`\\\`
+
+## Summary
+
+| Record | Purpose | Example Use |
+|--------|---------|-------------|
+| A | IPv4 address | Point domain to web server |
+| AAAA | IPv6 address | IPv6 connectivity |
+| CNAME | Alias | www → root, or → CDN |
+| MX | Mail servers | Route email to provider |
+| TXT | Text data | SPF, DKIM, DMARC, verification |
+| NS | Nameservers | Delegation to DNS provider |
+| SOA | Zone metadata | Zone info and serial |
+| CAA | SSL authorization | Restrict which CAs can issue certs |
+| PTR | Reverse DNS | IP → hostname lookup |
+| SRV | Service location | VoIP, messaging services |
+
+Now that you know how to read DNS records, you can confidently interpret any lookup result—and quickly spot problems.
+
+**Next step:** [Run a DNS lookup](/) now and see exactly what's configured for your domain.
+
+---
+
+## Related Tools
+
+- [Global DNS Checker](/) — Check any record type from 50+ locations
+- [Security Check](/security) — Validate SPF, DKIM, DMARC, and CAA
+- [DNS Comparison](/compare) — Compare records between two providers
+
+## Related Guides
+
+- [DNS Propagation: How It Actually Works](/blog/dns-propagation-explained) — Understand TTLs and caching
+- [SPF, DKIM, and DMARC Complete Guide](/blog/spf-dkim-dmarc-guide) — Deep dive into email authentication
+- [15 Common DNS Misconfigurations](/blog/common-dns-misconfigurations) — Know what errors to watch for
+    \`
   }
 ];
 
