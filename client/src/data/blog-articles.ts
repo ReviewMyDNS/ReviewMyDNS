@@ -282,6 +282,327 @@ By using a global DNS propagation checker like ReviewMyDNS, you can:
     `
   },
   {
+    slug: "dns-migration-checklist",
+    title: "How to Move DNS Providers Without Downtime: A Step-by-Step Checklist",
+    description: "Learn how to safely move DNS providers without downtime. Step-by-step checklist covering TTLs, record export/import, verification, propagation, email records, and post-migration monitoring.",
+    publishedDate: "2024-12-23",
+    author: "ReviewMyDNS Team",
+    category: "Tutorials",
+    readTime: "15 min read",
+    heroImage: "/blog/dns-migration.svg",
+    content: `
+## Introduction
+
+Moving DNS providers can feel risky.
+
+You're touching the core of how users find your site and how email reaches your domain. A mistake can mean:
+
+- Website downtime,
+- Broken APIs or subdomains,
+- Emails bouncing or going to spam.
+
+The good news: if you plan the migration carefully, you can switch DNS providers with zero or near-zero downtime.
+
+This guide gives you a practical, step-by-step checklist for moving DNS from Provider A to Provider B safely. We'll cover:
+
+- Preparing your records and TTLs,
+- Exporting and importing DNS correctly,
+- Verifying records before the cutover,
+- Managing propagation,
+- Checking web and email after the switch,
+- Monitoring DNS changes with tools like ReviewMyDNS.
+
+## Overview: The High-Level Plan
+
+At a high level, a safe DNS migration follows this pattern:
+
+1. **Prepare**: Audit existing records, lower TTLs, and clean up.
+2. **Replicate**: Import all records into the new provider.
+3. **Verify**: Check that old and new DNS responses match.
+4. **Cut Over**: Change nameservers at your domain registrar.
+5. **Monitor**: Watch propagation and application behavior.
+6. **Clean Up**: Remove temporary settings and old provider references.
+
+We'll walk through each step in detail.
+
+## Step 1: Audit Your Existing DNS Records
+
+Before touching anything, you need a complete and accurate view of your current DNS configuration.
+
+### 1.1 List all current records
+
+From your current DNS provider:
+
+- Export or screenshot all DNS zones for your domain:
+  - A and AAAA
+  - CNAME
+  - MX
+  - TXT (SPF, DKIM, DMARC, verifications)
+  - NS (if using sub-zone delegation)
+  - SRV, CAA, and others if applicable
+
+Also list:
+
+- All subdomains in use: www, api, app, admin, mail, etc.
+- Any third-party services that rely on DNS: Email providers, CDNs/WAF (Cloudflare, Fastly, etc.), SaaS verifications (Google Workspace, Microsoft 365, Stripe, etc.).
+
+### 1.2 Identify critical records
+
+Mark records that are mission-critical, such as:
+
+- Production web frontend (www.example.com, example.com),
+- API endpoints,
+- Email MX and associated SPF/DKIM/DMARC,
+- VPN/remote access hostnames.
+
+You'll want to be extra careful validating these later.
+
+## Step 2: Lower TTLs in Advance
+
+Propagation delay is one of the biggest sources of DNS headaches. You can reduce risk by lowering TTLs before migration.
+
+### 2.1 Lower TTLs on key records
+
+24–48 hours before the planned cutover:
+
+- For critical records (A/AAAA/CNAME/MX/TXT), lower TTLs to something like:
+  - 300 seconds (5 minutes) or
+  - 600 seconds (10 minutes)
+
+This ensures that:
+
+- Any cached answers at resolvers expire quickly,
+- If you need to roll back or adjust, changes will be seen faster.
+
+### 2.2 Wait for the new TTLs to propagate
+
+Let at least the old TTL duration pass before changing nameservers. Example:
+
+- Old TTL: 3600 seconds (1 hour)
+- You lower TTL to 300 seconds
+- Wait ~1 hour so existing 3600-second caches clear
+- Then proceed with your migration, knowing new changes will propagate faster
+
+During this time, you can start setting up the new provider.
+
+## Step 3: Replicate DNS Configuration at the New Provider
+
+Now you'll recreate all of your DNS records at the new provider.
+
+### 3.1 Import or re-create records
+
+At your new DNS provider:
+
+- If they support zone file import: Export from old provider → import into new.
+- If not: Manually recreate each record:
+  - Make sure hostnames, values, and TTLs match.
+  - Watch out for provider-specific UI differences (e.g., @ for root).
+
+Pay special attention to:
+
+- **MX records**: Correct priority and hostname.
+- **SPF TXT records**: Full string, no truncation.
+- **DKIM TXT records**: Selector + full key value.
+- **DMARC TXT record**: Syntax and reporting addresses (rua=, ruf=).
+- **CNAME chains** (e.g., www → CDN hostname).
+
+### 3.2 Match (or improve) TTLs
+
+For now, you can:
+
+- Set TTLs similar to what you configured in Step 2 (e.g., 300–600 seconds).
+- Later, once everything is stable, you can increase them for efficiency.
+
+## Step 4: Verify Old vs New DNS Before Cutover
+
+Before changing nameservers, you want to ensure that the old and new DNS answers match.
+
+This is where a DNS comparison tool like ReviewMyDNS is very handy.
+
+### 4.1 Compare providers for key records
+
+Using ReviewMyDNS:
+
+- Use the DNS Comparison tool to compare:
+  - Old provider vs new provider responses for:
+    - example.com (root),
+    - www.example.com,
+    - api.example.com (and any critical subdomains),
+    - MX and TXT records for email.
+
+You're checking that:
+
+- The new provider returns the same values as the old provider,
+- No records are missing,
+- No typos or extra/missing dots,
+- Mail records are identical.
+
+### 4.2 Spot and fix discrepancies
+
+If you find differences:
+
+- Fix them at the new provider before you change nameservers.
+- Re-run the comparison until everything matches for critical records.
+
+This "pre-flight check" is the difference between a smooth migration and a surprise outage.
+
+## Step 5: Change Nameservers at the Registrar
+
+Once you're confident the new provider has a correct copy of your DNS zone, it's time to cut over.
+
+### 5.1 Locate registrar settings
+
+At your domain registrar (where you bought the domain):
+
+- Go to the domain's DNS / Nameservers settings.
+- Note the current nameservers (in case you need to roll back temporarily).
+
+### 5.2 Update to new provider's nameservers
+
+From your new DNS provider, copy their authoritative nameservers (e.g., ns1.newdns.com, ns2.newdns.com).
+
+At the registrar:
+
+- Replace the old nameservers with the new provider's nameservers.
+- Save/apply changes.
+
+This tells the internet: "for this domain, start asking the new provider for answers."
+
+## Step 6: Monitor Propagation and Behavior
+
+After switching nameservers, you'll go through a propagation window where some resolvers use the new provider and some still use the old one.
+
+Because you lowered TTLs earlier, this period should be relatively short.
+
+### 6.1 Check DNS propagation globally
+
+Use a global DNS propagation checker like ReviewMyDNS to:
+
+- Check the key records (A, AAAA, CNAME, MX, TXT) from 50+ locations worldwide.
+- Confirm:
+  - Locations are resolving to the new provider's answers.
+  - No locations show NXDOMAIN or SERVFAIL for critical records.
+
+If you see mixed answers (old and new):
+
+- That's expected early on.
+- It should converge fully to the new answers within the old TTL + some buffer.
+
+### 6.2 Verify application behavior
+
+Test from multiple networks (home, office, mobile):
+
+- Load your main site (example.com, www.example.com).
+- Hit critical subdomains (e.g., app, api, admin).
+- Confirm:
+  - No invalid certificates (if SSL/TLS changed),
+  - No unexpected redirects,
+  - No 4xx/5xx errors that weren't present before.
+
+### 6.3 Verify email delivery
+
+Check email is still working:
+
+- Send test emails to and from key addresses on your domain.
+- Use mail tester tools to validate SPF, DKIM, and DMARC.
+- Confirm messages are authenticated and not landing in spam.
+
+With ReviewMyDNS, you can also run a Security / Email DNS check to validate MX, SPF, DKIM, DMARC, DNSSEC, and CAA records.
+
+## Step 7: Keep Monitoring and Then Clean Up
+
+Once propagation is complete and everything looks good, you can finalize the migration.
+
+### 7.1 Monitor DNS changes and errors
+
+Over the next few days:
+
+- Periodically run checks on key DNS records.
+- Use Historical Tracking to:
+  - Confirm no unexpected changes are happening,
+  - Establish a baseline for future troubleshooting.
+
+If your new provider supports logging or change history, enable it.
+
+### 7.2 Raise TTLs again (optional)
+
+After you're confident everything is stable:
+
+- Consider raising TTLs for:
+  - Root, www, API endpoints (e.g., 1800–3600 seconds or more),
+  - MX and TXT records (often safely higher).
+
+Higher TTLs:
+
+- Reduce DNS query load,
+- Improve performance for repeat clients,
+- But make future changes slower to propagate—so balance based on how often you change records.
+
+### 7.3 Remove or archive the old configuration
+
+Once you're sure you won't roll back:
+
+- Remove the zone from the old DNS provider, or
+- Archive screenshots/exports for documentation, then remove.
+
+This avoids confusion later if someone looks at the old provider and assumes those records are active.
+
+## Common Pitfalls to Avoid During DNS Migration
+
+Even with a checklist, there are some classic gotchas:
+
+### Forgetting a subdomain
+Missing api, admin, static, cdn, etc.
+**Fix**: Double-check your full subdomain list before migration.
+
+### Breaking email
+Incorrect MX priority or hostnames, missing SPF/DKIM/DMARC after migration.
+**Fix**: Verify email-related TXT and MX records closely and re-test sending/receiving.
+
+### Cloud/Proxy misconfiguration
+If using Cloudflare/another CDN/WAF: forgetting to set proxied vs DNS-only correctly, SSL mode mismatched (Flexible vs Full).
+**Fix**: Replicate not just DNS records, but also proxy settings and certificates where applicable.
+
+### Lack of rollback plan
+Not knowing how to quickly restore old nameservers if something goes wrong.
+**Fix**: Keep old nameserver info handy and don't decommission old DNS too quickly.
+
+## How ReviewMyDNS Can Help With DNS Provider Migrations
+
+ReviewMyDNS gives you the visibility you need for a safe migration:
+
+### Global DNS Propagation Checker
+See how your A, CNAME, MX, TXT, and other records resolve from 50+ servers worldwide.
+
+### DNS Comparison
+Compare old vs new DNS providers side-by-side: catch missing or mismatched records before you cut over.
+
+### Historical Tracking
+Track changes over time: understand when and how records changed, debug outages after the fact.
+
+### Security & Email Checks
+Validate SPF, DKIM, DMARC, DNSSEC and CAA, MX configuration.
+
+This turns a risky, opaque process into a set of measurable, verifiable steps.
+
+## Summary: Your DNS Migration Checklist
+
+To move DNS providers without downtime:
+
+1. **Audit** your current DNS records and identify critical entries.
+2. **Lower TTLs** on key records 24–48 hours before migration.
+3. **Replicate** all records at the new provider carefully.
+4. **Verify** that old vs new provider answers match (especially for web and email).
+5. **Change nameservers** at your registrar to point to the new provider.
+6. **Monitor** propagation and test web + email from multiple networks.
+7. **Keep monitoring**, then raise TTLs and clean up the old provider.
+
+If you follow this checklist and use a global DNS checker to validate every step, you can switch providers with minimal risk and near-zero downtime.
+
+**Next step:** Run a global DNS check with ReviewMyDNS to see how your records look from 50+ locations and plan your next migration safely.
+    `
+  },
+  {
     slug: "dns-propagation-myths-debunked",
     title: "5 DNS Propagation Myths Debunked: What Really Happens When You Change DNS",
     description: "Separate fact from fiction about DNS propagation. Learn what really happens when you update DNS records and how to avoid common mistakes.",
