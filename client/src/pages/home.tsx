@@ -10,7 +10,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { Globe, User, Menu, Lock, BarChart3, Zap, Share2, Copy, Check, RefreshCw, LogOut, Shield, History, Bell, Users, Server } from "lucide-react";
+import { Globe, Lock, BarChart3, Zap, Share2, Check, RefreshCw, LogOut, Shield, History, Bell, Users, Server, ArrowRight, BookOpen } from "lucide-react";
 import { Link } from "wouter";
 import type { DnsLookupWithResults } from "@shared/schema";
 import { useToast } from "@/hooks/use-toast";
@@ -168,7 +168,7 @@ export default function Home() {
 
       {/* Main Content */}
       <main>
-        {/* Main Search Section */}
+        {/* Hero Section */}
         <section className="relative bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 overflow-hidden">
           <div className="absolute inset-0 bg-grid-white/[0.05] bg-[size:32px_32px]"></div>
           <div className="absolute inset-0 opacity-20">
@@ -176,23 +176,17 @@ export default function Home() {
           </div>
           <div className="absolute top-10 right-10 w-32 h-32 bg-blue-500/30 rounded-full blur-3xl"></div>
           <div className="absolute bottom-10 left-10 w-40 h-40 bg-indigo-500/30 rounded-full blur-3xl"></div>
-          <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+          <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
             <div className="text-center mb-8">
               <h1 className="text-3xl md:text-5xl font-bold text-white mb-4 leading-tight">
-                Free DNS Lookup & Propagation Checker
+                Global DNS Propagation Checker & Health Monitor
               </h1>
-              <p className="text-blue-100 text-base md:text-xl mb-2">
-                Check DNS records instantly across 50+ global servers
+              <p className="text-blue-100 text-base md:text-xl mb-3 max-w-2xl mx-auto">
+                Check DNS records and propagation status across 50+ worldwide servers. Monitor changes, compare providers, and troubleshoot issues—all in one place.
               </p>
-              <p className="text-blue-200 text-sm md:text-base mb-4">
-                Trusted by DevOps teams, MSPs, and agencies managing production workloads
+              <p className="text-blue-300 text-sm mb-6">
+                Trusted by DevOps teams, MSPs, and agencies managing production domains.
               </p>
-              <div className="flex flex-wrap justify-center gap-2 text-xs text-blue-200">
-                <span className="bg-white/10 px-3 py-1 rounded-full">DNS Migration</span>
-                <span className="bg-white/10 px-3 py-1 rounded-full">Email Deliverability</span>
-                <span className="bg-white/10 px-3 py-1 rounded-full">Uptime Monitoring</span>
-                <span className="bg-white/10 px-3 py-1 rounded-full">Change Detection</span>
-              </div>
             </div>
             
             <DnsLookupForm 
@@ -200,37 +194,120 @@ export default function Home() {
               isLoading={isLoading}
               setIsLoading={setIsLoading}
             />
+            
+            {!isAuthenticated && (
+              <div className="text-center mt-4">
+                <Link href="/signin?tab=signup" className="text-blue-200 hover:text-white text-sm inline-flex items-center" data-testid="link-hero-signup">
+                  <ArrowRight className="h-4 w-4 mr-1" />
+                  Create free account to save domains & track history
+                </Link>
+              </div>
+            )}
           </div>
         </section>
 
-        {/* Who it's for Section */}
+        {/* Why ReviewMyDNS - Trust Strip */}
+        <section className="bg-white py-10 border-b border-gray-100">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div className="text-center">
+                <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                  <Globe className="h-6 w-6 text-blue-600" />
+                </div>
+                <h3 className="font-semibold text-gray-900 mb-1">Real-Time Global Coverage</h3>
+                <p className="text-sm text-gray-600">Check DNS from 50+ locations worldwide in seconds</p>
+              </div>
+              <div className="text-center">
+                <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                  <History className="h-6 w-6 text-green-600" />
+                </div>
+                <h3 className="font-semibold text-gray-900 mb-1">Historical Tracking</h3>
+                <p className="text-sm text-gray-600">See DNS changes over time with detailed logs</p>
+              </div>
+              <div className="text-center">
+                <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                  <Bell className="h-6 w-6 text-purple-600" />
+                </div>
+                <h3 className="font-semibold text-gray-900 mb-1">Smart Alerts</h3>
+                <p className="text-sm text-gray-600">Get notified when records drift or SSL expires</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* How It Works Section */}
+        <section className="bg-gray-50 py-12">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-10">
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">How to Use ReviewMyDNS</h2>
+              <p className="text-gray-600">Three simple steps to comprehensive DNS insights</p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div className="relative">
+                <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-100 h-full">
+                  <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold mb-4">1</div>
+                  <h3 className="font-semibold text-gray-900 mb-2">Enter your domain</h3>
+                  <p className="text-sm text-gray-600">Type your domain or hostname and select the record type (A, AAAA, CNAME, MX, TXT, etc.).</p>
+                </div>
+              </div>
+              <div className="relative">
+                <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-100 h-full">
+                  <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold mb-4">2</div>
+                  <h3 className="font-semibold text-gray-900 mb-2">Check propagation instantly</h3>
+                  <p className="text-sm text-gray-600">We query 50+ DNS servers worldwide and show you real-time results with status indicators.</p>
+                </div>
+              </div>
+              <div className="relative">
+                <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-100 h-full">
+                  <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold mb-4">3</div>
+                  <h3 className="font-semibold text-gray-900 mb-2">Save & monitor (optional)</h3>
+                  <p className="text-sm text-gray-600">Create a free account to save domains, view change history, and get weekly health reports.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Use Cases Section */}
         <section className="bg-white py-12 border-b border-gray-100">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-8">
-              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Built for DNS Professionals</h2>
+            <div className="text-center mb-10">
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Built for Real-World DNS Challenges</h2>
               <p className="text-gray-600">From quick lookups to enterprise monitoring</p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="text-center p-6 rounded-lg bg-gradient-to-br from-blue-50 to-indigo-50">
-                <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="p-6 rounded-lg bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-100">
+                <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4">
                   <Server className="h-6 w-6 text-blue-600" />
                 </div>
-                <h3 className="font-semibold text-gray-900 mb-2">DevOps & SRE Teams</h3>
-                <p className="text-sm text-gray-600">Verify DNS changes before they affect production. Monitor propagation during migrations and catch issues before users do.</p>
+                <h3 className="font-semibold text-gray-900 mb-3">For DevOps & SRE Teams</h3>
+                <ul className="text-sm text-gray-600 space-y-2">
+                  <li>• Verify DNS changes before and after deployments</li>
+                  <li>• Monitor production domains for drift</li>
+                  <li>• Troubleshoot propagation delays across regions</li>
+                </ul>
               </div>
-              <div className="text-center p-6 rounded-lg bg-gradient-to-br from-green-50 to-emerald-50">
-                <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="p-6 rounded-lg bg-gradient-to-br from-green-50 to-emerald-50 border border-green-100">
+                <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-4">
                   <Users className="h-6 w-6 text-green-600" />
                 </div>
-                <h3 className="font-semibold text-gray-900 mb-2">Agencies & MSPs</h3>
-                <p className="text-sm text-gray-600">Manage DNS for multiple client domains. Share results with stakeholders and track changes across your portfolio.</p>
+                <h3 className="font-semibold text-gray-900 mb-3">For Agencies & MSPs</h3>
+                <ul className="text-sm text-gray-600 space-y-2">
+                  <li>• Manage DNS health for dozens of client domains</li>
+                  <li>• Bulk check records during migrations</li>
+                  <li>• Generate reports for clients</li>
+                </ul>
               </div>
-              <div className="text-center p-6 rounded-lg bg-gradient-to-br from-purple-50 to-violet-50">
-                <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="p-6 rounded-lg bg-gradient-to-br from-purple-50 to-violet-50 border border-purple-100">
+                <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mb-4">
                   <Shield className="h-6 w-6 text-purple-600" />
                 </div>
-                <h3 className="font-semibold text-gray-900 mb-2">Email & Security Teams</h3>
-                <p className="text-sm text-gray-600">Debug email delivery with SPF, DKIM, DMARC checks. Ensure DNS security records are properly configured worldwide.</p>
+                <h3 className="font-semibold text-gray-900 mb-3">For Email & Deliverability Teams</h3>
+                <ul className="text-sm text-gray-600 space-y-2">
+                  <li>• Validate SPF, DKIM, and DMARC records</li>
+                  <li>• Diagnose "emails going to spam" issues</li>
+                  <li>• Monitor MX record changes</li>
+                </ul>
               </div>
             </div>
           </div>
@@ -526,6 +603,84 @@ export default function Home() {
         {/* DNS Tools Section */}
         <DnsToolsGrid />
 
+        {/* Recent Guides Section */}
+        <section className="bg-gray-50 py-12">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-10">
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">DNS Guides & Troubleshooting</h2>
+              <p className="text-gray-600">Learn DNS best practices and solve common issues</p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <Link href="/blog/dns-propagation-explained" data-testid="link-guide-propagation">
+                <Card className="h-full hover:shadow-md transition-shadow cursor-pointer">
+                  <CardContent className="p-5">
+                    <BookOpen className="h-5 w-5 text-blue-600 mb-3" />
+                    <h3 className="font-semibold text-gray-900 mb-2 text-sm">DNS Propagation: How It Actually Works</h3>
+                    <p className="text-xs text-gray-600">Understanding DNS caching and global propagation</p>
+                  </CardContent>
+                </Card>
+              </Link>
+              <Link href="/blog/cloudflare-vs-route53" data-testid="link-guide-cloudflare">
+                <Card className="h-full hover:shadow-md transition-shadow cursor-pointer">
+                  <CardContent className="p-5">
+                    <BookOpen className="h-5 w-5 text-blue-600 mb-3" />
+                    <h3 className="font-semibold text-gray-900 mb-2 text-sm">Cloudflare vs Route 53: Complete Comparison</h3>
+                    <p className="text-xs text-gray-600">Which DNS provider is right for you?</p>
+                  </CardContent>
+                </Card>
+              </Link>
+              <Link href="/blog/spf-dkim-dmarc-guide" data-testid="link-guide-email">
+                <Card className="h-full hover:shadow-md transition-shadow cursor-pointer">
+                  <CardContent className="p-5">
+                    <BookOpen className="h-5 w-5 text-blue-600 mb-3" />
+                    <h3 className="font-semibold text-gray-900 mb-2 text-sm">SPF, DKIM, and DMARC Explained</h3>
+                    <p className="text-xs text-gray-600">Stop your emails from going to spam</p>
+                  </CardContent>
+                </Card>
+              </Link>
+              <Link href="/blog/common-dns-misconfigurations" data-testid="link-guide-misconfigs">
+                <Card className="h-full hover:shadow-md transition-shadow cursor-pointer">
+                  <CardContent className="p-5">
+                    <BookOpen className="h-5 w-5 text-blue-600 mb-3" />
+                    <h3 className="font-semibold text-gray-900 mb-2 text-sm">10 Common DNS Misconfigurations</h3>
+                    <p className="text-xs text-gray-600">Identify and fix DNS issues before they cause outages</p>
+                  </CardContent>
+                </Card>
+              </Link>
+            </div>
+            <div className="text-center mt-8">
+              <Link href="/blog" data-testid="link-view-all-guides">
+                <Button variant="outline" className="inline-flex items-center">
+                  View All Guides
+                  <ArrowRight className="h-4 w-4 ml-2" />
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </section>
+
+        {/* Final CTA Section */}
+        {!isAuthenticated && (
+          <section className="bg-gradient-to-r from-slate-900 to-blue-900 py-16">
+            <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+              <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">Start Monitoring Your DNS Today</h2>
+              <p className="text-blue-200 mb-8 max-w-xl mx-auto">
+                Create a free account to save domains, track changes, and get alerts when something breaks.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Link href="/signin?tab=signup">
+                  <Button size="lg" className="bg-white text-blue-900 hover:bg-blue-50 w-full sm:w-auto" data-testid="button-signup-final-cta">
+                    Sign Up Free
+                  </Button>
+                </Link>
+                <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10 w-full sm:w-auto" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} data-testid="button-check-dns-cta">
+                  Check DNS Now
+                </Button>
+              </div>
+            </div>
+          </section>
+        )}
+
         {/* SEO Content Sections */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 bg-white">
           <div className="prose prose-blue max-w-none">
@@ -661,28 +816,21 @@ export default function Home() {
         </section>
 
         {/* Footer */}
-        <footer className="bg-gray-800 text-white">
+        <footer className="bg-gray-900 text-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-              {/* Brand */}
-              <div className="md:col-span-2">
-                <div className="flex items-center mb-4">
-                  <Lock className="h-8 w-8 text-blue-500 mr-2" />
-                  <h3 className="text-xl font-bold">ReviewMyDNS</h3>
-                </div>
-                <p className="text-gray-300 mb-4 max-w-md">
-                  Professional DNS propagation checking and analysis tools used by developers and system administrators worldwide.
-                </p>
-              </div>
-              
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
               {/* Tools */}
               <div>
-                <h4 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">DNS Tools</h4>
+                <h4 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">Tools</h4>
                 <ul className="space-y-2">
-                  <li><Link href="/" className="text-gray-300 hover:text-white text-sm">DNS Checker</Link></li>
-                  <li><Link href="/tools" className="text-gray-300 hover:text-white text-sm">All Tools</Link></li>
-                  <li><Link href="/bulk-lookup" className="text-gray-300 hover:text-white text-sm">Bulk Lookup</Link></li>
-                  <li><Link href="/tools" className="text-gray-300 hover:text-white text-sm">Historical Tracking</Link></li>
+                  <li><Link href="/" className="text-gray-400 hover:text-white text-sm" data-testid="link-footer-checker">Propagation Checker</Link></li>
+                  <li><Link href="/bulk-lookup" className="text-gray-400 hover:text-white text-sm" data-testid="link-footer-bulk">Bulk Lookup</Link></li>
+                  <li><Link href="/tools" className="text-gray-400 hover:text-white text-sm" data-testid="link-footer-compare">Compare</Link></li>
+                  <li><Link href="/history" className="text-gray-400 hover:text-white text-sm" data-testid="link-footer-history">History</Link></li>
+                  <li><Link href="/tools" className="text-gray-400 hover:text-white text-sm" data-testid="link-footer-monitor">Monitor</Link></li>
+                  <li><Link href="/tools" className="text-gray-400 hover:text-white text-sm" data-testid="link-footer-security">Security</Link></li>
+                  <li><Link href="/analytics" className="text-gray-400 hover:text-white text-sm" data-testid="link-footer-analytics">Analytics</Link></li>
+                  <li><Link href="/api-docs" className="text-gray-400 hover:text-white text-sm" data-testid="link-footer-api">API</Link></li>
                 </ul>
               </div>
               
@@ -690,24 +838,45 @@ export default function Home() {
               <div>
                 <h4 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">Resources</h4>
                 <ul className="space-y-2">
-                  <li><Link href="/documentation" className="text-gray-300 hover:text-white text-sm">Documentation</Link></li>
-                  <li><Link href="/api-docs" className="text-gray-300 hover:text-white text-sm">API Reference</Link></li>
-                  <li><Link href="/documentation" className="text-gray-300 hover:text-white text-sm">DNS Guide</Link></li>
-                  <li><Link href="/tools" className="text-gray-300 hover:text-white text-sm">Status Page</Link></li>
+                  <li><Link href="/guides" className="text-gray-400 hover:text-white text-sm" data-testid="link-footer-guides">Guides</Link></li>
+                  <li><Link href="/blog" className="text-gray-400 hover:text-white text-sm" data-testid="link-footer-blog">Blog</Link></li>
+                  <li><Link href="/documentation" className="text-gray-400 hover:text-white text-sm" data-testid="link-footer-faq">FAQ</Link></li>
+                  <li><Link href="/api-docs" className="text-gray-400 hover:text-white text-sm" data-testid="link-footer-apidocs">API Docs</Link></li>
                 </ul>
+              </div>
+              
+              {/* Company */}
+              <div>
+                <h4 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">Company</h4>
+                <ul className="space-y-2">
+                  <li><Link href="/about" className="text-gray-400 hover:text-white text-sm" data-testid="link-footer-about">About</Link></li>
+                  <li><a href="mailto:info@reviewmydns.com" className="text-gray-400 hover:text-white text-sm" data-testid="link-footer-contact">Contact</a></li>
+                  <li><Link href="/privacy" className="text-gray-400 hover:text-white text-sm" data-testid="link-footer-privacy">Privacy</Link></li>
+                  <li><Link href="/terms" className="text-gray-400 hover:text-white text-sm" data-testid="link-footer-terms">Terms</Link></li>
+                </ul>
+              </div>
+              
+              {/* Brand */}
+              <div>
+                <div className="flex items-center mb-4">
+                  <Logo size="sm" className="mr-2" />
+                  <h3 className="text-lg font-bold">ReviewMyDNS</h3>
+                </div>
+                <p className="text-gray-400 text-sm mb-4">
+                  Global DNS propagation checker and health monitor for professionals.
+                </p>
               </div>
             </div>
             
             <Separator className="my-8 bg-gray-700" />
             
             <div className="flex flex-col md:flex-row justify-between items-center">
-              <div className="text-gray-300 text-sm">
+              <div className="text-gray-400 text-sm">
                 © 2025 ReviewMyDNS. All rights reserved.
               </div>
               <div className="flex space-x-6 mt-4 md:mt-0">
-                <Link href="/documentation" className="text-gray-300 hover:text-white text-sm">Privacy Policy</Link>
-                <Link href="/documentation" className="text-gray-300 hover:text-white text-sm">Terms of Service</Link>
-                <a href="mailto:info@reviewmydns.com" className="text-gray-300 hover:text-white text-sm">Contact</a>
+                <Link href="/privacy" className="text-gray-400 hover:text-white text-sm" data-testid="link-footer-privacy-bottom">Privacy Policy</Link>
+                <Link href="/terms" className="text-gray-400 hover:text-white text-sm" data-testid="link-footer-terms-bottom">Terms of Service</Link>
               </div>
             </div>
           </div>

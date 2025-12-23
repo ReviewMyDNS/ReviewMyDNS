@@ -7,6 +7,7 @@ const tools = [
   {
     title: "Bulk DNS Lookup",
     description: "Check multiple domains at once with comprehensive reporting",
+    benefit: "Perfect for migrations and audits",
     icon: List,
     color: "text-blue-600",
     path: "/bulk-lookup",
@@ -15,6 +16,7 @@ const tools = [
   {
     title: "DNS Comparison",
     description: "Compare DNS records between different providers",
+    benefit: "Validate before and after switching DNS hosts",
     icon: GitCompare,
     color: "text-green-600",
     path: "/compare",
@@ -23,6 +25,7 @@ const tools = [
   {
     title: "Historical Tracking",
     description: "Monitor DNS changes over time with detailed logs",
+    benefit: "Catch unauthorized changes and debug outages",
     icon: History,
     color: "text-purple-600",
     path: "/history",
@@ -31,6 +34,7 @@ const tools = [
   {
     title: "Developer API",
     description: "Integrate DNS checking into your applications",
+    benefit: "Automate monitoring and alerting",
     icon: Code,
     color: "text-orange-600",
     path: "/api-docs",
@@ -39,6 +43,7 @@ const tools = [
   {
     title: "Performance Monitor",
     description: "Real-time DNS response time monitoring",
+    benefit: "Identify slow resolvers affecting your users",
     icon: Zap,
     color: "text-yellow-600",
     path: "/monitor",
@@ -47,6 +52,7 @@ const tools = [
   {
     title: "Global Coverage",
     description: "Check DNS from 50+ servers worldwide",
+    benefit: "See exactly what your users see, everywhere",
     icon: Globe,
     color: "text-indigo-600",
     path: "/",
@@ -54,7 +60,8 @@ const tools = [
   },
   {
     title: "Security Check",
-    description: "Validate DNS security configurations",
+    description: "Validate DNS security configurations (DNSSEC, SPF, DMARC, CAA)",
+    benefit: "Prevent email spoofing and SSL issues",
     icon: Shield,
     color: "text-red-600",
     path: "/security",
@@ -63,6 +70,7 @@ const tools = [
   {
     title: "DNS Analytics",
     description: "Comprehensive DNS performance analytics",
+    benefit: "Understand trends and optimize configurations",
     icon: Database,
     color: "text-teal-600",
     path: "/analytics",
@@ -75,9 +83,9 @@ export function DnsToolsGrid() {
     <section className="bg-white border-t border-gray-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="text-center mb-12">
-          <h3 className="text-2xl font-bold text-gray-900 mb-4">Additional DNS Tools</h3>
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">Complete DNS Toolkit for Professionals</h2>
           <p className="text-gray-600 max-w-2xl mx-auto">
-            Comprehensive suite of DNS analysis and troubleshooting tools for developers and system administrators
+            Everything you need to manage, monitor, and troubleshoot DNS
           </p>
         </div>
         
@@ -95,7 +103,8 @@ export function DnsToolsGrid() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-sm text-gray-600 mb-4">{tool.description}</p>
+                  <p className="text-sm text-gray-600 mb-2">{tool.description}</p>
+                  <p className="text-xs text-gray-500 italic mb-4">{tool.benefit}</p>
                   {tool.active ? (
                     <Link href={tool.path}>
                       <Button variant="ghost" size="sm" className="text-blue-600 hover:text-blue-800 p-0 h-auto font-medium w-full text-left">

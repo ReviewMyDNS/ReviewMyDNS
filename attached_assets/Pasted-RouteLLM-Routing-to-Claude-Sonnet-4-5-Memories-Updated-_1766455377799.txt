@@ -1,0 +1,117 @@
+RouteLLM
+Routing to Claude Sonnet 4.5
+Memories Updated
+Perfect. Here's everything you need to execute the next phase.
+
+1. Revised Homepage Structure
+Section-by-section layout with copy blocks
+Hero Section (above the fold)
+H1:
+Global DNS Propagation Checker & Health Monitor
+
+Subheading:
+Check DNS records and propagation status across 50+ worldwide servers. Monitor changes, compare providers, and troubleshoot issues—all in one place.
+
+For whom (small tag line):
+Trusted by DevOps teams, MSPs, and agencies managing production domains.
+
+CTA:
+[Primary input form: Domain + Record Type + Check DNS button]
+
+Secondary CTA (small link below):
+→ Create free account to save domains & track history
+
+Why ReviewMyDNS (trust/differentiation strip)
+3-column icon blocks:
+
+Real-Time Global Coverage	Historical Tracking	Smart Alerts
+Check DNS from 50+ locations worldwide in seconds	See DNS changes over time with detailed logs	Get notified when records drift or SSL expires
+How It Works (3-step visual)
+H2: How to Use ReviewMyDNS
+
+Enter your domain
+Type your domain or hostname and select the record type (A, AAAA, CNAME, MX, TXT, etc.).
+Check propagation instantly
+We query 50+ DNS servers worldwide and show you real-time results with status indicators.
+Save & monitor (optional)
+Create a free account to save domains, view change history, and get weekly health reports.
+[Visual: simple 3-panel diagram or screenshot]
+
+Additional DNS Tools (current section, keep but refine)
+H2: Complete DNS Toolkit for Professionals
+
+Keep the current 8-tool grid, but add one-line benefit descriptions:
+
+Bulk DNS Lookup – Check multiple domains at once with comprehensive reporting
+Perfect for migrations and audits
+DNS Comparison – Compare DNS records between different providers
+Validate before and after switching DNS hosts
+Historical Tracking – Monitor DNS changes over time with detailed logs
+Catch unauthorized changes and debug outages
+Developer API – Integrate DNS checking into your applications
+Automate monitoring and alerting
+Performance Monitor – Real-time DNS response time monitoring
+Identify slow resolvers affecting your users
+Security Check – Validate DNS security configurations (DNSSEC, SPF, DMARC, CAA)
+Prevent email spoofing and SSL issues
+DNS Analytics – Comprehensive DNS performance analytics
+Understand trends and optimize configurations
+Global Coverage – Check DNS from 50+ servers worldwide
+See exactly what your users see, everywhere
+Use Cases (new section)
+H2: Built for Real-World DNS Challenges
+
+3-column cards:
+
+For DevOps & SRE Teams
+
+Verify DNS changes before and after deployments
+Monitor production domains for drift
+Troubleshoot propagation delays across regions
+For Agencies & MSPs
+
+Manage DNS health for dozens of client domains
+Bulk check records during migrations
+Generate reports for clients
+For Email & Deliverability Teams
+
+Validate SPF, DKIM, and DMARC records
+Diagnose "emails going to spam" issues
+Monitor MX record changes
+Recent Guides (new section – links to blog/guides)
+H2: DNS Guides & Troubleshooting
+
+4 featured article cards (once you publish them):
+
+DNS Propagation: How It Actually Works (and How to Check Properly)
+Checklist: Moving DNS Providers Without Downtime
+Diagnosing Email Delivery Problems with SPF, DKIM, and DMARC
+Common DNS Misconfigurations and How to Detect Them
+[View All Guides →]
+
+Social Proof / Stats (optional, if you have data)
+H2: Trusted by Teams Worldwide
+
+X million DNS checks performed
+50+ global server locations
+X,XXX domains monitored
+(If you don't have big numbers yet, skip this section for now and add later.)
+
+Final CTA
+H2: Start Monitoring Your DNS Today
+
+Copy:
+Create a free account to save domains, track changes, and get alerts when something breaks.
+
+[Sign Up Free] [or Check DNS Now →]
+
+Footer
+Tools: Propagation Checker | Bulk Lookup | Compare | History | Monitor | Security | Analytics | API
+Resources: Guides | Blog | FAQ | API Docs
+Company: About | Contact | Privacy | Terms
+Social: Twitter/X | GitHub (if you have one)
+Design notes
+Keep it clean and fast-loading (you're on Replit, so watch performance).
+Use icons for the tool grid and use cases.
+Add a sticky header with "Check DNS" CTA.
+Make the main input form prominent and easy to use on mobile.
