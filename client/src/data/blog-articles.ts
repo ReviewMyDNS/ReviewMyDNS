@@ -2412,7 +2412,7 @@ DNS history is your debugging superpower. When something breaks, history tells y
     category: "DNS Basics",
     readTime: "10 min read",
     heroImage: "/blog/dns-basics.svg",
-    content: \`
+    content: `
 ## Introduction
 
 DNS records are the instructions that tell the internet how to find your website, where to send your email, and how to verify your domain. But if you've ever looked at raw DNS output, it can seem like a foreign language.
@@ -2430,15 +2430,15 @@ By the end, you'll be able to look at any DNS lookup result and understand exact
 
 Every DNS record has the same basic structure:
 
-\\\`\\\`\\\`
+\`\`\`
 name    TTL    class    type    value
-\\\`\\\`\\\`
+\`\`\`
 
 **Example:**
 
-\\\`\\\`\\\`
+\`\`\`
 example.com.    300    IN    A    93.184.216.34
-\\\`\\\`\\\`
+\`\`\`
 
 **Breaking it down:**
 
@@ -2458,9 +2458,9 @@ The trailing dot after the domain name indicates it's a fully qualified domain n
 
 **Example:**
 
-\\\`\\\`\\\`
+\`\`\`
 example.com.    300    IN    A    93.184.216.34
-\\\`\\\`\\\`
+\`\`\`
 
 **What it means:**
 - When someone requests example.com, DNS returns this IP address.
@@ -2481,9 +2481,9 @@ example.com.    300    IN    A    93.184.216.34
 
 **Example:**
 
-\\\`\\\`\\\`
+\`\`\`
 example.com.    300    IN    AAAA    2606:2800:220:1:248:1893:25c8:1946
-\\\`\\\`\\\`
+\`\`\`
 
 **What it means:**
 - Same as an A record, but for the newer IPv6 protocol.
@@ -2499,9 +2499,9 @@ example.com.    300    IN    AAAA    2606:2800:220:1:248:1893:25c8:1946
 
 **Example:**
 
-\\\`\\\`\\\`
+\`\`\`
 www.example.com.    300    IN    CNAME    example.com.
-\\\`\\\`\\\`
+\`\`\`
 
 **What it means:**
 - "www.example.com is an alias for example.com"
@@ -2527,10 +2527,10 @@ www.example.com.    300    IN    CNAME    example.com.
 
 **Example:**
 
-\\\`\\\`\\\`
+\`\`\`
 example.com.    3600    IN    MX    10 mail.example.com.
 example.com.    3600    IN    MX    20 backup-mail.example.com.
-\\\`\\\`\\\`
+\`\`\`
 
 **What it means:**
 - Email for example.com should be sent to mail.example.com.
@@ -2552,39 +2552,39 @@ example.com.    3600    IN    MX    20 backup-mail.example.com.
 
 **Example:**
 
-\\\`\\\`\\\`
+\`\`\`
 example.com.    300    IN    TXT    "v=spf1 include:_spf.google.com ~all"
-\\\`\\\`\\\`
+\`\`\`
 
 **Common uses:**
 
 ### SPF (Sender Policy Framework)
 Tells receiving mail servers which IPs are allowed to send email for your domain.
 
-\\\`\\\`\\\`
+\`\`\`
 "v=spf1 include:_spf.google.com include:sendgrid.net ~all"
-\\\`\\\`\\\`
+\`\`\`
 
 ### DKIM (DomainKeys Identified Mail)
 Published at a specific selector subdomain (e.g., selector1._domainkey.example.com).
 
-\\\`\\\`\\\`
+\`\`\`
 "v=DKIM1; k=rsa; p=MIGfMA0G..."
-\\\`\\\`\\\`
+\`\`\`
 
 ### DMARC (Domain-based Message Authentication)
 Published at _dmarc.example.com. Tells receivers how to handle failed SPF/DKIM.
 
-\\\`\\\`\\\`
+\`\`\`
 "v=DMARC1; p=quarantine; rua=mailto:reports@example.com"
-\\\`\\\`\\\`
+\`\`\`
 
 ### Domain verification
 Services like Google, Microsoft, Mailchimp ask you to add TXT records to prove you own the domain.
 
-\\\`\\\`\\\`
+\`\`\`
 "google-site-verification=abc123xyz..."
-\\\`\\\`\\\`
+\`\`\`
 
 **What to check:**
 - Is the SPF record valid? (Use our [Security Check](/security) to validate)
@@ -2598,10 +2598,10 @@ Services like Google, Microsoft, Mailchimp ask you to add TXT records to prove y
 
 **Example:**
 
-\\\`\\\`\\\`
+\`\`\`
 example.com.    86400    IN    NS    ns1.dnsprovider.com.
 example.com.    86400    IN    NS    ns2.dnsprovider.com.
-\\\`\\\`\\\`
+\`\`\`
 
 **What it means:**
 - "For example.com, ask ns1.dnsprovider.com or ns2.dnsprovider.com for answers."
@@ -2618,14 +2618,14 @@ example.com.    86400    IN    NS    ns2.dnsprovider.com.
 
 **Example:**
 
-\\\`\\\`\\\`
+\`\`\`
 example.com.    86400    IN    SOA    ns1.dnsprovider.com. admin.example.com. (
                               2024122301 ; Serial
                               7200       ; Refresh
                               3600       ; Retry
                               1209600    ; Expire
                               86400 )    ; Minimum TTL
-\\\`\\\`\\\`
+\`\`\`
 
 **What it means:**
 
@@ -2649,16 +2649,16 @@ example.com.    86400    IN    SOA    ns1.dnsprovider.com. admin.example.com. (
 
 **Example:**
 
-\\\`\\\`\\\`
+\`\`\`
 example.com.    300    IN    CAA    0 issue "letsencrypt.org"
 example.com.    300    IN    CAA    0 issuewild "letsencrypt.org"
 example.com.    300    IN    CAA    0 iodef "mailto:security@example.com"
-\\\`\\\`\\\`
+\`\`\`
 
 **What it means:**
 - Only Let's Encrypt can issue certificates for this domain.
-- \\\`issue\\\` controls regular certs, \\\`issuewild\\\` controls wildcard certs.
-- \\\`iodef\\\` specifies where to send violation reports.
+- \`issue\` controls regular certs, \`issuewild\` controls wildcard certs.
+- \`iodef\` specifies where to send violation reports.
 
 **Do you need it?**
 - CAA is optional but recommended for security.
@@ -2674,9 +2674,9 @@ example.com.    300    IN    CAA    0 iodef "mailto:security@example.com"
 
 **Example:**
 
-\\\`\\\`\\\`
+\`\`\`
 34.216.184.93.in-addr.arpa.    86400    IN    PTR    example.com.
-\\\`\\\`\\\`
+\`\`\`
 
 **What it means:**
 - "The IP 93.184.216.34 belongs to example.com."
@@ -2696,14 +2696,14 @@ example.com.    300    IN    CAA    0 iodef "mailto:security@example.com"
 
 **Example:**
 
-\\\`\\\`\\\`
+\`\`\`
 _sip._tcp.example.com.    300    IN    SRV    10 5 5060 sipserver.example.com.
-\\\`\\\`\\\`
+\`\`\`
 
 **Format breakdown:**
-\\\`\\\`\\\`
+\`\`\`
 _service._protocol.domain.    TTL    IN    SRV    priority weight port target
-\\\`\\\`\\\`
+\`\`\`
 
 **Common uses:**
 - VoIP/SIP services
@@ -2742,29 +2742,29 @@ When you [run a DNS lookup](/), here's what to check:
 ## Common Patterns You'll See
 
 ### Website hosting
-\\\`\\\`\\\`
+\`\`\`
 example.com.        A      93.184.216.34
 www.example.com.    CNAME  example.com.
-\\\`\\\`\\\`
+\`\`\`
 
 ### Email with Google Workspace
-\\\`\\\`\\\`
+\`\`\`
 example.com.    MX    1 aspmx.l.google.com.
 example.com.    MX    5 alt1.aspmx.l.google.com.
 example.com.    TXT   "v=spf1 include:_spf.google.com ~all"
-\\\`\\\`\\\`
+\`\`\`
 
 ### CDN setup (Cloudflare, etc.)
-\\\`\\\`\\\`
+\`\`\`
 example.com.        A      104.21.45.67        (Cloudflare IP)
 example.com.        AAAA   2606:4700:3030::...  (Cloudflare IPv6)
-\\\`\\\`\\\`
+\`\`\`
 
 ### Subdomain delegation
-\\\`\\\`\\\`
+\`\`\`
 blog.example.com.    NS    ns1.blogprovider.com.
 blog.example.com.    NS    ns2.blogprovider.com.
-\\\`\\\`\\\`
+\`\`\`
 
 ## Summary
 
@@ -2798,7 +2798,7 @@ Now that you know how to read DNS records, you can confidently interpret any loo
 - [DNS Propagation: How It Actually Works](/blog/dns-propagation-explained) — Understand TTLs and caching
 - [SPF, DKIM, and DMARC Complete Guide](/blog/spf-dkim-dmarc-guide) — Deep dive into email authentication
 - [15 Common DNS Misconfigurations](/blog/common-dns-misconfigurations) — Know what errors to watch for
-    \`
+    `
   }
 ];
 
