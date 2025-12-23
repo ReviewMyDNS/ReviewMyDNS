@@ -10,7 +10,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { Globe, User, Menu, Lock, BarChart3, Zap, Share2, Copy, Check, RefreshCw, LogOut } from "lucide-react";
+import { Globe, User, Menu, Lock, BarChart3, Zap, Share2, Copy, Check, RefreshCw, LogOut, Clock, Shield, History, Bell, Users, Server } from "lucide-react";
 import { Link } from "wouter";
 import type { DnsLookupWithResults } from "@shared/schema";
 import { useToast } from "@/hooks/use-toast";
@@ -184,9 +184,15 @@ export default function Home() {
               <p className="text-blue-100 text-base md:text-xl mb-2">
                 Check DNS records instantly across 50+ global servers
               </p>
-              <p className="text-blue-200 text-sm md:text-base">
-                Monitor DNS propagation, verify nameserver changes, and troubleshoot DNS issues in real-time
+              <p className="text-blue-200 text-sm md:text-base mb-4">
+                Trusted by DevOps teams, MSPs, and agencies managing production workloads
               </p>
+              <div className="flex flex-wrap justify-center gap-2 text-xs text-blue-200">
+                <span className="bg-white/10 px-3 py-1 rounded-full">DNS Migration</span>
+                <span className="bg-white/10 px-3 py-1 rounded-full">Email Deliverability</span>
+                <span className="bg-white/10 px-3 py-1 rounded-full">Uptime Monitoring</span>
+                <span className="bg-white/10 px-3 py-1 rounded-full">Change Detection</span>
+              </div>
             </div>
             
             <DnsLookupForm 
@@ -196,6 +202,89 @@ export default function Home() {
             />
           </div>
         </section>
+
+        {/* Who it's for Section */}
+        <section className="bg-white py-12 border-b border-gray-100">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-8">
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Built for DNS Professionals</h2>
+              <p className="text-gray-600">From quick lookups to enterprise monitoring</p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div className="text-center p-6 rounded-lg bg-gradient-to-br from-blue-50 to-indigo-50">
+                <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Server className="h-6 w-6 text-blue-600" />
+                </div>
+                <h3 className="font-semibold text-gray-900 mb-2">DevOps & SRE Teams</h3>
+                <p className="text-sm text-gray-600">Verify DNS changes before they affect production. Monitor propagation during migrations and catch issues before users do.</p>
+              </div>
+              <div className="text-center p-6 rounded-lg bg-gradient-to-br from-green-50 to-emerald-50">
+                <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Users className="h-6 w-6 text-green-600" />
+                </div>
+                <h3 className="font-semibold text-gray-900 mb-2">Agencies & MSPs</h3>
+                <p className="text-sm text-gray-600">Manage DNS for multiple client domains. Share results with stakeholders and track changes across your portfolio.</p>
+              </div>
+              <div className="text-center p-6 rounded-lg bg-gradient-to-br from-purple-50 to-violet-50">
+                <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Shield className="h-6 w-6 text-purple-600" />
+                </div>
+                <h3 className="font-semibold text-gray-900 mb-2">Email & Security Teams</h3>
+                <p className="text-sm text-gray-600">Debug email delivery with SPF, DKIM, DMARC checks. Ensure DNS security records are properly configured worldwide.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Why Sign Up Section */}
+        {!isAuthenticated && (
+          <section className="bg-gradient-to-r from-blue-600 to-indigo-600 py-12">
+            <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="text-center mb-8">
+                <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">Go Beyond One-Off Lookups</h2>
+                <p className="text-blue-100">Create a free account to unlock powerful features</p>
+              </div>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
+                <div className="text-center">
+                  <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-2">
+                    <Globe className="h-5 w-5 text-white" />
+                  </div>
+                  <p className="text-sm text-white font-medium">Save Domains</p>
+                  <p className="text-xs text-blue-200">Quick access to your domains</p>
+                </div>
+                <div className="text-center">
+                  <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-2">
+                    <History className="h-5 w-5 text-white" />
+                  </div>
+                  <p className="text-sm text-white font-medium">Lookup History</p>
+                  <p className="text-xs text-blue-200">30-day change tracking</p>
+                </div>
+                <div className="text-center">
+                  <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-2">
+                    <Bell className="h-5 w-5 text-white" />
+                  </div>
+                  <p className="text-sm text-white font-medium">DNS Alerts</p>
+                  <p className="text-xs text-blue-200">Get notified on changes</p>
+                </div>
+                <div className="text-center">
+                  <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-2">
+                    <BarChart3 className="h-5 w-5 text-white" />
+                  </div>
+                  <p className="text-sm text-white font-medium">Analytics</p>
+                  <p className="text-xs text-blue-200">Performance insights</p>
+                </div>
+              </div>
+              <div className="text-center">
+                <Link href="/signin?tab=signup">
+                  <Button size="lg" variant="secondary" className="bg-white text-blue-600 hover:bg-blue-50" data-testid="button-signup-cta">
+                    Create Free Account
+                  </Button>
+                </Link>
+                <p className="text-xs text-blue-200 mt-2">No credit card required</p>
+              </div>
+            </div>
+          </section>
+        )}
 
         {/* Usage Stats Section - Always Visible */}
         <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
