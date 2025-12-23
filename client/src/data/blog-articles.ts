@@ -12,6 +12,276 @@ export interface BlogArticle {
 
 export const blogArticles: BlogArticle[] = [
   {
+    slug: "dns-propagation-explained",
+    title: "DNS Propagation: How It Actually Works (and How to Check It Properly)",
+    description: "Learn what DNS propagation really is, how long it takes, why records seem 'stuck', and how to correctly check propagation from 50+ global locations using ReviewMyDNS.",
+    publishedDate: "2024-12-23",
+    author: "ReviewMyDNS Team",
+    category: "DNS Basics",
+    readTime: "12 min read",
+    heroImage: "/blog/dns-propagation.svg",
+    content: `
+## Introduction
+
+When you change a DNS record—like pointing your domain to a new server—you expect the change to "just work." In reality, it can take minutes to hours before users around the world see the new result. That delay is what people call DNS propagation.
+
+Unfortunately, DNS propagation is often misunderstood:
+
+- Some providers still say "wait 24–48 hours,"
+- Tools sometimes show mixed results,
+- And it's not obvious whether the issue is your DNS, caching, or something else.
+
+In this guide, we'll explain:
+
+- What DNS propagation actually is (and what it isn't),
+- How long it really takes,
+- Why different locations show different results,
+- And how to correctly check propagation using a global DNS checker like ReviewMyDNS.
+
+## What Is DNS Propagation?
+
+DNS (Domain Name System) is the internet's address book. When you change a record, you're updating the answer to questions like:
+
+- "What IP does example.com point to?"
+- "Which mail server handles email for example.com?"
+- "What's the SPF or DMARC policy for this domain?"
+
+**DNS propagation is the period of time where different DNS resolvers around the world still have old answers cached, and gradually start using the new ones.**
+
+Key points:
+
+- There is no single "DNS server" that updates instantly.
+- DNS is distributed and cached at many layers:
+  - Recursive resolvers (ISP, corporate, public DNS like 8.8.8.8),
+  - Browser cache,
+  - Operating system cache.
+- Until these caches expire, they can continue to return old records, even though your authoritative DNS servers have the new data.
+
+You're not "waiting for the change to upload" somewhere; you're waiting for caches to expire and refresh.
+
+## How Long Does DNS Propagation Take?
+
+The answer is: **it depends mostly on your TTLs and caching behavior.**
+
+### TTL: Time to Live
+
+Every DNS record has a TTL (Time to Live) in seconds. It tells resolvers how long they're allowed to cache an answer before asking again.
+
+Examples:
+
+| TTL Value | Cache Duration |
+|-----------|----------------|
+| 60 seconds | Up to 1 minute |
+| 300 seconds | Up to 5 minutes |
+| 3600 seconds | Up to 1 hour |
+| 86400 seconds | Up to 24 hours |
+
+If you change a record that previously had a TTL of 3600 seconds:
+
+- Any resolver that cached the old answer can keep serving it for up to an hour.
+- After that, when they re-query, they'll get the new answer.
+
+**In practice:**
+
+- Most changes start visible within minutes in many locations.
+- Some resolvers might hold onto old records for up to the old TTL, sometimes longer if they ignore TTLs.
+- That's why you often see "mixed" propagation—some places show new IPs, others still show old ones.
+
+### Factors That Affect Propagation Time
+
+1. **Previous TTL value**: If a record had TTL=86400 (24 hours), old answers can linger for a day.
+2. **Resolver behavior**: Some resolvers are conservative and may cache longer. Some public DNS services or corporate caches can be sticky.
+3. **Record type**: A, AAAA, CNAME, MX, TXT, NS—all have TTLs and can be cached.
+4. **User devices and browsers**: Local OS and browser caches can also keep old answers temporarily.
+
+The old blanket advice "DNS takes 24–48 hours" is often outdated. With sensible TTLs (e.g., 300–3600 seconds), you typically see full propagation in minutes to a few hours, not days.
+
+## Why Different Locations Show Different Results
+
+When you test DNS from multiple locations, you might see:
+
+- Some locations show the new IP/record,
+- Some still show the old IP/record,
+- Some show NXDOMAIN or errors during transitions.
+
+**Reasons:**
+
+### Different resolvers have different cache states
+- A resolver in Europe may have just refreshed the record.
+- A resolver in Asia may still have the old record cached.
+
+### Staggered queries
+- Not all resolvers ask for your record at the same moment.
+- They'll re-query whenever their local TTL expires, which can be slightly different across servers.
+
+### Nameserver changes vs. record changes
+- If you changed nameservers at your registrar, some resolvers may still query the old nameservers until the registrar glue records and delegations are fully updated and cached.
+
+### Misconfigurations
+Sometimes the issue isn't propagation at all:
+- Wrong record values,
+- Missing records,
+- Nameservers not responding,
+- DNSSEC issues.
+
+That's why checking from multiple vantage points globally is so important—you see where the old answers still live and whether there are real misconfigurations.
+
+## How to Correctly Check DNS Propagation
+
+You can check DNS propagation manually with dig or nslookup, but that gets tedious quickly. A global DNS propagation checker like ReviewMyDNS does the hard work for you.
+
+### Step 1: Enter your domain and record type
+
+1. Go to ReviewMyDNS.com.
+2. In the main form, enter your domain or hostname (e.g., example.com or www.example.com).
+3. Select the record type you want to check:
+   - A / AAAA (IP addresses),
+   - CNAME (aliases),
+   - MX (mail servers),
+   - TXT (SPF, DKIM, DMARC, verifications),
+   - NS, SOA, CAA, etc.
+
+### Step 2: Run a global check
+
+Click **Check DNS Propagation**.
+
+ReviewMyDNS will:
+
+- Query your chosen record type from 50+ DNS servers worldwide.
+- Display:
+  - Each location,
+  - The answer returned (e.g., IP address, MX host),
+  - Status indicators for consistency or errors.
+
+You can quickly see:
+
+- Which locations are returning the new value,
+- Which are still returning old values,
+- Any locations that return errors (NXDOMAIN, SERVFAIL, REFUSED).
+
+### Step 3: Interpret the results
+
+Some patterns you might see:
+
+**All locations show the same new record**
+→ Propagation is effectively complete.
+
+**Mix of old and new values**
+→ Propagation is in progress. Caches in some regions haven't expired yet.
+
+**Some locations show NXDOMAIN**
+→ Could be:
+- You just created the record and some resolvers haven't seen it yet, or
+- Misconfiguration (e.g., record missing at your authoritative DNS), or
+- Nameserver/delegation issues.
+
+**SERVFAIL or REFUSED errors**
+→ Often indicates:
+- Authoritative DNS not responding,
+- DNSSEC validation failures,
+- Misconfigured nameservers.
+
+If you see inconsistent or error responses, you're likely dealing with more than just propagation, and it's worth double-checking your DNS configuration.
+
+## Best Practices Before Changing DNS
+
+To make propagation smoother and safer:
+
+### 1. Lower TTL in advance
+
+If you know you'll be making a significant change (e.g., moving servers, changing MX records):
+
+- 24–48 hours before the change, lower the TTL on the relevant records to something like:
+  - 300 seconds (5 minutes), or
+  - 600 seconds (10 minutes).
+- Wait for that lower TTL to propagate (old caches clear).
+- Then make your record change.
+
+This way, if you need to correct something, the old/bad record won't linger for a full day.
+
+### 2. Verify record values before going live
+
+- Double-check IP addresses, hostnames, and syntax.
+- For MX, SPF, DKIM, and DMARC:
+  - Make sure hostnames are correct,
+  - SPF doesn't exceed 10 DNS lookups,
+  - DMARC policy and reporting addresses are valid.
+
+### 3. Use a test subdomain when possible
+
+If you're trying a new provider:
+
+- Use a test subdomain first (e.g., test.example.com) to validate DNS, SSL, or email routing before touching the main domain.
+
+## Common Problems Mistaken for "Slow Propagation"
+
+A lot of "DNS propagation issues" are actually misconfigurations. Examples:
+
+### Mis-typed records
+- Wrong IP (e.g., 1.2.3.4 vs 12.3.4.5)
+- Wrong hostname in CNAME or MX
+- Extra spaces or quotes in TXT records
+
+### Missing or incorrect NS records
+- Registrar still pointing at old nameservers
+- New nameservers not properly set up for your domain
+
+### DNSSEC issues
+- Incomplete or outdated DS records at the registrar
+- DNSSEC enabled on provider, but not correctly configured
+- Leads to SERVFAIL at validating resolvers
+
+### Cloudflare or proxy complications
+- Orange-cloud vs gray-cloud (proxied vs DNS-only)
+- SSL mode set to "Flexible" causing redirect loops or SSL issues
+- CNAME flattening behavior confusing propagation expectations
+
+If propagation seems "stuck" for more than a few hours and some locations show errors, you're likely dealing with configuration problems, not just caching.
+
+## How ReviewMyDNS Helps You Debug Faster
+
+With ReviewMyDNS, you can:
+
+### See global propagation at a glance
+Check from 50+ worldwide DNS servers in one click.
+
+### Compare old vs new providers
+Use the DNS Comparison tool to see differences between:
+- Old DNS host vs new DNS host,
+- Before/after migration.
+
+### Track DNS changes over time
+Use Historical Tracking to:
+- See when records changed,
+- Understand what might have triggered an outage,
+- Detect unauthorized modifications.
+
+### Validate security and email configuration
+Use the Security Check to validate:
+- SPF, DKIM, and DMARC records,
+- DNSSEC and CAA settings.
+
+This turns DNS propagation from a guessing game into a measurable, visible process.
+
+## Summary
+
+DNS propagation isn't magic, and it doesn't have to be a black box:
+
+- You're mostly waiting for cached answers to expire based on TTL.
+- With reasonable TTLs, you should see most changes propagate in minutes to a few hours, not days.
+- Mixed results across locations are normal during the transition.
+- Many "propagation issues" are actually configuration errors.
+
+By using a global DNS propagation checker like ReviewMyDNS, you can:
+
+- See exactly what resolvers around the world are returning,
+- Confirm when changes are truly live,
+- And quickly spot misconfigurations before they impact users.
+
+**Next step:** Check your DNS propagation now with ReviewMyDNS and see how your records look from 50+ global locations.
+    `
+  },
+  {
     slug: "dns-propagation-myths-debunked",
     title: "5 DNS Propagation Myths Debunked: What Really Happens When You Change DNS",
     description: "Separate fact from fiction about DNS propagation. Learn what really happens when you update DNS records and how to avoid common mistakes.",
