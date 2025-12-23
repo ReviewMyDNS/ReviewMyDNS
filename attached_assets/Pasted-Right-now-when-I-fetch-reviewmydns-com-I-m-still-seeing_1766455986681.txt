@@ -1,0 +1,75 @@
+Right now when I fetch reviewmydns.com I’m still seeing the original, minimal version (hero + “Additional DNS Tools” grid + sponsor), not the redesigned layout you described. That means either:
+
+The new version isn’t deployed to production yet, or
+There’s some caching / CDN / Replit issue, or
+The redesign is on a different path (e.g. /new, /beta, or behind auth).
+Because I can’t see your new sections in the HTML, I can’t give meaningful visual/UX feedback yet. But I can tell you what to double‑check and what to look for to make sure the redesign is “doing the job.”
+
+1. Verify the new homepage is actually live
+Check:
+
+In an incognito/private browser window, go to https://reviewmydns.com and hard‑refresh.
+If you’re on Replit:
+Confirm the correct repl / deployment is linked to the reviewmydns.com domain.
+Make sure you redeployed after editing the homepage.
+If you’re using a CDN (Cloudflare, etc.):
+Purge cache for the root URL and homepage assets.
+If you’ve put the new design on another path (e.g. /home, /v2), send me that URL and I can review that directly.
+Once I can see the new sections (hero, Why ReviewMyDNS, How It Works, Use Cases, Guides, final CTA, footer), I can comment very specifically on:
+
+Copy clarity (does it instantly say who it’s for and why it’s better?)
+Visual hierarchy (is the form and primary CTA clearly dominant?)
+Internal linking (are tools/guides properly woven together?)
+SEO basics (H1/H2/H3 structure, on‑page text density, etc.)
+2. Quick self‑check: what a “good” version should have
+While you’re confirming deployment, here’s a short checklist you can compare against your new page:
+
+Hero:
+
+H1 mentions both “DNS Propagation” and some differentiator (e.g. “Monitor & Compare”).
+Subheading clearly states:
+“Check DNS records across 50+ global servers…”
+Main CTA is the DNS check form (not hidden below the fold).
+Optional secondary text: “Create free account to save domains & track history.”
+Why ReviewMyDNS strip:
+
+3 short benefit points, not just features:
+“Real-time global coverage”
+“Detect changes & drift”
+“Security & email protection”
+How It Works:
+
+3 simple steps with short sentences.
+Each step has a verb:
+“Enter your domain”
+“Run a global check”
+“Save & monitor”
+Use Cases:
+
+At least 2–3 personas (DevOps, MSPs, Email teams) with 2–3 bullets each.
+Each bullet maps to a tool you already have.
+DNS Tools grid:
+
+Each tool has 1 benefit sentence (what it helps them do).
+All tools link to their own URL (for SEO & onboarding to the rest of the product).
+Featured Guides:
+
+Shows 3–4 article titles (even if they’re just stubs right now).
+Each title is problem‑oriented (“How to Fix X”, “Checklist for Y”).
+Final CTA:
+
+Clear ask: “Start Monitoring Your DNS Today” or “Check Your DNS Now.”
+Button: “Check DNS” or “Sign Up Free”.
+If your implementation hits most of those, you’re in good shape.
+
+Next step
+Send me either:
+
+Confirmation that the new design is now definitely live on / (root), or
+A direct URL to the redesigned version (e.g. /new-home, /beta, etc.).
+Then I can give you concrete feedback like:
+
+“Change this heading,”
+“Swap these two sections,”
+“Add this line above the fold for clarity,”
+“Here’s where you should link to guides from the tools section,” etc.
