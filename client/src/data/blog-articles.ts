@@ -798,165 +798,385 @@ Use tools like ReviewMyDNS throughout the process to monitor your propagation an
     `
   },
   {
-    slug: "debug-email-delivery-dns",
-    title: "DNS Troubleshooting for Email Delivery: MX, SPF, DKIM, and DMARC",
-    description: "Complete guide to debugging email delivery issues by checking and fixing DNS records for mail servers.",
-    publishedDate: "2024-12-05",
+    slug: "spf-dkim-dmarc-guide",
+    title: "SPF, DKIM, and DMARC: The Complete Email Authentication Guide",
+    description: "Master email authentication with this comprehensive guide to SPF, DKIM, and DMARC. Learn how to configure DNS records to stop spoofing, improve deliverability, and keep emails out of spam.",
+    publishedDate: "2024-12-23",
     author: "ReviewMyDNS Team",
     category: "Email",
-    readTime: "15 min read",
+    readTime: "18 min read",
     heroImage: "/blog/email-dns.svg",
     content: `
 ## Introduction
 
-If your emails are landing in spam folders—or not being delivered at all—the problem often lies in your DNS configuration. Email authentication relies on multiple DNS record types working together: MX, SPF, DKIM, and DMARC.
+If your emails are landing in spam—or not being delivered at all—the problem is almost always your DNS configuration.
 
-This guide will walk you through diagnosing and fixing common email DNS issues.
+Modern email relies on three authentication protocols working together:
 
-## Understanding Email DNS Records
+- **SPF** (Sender Policy Framework): Who is allowed to send email for your domain?
+- **DKIM** (DomainKeys Identified Mail): Is this email actually from your domain and unmodified?
+- **DMARC** (Domain-based Message Authentication): What should happen when authentication fails?
 
-### MX Records (Mail Exchange)
+When properly configured, these three records:
 
-MX records tell other mail servers where to deliver email for your domain. They include:
+- Prevent attackers from spoofing your domain,
+- Improve your email deliverability,
+- Give you visibility into who's sending email as you.
 
-- **Priority value**: Lower numbers = higher priority
-- **Mail server hostname**: The server that receives email
+This guide explains each protocol in detail, shows you how to configure them correctly, and helps you debug common problems.
 
-Example MX configuration:
-- Priority 10: mail1.example.com
-- Priority 20: mail2.example.com (backup)
+## Part 1: Understanding Email Authentication
 
-### SPF Records (Sender Policy Framework)
+### How Email Authentication Works
 
-SPF is a TXT record that specifies which IP addresses and servers are allowed to send email on behalf of your domain.
+When you send an email from your domain:
 
-Example SPF record:
-\`v=spf1 include:_spf.google.com include:amazonses.com -all\`
+1. Your mail server signs the message with DKIM.
+2. The receiving server checks SPF to see if your server is authorized.
+3. The receiving server verifies the DKIM signature.
+4. DMARC tells the receiver what to do if SPF or DKIM fails.
 
-### DKIM Records (DomainKeys Identified Mail)
+If all checks pass, your email is more likely to reach the inbox. If they fail, it may be marked as spam or rejected entirely.
 
-DKIM uses cryptographic signatures to verify that emails haven't been tampered with and actually came from your domain.
+### Why All Three Are Necessary
 
-DKIM records are TXT records with a specific selector prefix:
-\`selector1._domainkey.yourdomain.com\`
+| Protocol | What It Proves | Limitation |
+|----------|----------------|------------|
+| SPF | Sending IP is authorized | Breaks with forwarding |
+| DKIM | Message is authentic and unmodified | Doesn't cover envelope sender |
+| DMARC | Ties SPF/DKIM to your domain + policy | Requires both SPF and DKIM to work well |
 
-### DMARC Records (Domain-based Message Authentication)
+Each protocol has blind spots. Together, they form a robust authentication system.
 
-DMARC tells receiving servers what to do when SPF or DKIM checks fail, and where to send reports.
+## Part 2: SPF (Sender Policy Framework)
 
-Example DMARC record:
-\`v=DMARC1; p=quarantine; rua=mailto:dmarc-reports@example.com\`
+### What SPF Does
 
-## Common Email DNS Problems
+SPF lets you publish a list of IP addresses and servers that are authorized to send email for your domain. Receiving servers check this list to verify the sender.
 
-### Problem 1: Missing MX Records
+### SPF Record Format
 
-**Symptoms:**
-- No email delivery at all
-- Bounce messages saying "no MX record found"
+SPF is published as a TXT record at your root domain:
 
-**Solution:**
-1. Use ReviewMyDNS to check your MX records
-2. Add MX records pointing to your email provider
-3. Verify propagation across global DNS servers
+\`\`\`
+v=spf1 include:_spf.google.com include:amazonses.com ip4:192.0.2.1 -all
+\`\`\`
 
-### Problem 2: SPF "Too Many Lookups" Error
+**Components:**
 
-**Symptoms:**
-- SPF checks fail intermittently
-- Error message: "PermError: too many DNS lookups"
+- \`v=spf1\` — Required version tag
+- \`include:\` — Authorize another domain's SPF (counts as a DNS lookup)
+- \`ip4:\` / \`ip6:\` — Authorize specific IP addresses
+- \`a\` — Authorize IPs from your A record
+- \`mx\` — Authorize IPs from your MX record
+- \`-all\` — Fail everything else (hard fail)
+- \`~all\` — Soft fail (mark as suspicious but deliver)
+- \`?all\` — Neutral (no policy)
 
-**The cause:** SPF has a limit of 10 DNS lookups. Each \`include:\` counts as a lookup.
+### The 10 DNS Lookup Limit
 
-**Solution:**
-1. Audit your current SPF record
-2. Remove unnecessary includes
-3. Flatten nested includes where possible
-4. Consider using SPF flattening services
+**This is the most common SPF problem.**
 
-### Problem 3: DKIM Signature Verification Fails
+SPF allows a maximum of 10 DNS lookups. Each \`include:\`, \`a\`, \`mx\`, \`redirect\`, and \`exists\` mechanism counts as a lookup.
 
-**Symptoms:**
-- Emails fail DKIM authentication
-- "dkim=fail" in email headers
+If you exceed 10 lookups, SPF returns a **PermError** and fails.
 
-**Common causes:**
-- DKIM record not published in DNS
-- Selector mismatch between email and DNS
-- Record truncation (TXT record too long)
+**How to count lookups:**
 
-**Solution:**
-1. Verify the exact selector your email provider uses
-2. Check the DKIM record is published correctly
-3. For long records, split into multiple strings (DNS requirement)
+1. Each \`include:\` = 1 lookup
+2. Nested includes also count
+3. \`a\` and \`mx\` = 1 lookup each
+4. \`ip4:\` and \`ip6:\` = 0 lookups (no DNS needed)
 
-### Problem 4: DMARC Policy Not Applied
+**Example problem:**
 
-**Symptoms:**
-- No DMARC reports received
-- Emails not getting quarantined/rejected as expected
+\`\`\`
+v=spf1 include:_spf.google.com include:spf.protection.outlook.com include:amazonses.com include:sendgrid.net include:mailchimp.com include:freshdesk.com include:zendesk.com -all
+\`\`\`
 
-**Common causes:**
-- DMARC record not at correct location (_dmarc.yourdomain.com)
-- Syntax errors in the record
-- Missing or invalid reporting email
+This looks like 7 includes, but each include may have nested includes. You could easily exceed 10.
 
-**Solution:**
-1. Verify DMARC record is at _dmarc.yourdomain.com
-2. Check syntax using DMARC validators
-3. Start with p=none to receive reports without affecting delivery
+**Solutions:**
 
-## Step-by-Step Email DNS Audit
+1. Remove services you no longer use
+2. Replace \`include:\` with \`ip4:\` for static IPs
+3. Use SPF flattening tools (but update regularly)
+4. Split email sending across subdomains
 
-### Step 1: Check MX Records
+### Common SPF Mistakes
 
-Using ReviewMyDNS, query your MX records:
+| Mistake | Problem | Fix |
+|---------|---------|-----|
+| Multiple SPF records | Only one allowed; causes failure | Merge into single record |
+| Missing \`v=spf1\` | Record not recognized as SPF | Add version tag |
+| Using \`+all\` | Allows anyone to send as you | Use \`-all\` or \`~all\` |
+| Too many lookups | PermError, SPF fails | Reduce includes |
 
-1. Verify records point to correct mail servers
-2. Check priorities are correctly set (lower = higher priority)
-3. Ensure backup servers are configured
+## Part 3: DKIM (DomainKeys Identified Mail)
 
-### Step 2: Validate SPF Record
+### What DKIM Does
 
-Query your TXT records and look for the SPF entry:
+DKIM adds a cryptographic signature to your outgoing emails. Receiving servers use a public key (published in DNS) to verify the signature.
 
-1. Confirm it starts with "v=spf1"
-2. Verify all authorized senders are included
-3. Check the policy (-all, ~all, ?all)
-4. Count DNS lookups (maximum 10)
+This proves:
 
-### Step 3: Verify DKIM Records
+1. The email actually came from your domain
+2. The message wasn't modified in transit
 
-For each email sending service:
+### DKIM Record Format
 
-1. Get the DKIM selector from your email provider
-2. Query: selector._domainkey.yourdomain.com
-3. Verify the public key is present
-4. Test by sending an email and checking headers
+DKIM records are TXT records at a specific selector:
 
-### Step 4: Check DMARC Record
+\`\`\`
+selector._domainkey.yourdomain.com
+\`\`\`
 
-Query: _dmarc.yourdomain.com
+**Example record:**
 
-1. Verify it starts with "v=DMARC1"
-2. Check the policy (none, quarantine, reject)
-3. Verify reporting addresses are valid
-4. Consider alignment settings (strict vs relaxed)
+\`\`\`
+v=DKIM1; k=rsa; p=MIGfMA0GCSqGSIb3DQEBA...
+\`\`\`
 
-## Testing Your Email Configuration
+**Components:**
 
-After making changes:
+- \`v=DKIM1\` — Version tag
+- \`k=rsa\` — Key type (RSA is standard)
+- \`p=...\` — Public key (base64 encoded)
 
-1. **Send test emails** to Gmail, Outlook, Yahoo
-2. **Check email headers** for authentication results
-3. **Use email testing tools** like mail-tester.com
-4. **Monitor DMARC reports** for ongoing issues
+### Finding Your DKIM Selector
 
-## Conclusion
+Each email service uses a different selector:
 
-Email delivery problems are frustrating, but they're usually fixable with proper DNS configuration. The key is understanding how MX, SPF, DKIM, and DMARC work together to authenticate your emails.
+| Provider | Selector Example |
+|----------|------------------|
+| Google Workspace | \`google._domainkey\` |
+| Microsoft 365 | \`selector1._domainkey\`, \`selector2._domainkey\` |
+| SendGrid | \`s1._domainkey\`, \`s2._domainkey\` |
+| Mailchimp | \`k1._domainkey\` |
 
-Use ReviewMyDNS to regularly audit your email DNS records and catch problems before they affect delivery.
+Your email provider will give you the exact selector and public key to publish.
+
+### Common DKIM Problems
+
+**1. Selector mismatch**
+
+The selector in your email headers doesn't match the DNS record.
+
+**Fix:** Check the DKIM-Signature header in a sent email and verify that selector exists in DNS.
+
+**2. Record truncation**
+
+DKIM keys are long. Some DNS providers truncate TXT records over 255 characters.
+
+**Fix:** Split the record into multiple quoted strings:
+
+\`\`\`
+"v=DKIM1; k=rsa; p=MIGfMA0GCSqGSIb3DQEBA..." "...QAB"
+\`\`\`
+
+**3. Missing record entirely**
+
+**Fix:** Generate a new key pair in your email provider and publish the public key.
+
+### Verifying DKIM
+
+Use ReviewMyDNS to query:
+
+\`\`\`
+selector._domainkey.yourdomain.com (TXT record)
+\`\`\`
+
+You should see the public key. If you see NXDOMAIN, the record is missing.
+
+## Part 4: DMARC (Domain-based Message Authentication)
+
+### What DMARC Does
+
+DMARC ties SPF and DKIM together and tells receiving servers:
+
+1. **Policy**: What to do when authentication fails
+2. **Reporting**: Where to send aggregate and forensic reports
+3. **Alignment**: How strict to be about domain matching
+
+### DMARC Record Format
+
+DMARC is published as a TXT record at:
+
+\`\`\`
+_dmarc.yourdomain.com
+\`\`\`
+
+**Example record:**
+
+\`\`\`
+v=DMARC1; p=quarantine; rua=mailto:dmarc-reports@yourdomain.com; ruf=mailto:dmarc-forensic@yourdomain.com; pct=100; adkim=r; aspf=r
+\`\`\`
+
+**Components:**
+
+| Tag | Meaning | Values |
+|-----|---------|--------|
+| \`v\` | Version | Must be \`DMARC1\` |
+| \`p\` | Policy | \`none\`, \`quarantine\`, \`reject\` |
+| \`rua\` | Aggregate report address | \`mailto:...\` |
+| \`ruf\` | Forensic report address | \`mailto:...\` |
+| \`pct\` | Percentage of mail to apply policy | 0-100 |
+| \`adkim\` | DKIM alignment | \`r\` (relaxed), \`s\` (strict) |
+| \`aspf\` | SPF alignment | \`r\` (relaxed), \`s\` (strict) |
+
+### DMARC Policy Progression
+
+Don't jump straight to \`reject\`. Follow this progression:
+
+**Week 1-2: Monitor**
+\`\`\`
+v=DMARC1; p=none; rua=mailto:dmarc@yourdomain.com
+\`\`\`
+
+Collect reports without affecting delivery.
+
+**Week 3-4: Quarantine (partial)**
+\`\`\`
+v=DMARC1; p=quarantine; pct=25; rua=mailto:dmarc@yourdomain.com
+\`\`\`
+
+Send 25% of failing mail to spam.
+
+**Week 5-6: Quarantine (full)**
+\`\`\`
+v=DMARC1; p=quarantine; pct=100; rua=mailto:dmarc@yourdomain.com
+\`\`\`
+
+**Week 7+: Reject**
+\`\`\`
+v=DMARC1; p=reject; rua=mailto:dmarc@yourdomain.com
+\`\`\`
+
+Block all failing mail.
+
+### Understanding DMARC Reports
+
+DMARC aggregate reports (rua) show:
+
+- Which IPs are sending email as your domain
+- Whether SPF and DKIM passed or failed
+- Volume of messages
+
+Use a DMARC report analyzer to parse the XML files.
+
+## Part 5: Complete Configuration Walkthrough
+
+### Step 1: Inventory Your Email Senders
+
+Before configuring, list everyone who sends email as your domain:
+
+- Primary email (Google Workspace, Microsoft 365)
+- Marketing (Mailchimp, HubSpot)
+- Transactional (SendGrid, Amazon SES)
+- Support (Zendesk, Freshdesk)
+- Internal systems (servers, applications)
+
+### Step 2: Configure SPF
+
+Create your SPF record including all authorized senders:
+
+\`\`\`
+v=spf1 include:_spf.google.com include:sendgrid.net ip4:YOUR.SERVER.IP -all
+\`\`\`
+
+Verify with ReviewMyDNS that it's published correctly.
+
+### Step 3: Configure DKIM
+
+For each email service:
+
+1. Generate DKIM keys in the service's settings
+2. Publish the TXT record at the specified selector
+3. Enable DKIM signing in the service
+
+Verify each selector with ReviewMyDNS.
+
+### Step 4: Configure DMARC
+
+Start with monitoring mode:
+
+\`\`\`
+v=DMARC1; p=none; rua=mailto:dmarc@yourdomain.com
+\`\`\`
+
+Wait 1-2 weeks and review reports before tightening the policy.
+
+### Step 5: Test Everything
+
+1. Send test emails to Gmail, Outlook, Yahoo
+2. Check headers for SPF, DKIM, DMARC pass/fail
+3. Use mail-tester.com for a full audit
+4. Monitor DMARC reports for unexpected failures
+
+## Part 6: Debugging Common Problems
+
+### Emails Going to Spam
+
+**Check:**
+1. SPF: Is sending IP authorized?
+2. DKIM: Does signature verify?
+3. DMARC: Is alignment passing?
+
+Use ReviewMyDNS to verify all three records are correct.
+
+### "SPF PermError: Too Many Lookups"
+
+**Fix:**
+1. Count your includes (including nested)
+2. Remove unused services
+3. Replace includes with IP addresses where possible
+
+### "DKIM Signature Verification Failed"
+
+**Check:**
+1. Is the selector correct in DNS?
+2. Is the public key complete (not truncated)?
+3. Has the key been rotated recently?
+
+### "DMARC Fail" Despite SPF/DKIM Passing
+
+**Likely cause:** Alignment failure
+
+SPF domain or DKIM domain doesn't match the From: header domain.
+
+**Fix:** Use relaxed alignment (\`adkim=r; aspf=r\`) or ensure your sending services properly align domains.
+
+## How ReviewMyDNS Helps with Email Authentication
+
+With ReviewMyDNS, you can:
+
+### Check All Email Records at Once
+Query MX, TXT (SPF), DKIM selectors, and DMARC from 50+ global locations.
+
+### Validate Configuration
+- Verify SPF syntax and lookup count
+- Confirm DKIM public keys are published
+- Check DMARC policy and reporting addresses
+
+### Monitor for Changes
+Track when email records change—intentionally or not.
+
+### Troubleshoot Delivery Issues
+Compare what different resolvers see for your email records.
+
+## Summary
+
+Email authentication isn't optional anymore. Major email providers (Gmail, Microsoft, Yahoo) require proper SPF, DKIM, and DMARC for reliable delivery.
+
+**Key takeaways:**
+
+1. **SPF** authorizes sending IPs—watch the 10-lookup limit
+2. **DKIM** signs messages—publish keys for all senders
+3. **DMARC** ties them together—start with \`p=none\` and progress to \`reject\`
+
+Use ReviewMyDNS to verify your email DNS configuration and catch issues before they affect delivery.
+
+**Next step:** Run a security check with ReviewMyDNS to validate your SPF, DKIM, and DMARC records now.
     `
   },
   {
