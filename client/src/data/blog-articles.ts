@@ -1494,164 +1494,842 @@ Use ReviewMyDNS to compare DNS performance across providers and verify your conf
   },
   {
     slug: "common-dns-misconfigurations",
-    title: "10 Common DNS Misconfigurations and How to Detect Them",
-    description: "Learn to identify and fix the most common DNS configuration mistakes that cause downtime, email delivery failures, and security vulnerabilities.",
-    publishedDate: "2024-11-20",
+    title: "15 Common DNS Misconfigurations and How to Detect Them",
+    description: "Comprehensive guide to identifying and fixing the most common DNS configuration mistakes that cause downtime, email delivery failures, and security vulnerabilities.",
+    publishedDate: "2024-12-23",
     author: "ReviewMyDNS Team",
     category: "Troubleshooting",
-    readTime: "11 min read",
+    readTime: "16 min read",
     heroImage: "/blog/dns-misconfigurations.svg",
     content: `
 ## Introduction
 
-DNS misconfigurations are one of the leading causes of website outages and email delivery failures. Even experienced administrators make these mistakes. The good news? Most DNS issues follow predictable patterns and can be detected before they cause problems.
+DNS misconfigurations are one of the leading causes of website outages, email delivery failures, and security incidents.
+
+Even experienced administrators make these mistakes—often without realizing until something breaks.
+
+The good news? Most DNS issues follow predictable patterns. If you know what to look for, you can detect and fix them before they cause problems.
+
+This guide covers the 15 most common DNS misconfigurations, how to detect each one, and exactly how to fix them.
+
+## Overview: The Cost of DNS Misconfigurations
+
+Before we dive in, here's why this matters:
+
+| Misconfiguration | Impact |
+|------------------|--------|
+| Missing MX records | Complete email outage |
+| Broken SPF/DKIM | Emails marked as spam or rejected |
+| CNAME at root | Website doesn't load |
+| Dangling CNAME | Subdomain takeover (security risk) |
+| Wrong nameservers | Complete domain outage |
+| Missing CAA | Unauthorized SSL certificates |
+
+Let's go through each one.
 
 ## 1. Missing or Incorrect MX Records
 
-**The Problem:** Email doesn't reach your domain, or mail servers reject connections.
+**What happens:** Email doesn't reach your domain, or mail servers reject connections.
 
-**How to Detect:**
-1. Use ReviewMyDNS to query your MX records
-2. Verify each mail server hostname resolves to an IP
-3. Check that priorities are correctly ordered
+**How to detect:**
 
-**Fix:** Ensure MX records point to valid, resolvable hostnames with appropriate priority values.
+1. Query your MX records with ReviewMyDNS
+2. Check if any records exist
+3. Verify each mail server hostname actually resolves to an IP
 
-## 2. SPF Record Too Many Lookups
+**Common mistakes:**
 
-**The Problem:** Email authentication fails with "SPF PermError."
+- MX points to an IP address (wrong—it must point to a hostname)
+- MX hostname doesn't exist or has a typo
+- MX priorities are backwards (lower numbers = higher priority)
+- Using CNAME instead of A record for the mail server hostname
 
-SPF has a limit of 10 DNS lookups. Each include: counts as a lookup.
+**Example of correct MX setup:**
 
-**Fix:** Flatten your SPF record or use SPF flattening services.
+\`\`\`
+Priority 10: mail1.example.com
+Priority 20: mail2.example.com (backup)
+\`\`\`
 
-## 3. CNAME at the Root Domain
+**Fix:** Ensure MX records point to valid, resolvable hostnames with appropriate priority values. Verify each hostname has an A record.
 
-**The Problem:** DNS standards don't allow CNAME records at the root domain.
+## 2. SPF Record Exceeds 10 DNS Lookups
 
-**Fix:** Use A/AAAA records for the root domain, or use a DNS provider that supports ALIAS records.
+**What happens:** Email authentication fails with "SPF PermError." Receiving servers can't validate your email.
 
-## 4. Inconsistent DNS Across Nameservers
+**How to detect:**
 
-**The Problem:** Different users see different DNS results.
+1. Query your TXT records
+2. Count \`include:\`, \`a\`, \`mx\`, \`redirect\`, and \`exists\` mechanisms
+3. Remember: nested includes count too
 
-**How to Detect:** Use ReviewMyDNS to query your domain globally and compare results.
+**The 10-lookup limit:**
 
-**Fix:** Ensure all authoritative nameservers have identical zone files.
+Each of these counts as 1 lookup:
+- \`include:_spf.google.com\` (plus its nested includes)
+- \`a\` mechanism
+- \`mx\` mechanism
+- \`redirect\`
+- \`exists\`
 
-## 5. Dangling CNAME Records (Subdomain Takeover Risk)
+These do NOT count:
+- \`ip4:\` and \`ip6:\`
+- \`all\`
 
-**The Problem:** CNAME points to a hostname that no longer exists.
+**Example problem:**
 
-**Security Note:** Dangling CNAMEs can be exploited by attackers to take over your subdomain.
+\`\`\`
+v=spf1 include:_spf.google.com include:spf.protection.outlook.com include:amazonses.com include:sendgrid.net include:mailchimp.com include:freshdesk.com -all
+\`\`\`
 
-**Fix:** Audit your DNS records regularly and remove pointers to decommissioned services.
+This looks like 6 includes, but Google's SPF alone has 3-4 nested includes. You're probably over 10.
 
-## 6. Missing or Invalid DKIM Records
+**Fix:**
 
-**The Problem:** Emails fail DKIM authentication.
+1. Remove services you no longer use
+2. Replace \`include:\` with \`ip4:\` for services with static IPs
+3. Use SPF flattening (but update it regularly)
+4. Split email sending across subdomains
 
-**Fix:** Regenerate and republish DKIM records with the correct selector.
+## 3. Multiple SPF Records
 
-## 7. Excessively High TTL Values
+**What happens:** SPF fails because the RFC only allows one SPF record per domain.
 
-**The Problem:** DNS changes take too long to propagate.
+**How to detect:**
 
-**Fix:** Use 3600 seconds for most records, lower before planned changes.
+Query TXT records and look for multiple entries starting with \`v=spf1\`.
 
-## 8. Missing CAA Records
+**Common cause:**
 
-**The Problem:** Anyone can potentially obtain SSL certificates for your domain.
+Adding a new email service by creating a new SPF record instead of editing the existing one.
 
-**Fix:** Add CAA records specifying authorized certificate authorities.
+**Fix:** Merge all SPF mechanisms into a single record:
 
-## 9. Wrong NS Records at Registrar
+\`\`\`
+v=spf1 include:_spf.google.com include:sendgrid.net -all
+\`\`\`
 
-**The Problem:** Domain points to old or incorrect nameservers.
+## 4. CNAME at the Root Domain (Apex)
 
-**Fix:** Update nameserver records at your domain registrar.
+**What happens:** DNS standards (RFC 1034) don't allow CNAME records at the root domain. Your website may not load.
 
-## 10. Missing Reverse DNS (PTR) Records
+**Why this is a problem:**
 
-**The Problem:** Email servers reject your outgoing mail as spam.
+- \`example.com\` (root) cannot have a CNAME
+- \`www.example.com\` can have a CNAME
+- Many DNS providers silently ignore or break root CNAMEs
 
-**Fix:** Contact your hosting provider to configure PTR records.
+**How to detect:**
 
-## Conclusion
+Query your root domain and check if you have a CNAME. If so, that's the problem.
 
-DNS misconfigurations are common but preventable. Use ReviewMyDNS to audit your DNS regularly and catch problems before they impact your users.
+**Fix:**
+
+- Use A and AAAA records for the root domain
+- OR use a DNS provider that supports ALIAS/ANAME records (Cloudflare, Route 53, DNSimple)
+
+These providers synthesize the behavior you want without violating DNS standards.
+
+## 5. Inconsistent DNS Across Nameservers
+
+**What happens:** Different users see different DNS results. Some can access your site, others can't.
+
+**How to detect:**
+
+Use ReviewMyDNS to query your domain from 50+ global locations. Compare results—if they differ, you have a synchronization problem.
+
+**Common causes:**
+
+- Manual edits to individual nameservers without replicating
+- Zone transfer (AXFR) failures between primary and secondary nameservers
+- Recent changes that haven't propagated to all nameservers
+
+**Fix:**
+
+1. Identify which nameserver has incorrect data
+2. Force a zone transfer or manually update
+3. Consider using a managed DNS provider with automatic replication
+
+## 6. Dangling CNAME Records (Subdomain Takeover Risk)
+
+**What happens:** A CNAME points to a hostname that no longer exists. An attacker can register that hostname and take over your subdomain.
+
+**Security impact:** Critical. Attackers can:
+
+- Host malicious content on your subdomain
+- Steal cookies scoped to your domain
+- Conduct phishing attacks with your domain's reputation
+
+**How to detect:**
+
+1. List all CNAME records
+2. For each one, check if the target hostname resolves
+3. If you get NXDOMAIN, you have a dangling CNAME
+
+**Common scenarios:**
+
+- Decommissioned cloud services (S3 buckets, Azure apps, GitHub Pages)
+- Expired SaaS trial accounts
+- Removed CDN endpoints
+
+**Fix:**
+
+1. Delete the CNAME record immediately
+2. If you need the subdomain, update it to point to a valid target
+3. Audit CNAMEs regularly—at least quarterly
+
+## 7. Missing or Invalid DKIM Records
+
+**What happens:** Emails fail DKIM authentication. Receiving servers can't verify message integrity.
+
+**How to detect:**
+
+1. Get your DKIM selector from your email provider
+2. Query: \`selector._domainkey.yourdomain.com\`
+3. If you get NXDOMAIN or malformed data, the record is missing or broken
+
+**Common problems:**
+
+- Wrong selector (e.g., \`google\` vs \`google._domainkey\`)
+- Record truncated (long TXT records split incorrectly)
+- Key rotated but new key not published
+
+**Fix:**
+
+1. Verify the exact selector your email provider uses
+2. Regenerate and republish DKIM records if needed
+3. For long keys, ensure your DNS provider supports multi-string TXT records
+
+## 8. Missing DMARC Record
+
+**What happens:** No policy for handling email authentication failures. You don't receive reports about who's sending email as your domain.
+
+**How to detect:**
+
+Query: \`_dmarc.yourdomain.com\`
+
+If you get NXDOMAIN, you don't have DMARC.
+
+**Why this matters:**
+
+- No visibility into spoofing attempts
+- No policy enforcement
+- Harder to troubleshoot email delivery
+
+**Fix:** Add a DMARC record. Start with monitoring:
+
+\`\`\`
+v=DMARC1; p=none; rua=mailto:dmarc-reports@yourdomain.com
+\`\`\`
+
+## 9. Excessively High TTL Values
+
+**What happens:** DNS changes take too long to propagate. If you need to make an emergency change, you're stuck waiting.
+
+**How to detect:**
+
+Query your records and check TTL values. If they're 86400 (1 day) or higher, changes will be slow.
+
+**Trade-offs:**
+
+| TTL | Propagation | Cache Efficiency |
+|-----|-------------|------------------|
+| 300 (5 min) | Fast | Low |
+| 3600 (1 hour) | Moderate | Good |
+| 86400 (1 day) | Slow | High |
+
+**Fix:**
+
+- Use 3600 seconds for most production records
+- Lower TTL before planned changes (24-48 hours ahead)
+- Consider lower TTLs for records that change frequently
+
+## 10. Missing CAA Records
+
+**What happens:** Any certificate authority can issue SSL certificates for your domain. An attacker who compromises a CA could get a valid cert for your domain.
+
+**How to detect:**
+
+Query CAA records for your domain. If you get no results, you don't have CAA.
+
+**Why this matters:**
+
+CAA (Certificate Authority Authorization) tells CAs which ones are allowed to issue certs for your domain. Without it, any CA can.
+
+**Fix:** Add CAA records for your authorized CAs:
+
+\`\`\`
+example.com. CAA 0 issue "letsencrypt.org"
+example.com. CAA 0 issue "digicert.com"
+example.com. CAA 0 iodef "mailto:security@example.com"
+\`\`\`
+
+## 11. Wrong NS Records at Registrar
+
+**What happens:** Your domain points to old or incorrect nameservers. Complete domain outage.
+
+**How to detect:**
+
+1. Check nameservers at your registrar
+2. Compare with your actual DNS provider
+3. Query your domain globally—if you get SERVFAIL, nameservers may be wrong
+
+**Common causes:**
+
+- DNS provider migration without updating registrar
+- Typo in nameserver hostnames
+- Nameserver decommissioned by provider
+
+**Fix:** Update nameserver records at your domain registrar to match your current DNS provider.
+
+## 12. Missing Reverse DNS (PTR) Records
+
+**What happens:** Email servers reject your outgoing mail as spam. PTR records map IP addresses back to hostnames.
+
+**How to detect:**
+
+Do a reverse DNS lookup on your mail server's IP address. If it doesn't resolve or doesn't match your hostname, PTR is missing or wrong.
+
+**Why email servers check PTR:**
+
+- Legitimate mail servers usually have PTR records
+- Spammers often use IPs without PTR
+- It's a basic spam filter heuristic
+
+**Fix:** Contact your hosting provider or ISP to configure PTR records. You typically can't set these yourself.
+
+## 13. Wildcard Records Causing Unexpected Matches
+
+**What happens:** A wildcard record (\`*.example.com\`) matches subdomains you didn't intend.
+
+**How to detect:**
+
+1. Query a random subdomain that shouldn't exist
+2. If you get a response (instead of NXDOMAIN), you have a wildcard
+
+**Problems caused:**
+
+- Subdomain enumeration becomes impossible
+- Security scanners return false positives
+- Unexpected behavior for typos
+
+**Fix:**
+
+- Remove wildcard if not needed
+- If needed, explicitly create records for known subdomains (explicit records take precedence over wildcards)
+
+## 14. TXT Record Formatting Errors
+
+**What happens:** SPF, DKIM, DMARC, or verification records fail because of formatting issues.
+
+**Common mistakes:**
+
+- Missing quotes around long strings
+- Incorrect escaping of special characters
+- Trailing whitespace
+- Multiple TXT records instead of one with multiple strings
+
+**How to detect:**
+
+Query TXT records and carefully check formatting. Use a validator for SPF, DKIM, and DMARC.
+
+**Fix:**
+
+- Follow the exact format your service requires
+- For long records, use multiple quoted strings:
+  \`\`\`
+  "v=spf1 include..." "...more includes... -all"
+  \`\`\`
+
+## 15. Expired or Suspended Domain
+
+**What happens:** Your domain stops resolving entirely. All services fail.
+
+**How to detect:**
+
+1. WHOIS lookup shows expired status
+2. All DNS queries fail with SERVFAIL or REFUSED
+3. Registrar sends warning emails (check spam folder)
+
+**Common causes:**
+
+- Missed renewal payment
+- Outdated payment method
+- Email notifications going to spam or wrong address
+
+**Fix:**
+
+1. Renew immediately if within grace period
+2. Enable auto-renewal
+3. Set up domain monitoring alerts
+4. Keep registrar contact email current
+
+## How to Audit Your DNS Configuration
+
+Here's a systematic approach to finding misconfigurations:
+
+### Step 1: Check Core Records
+
+Use ReviewMyDNS to query:
+- A and AAAA (web traffic)
+- MX (email routing)
+- NS (nameservers)
+- TXT (SPF, DMARC, verifications)
+
+### Step 2: Check Email Authentication
+
+Query:
+- SPF: TXT at root domain
+- DKIM: TXT at each \`selector._domainkey.yourdomain.com\`
+- DMARC: TXT at \`_dmarc.yourdomain.com\`
+
+### Step 3: Check Security Records
+
+Query:
+- CAA records
+- DNSSEC status (if enabled)
+
+### Step 4: Compare Globally
+
+Use ReviewMyDNS to query from 50+ locations:
+- Are results consistent?
+- Any SERVFAIL or timeout errors?
+- Do all nameservers return the same data?
+
+### Step 5: Inventory Subdomains
+
+List all subdomains and check:
+- Do CNAMEs point to valid targets?
+- Are there old subdomains that should be removed?
+- Any dangling records?
+
+## How ReviewMyDNS Helps Detect Misconfigurations
+
+### Global DNS Propagation Checker
+See how your records look from 50+ locations worldwide. Catch inconsistencies between nameservers.
+
+### Record Type Queries
+Query all record types (A, AAAA, CNAME, MX, TXT, NS, CAA, SOA) to get complete visibility.
+
+### Email Authentication Checks
+Validate SPF, DKIM, and DMARC configuration in one place.
+
+### Historical Tracking
+Compare current records to past snapshots. Know when something changed.
+
+## Summary: Your DNS Health Checklist
+
+| Check | What to Look For |
+|-------|------------------|
+| MX Records | Valid, resolvable hostnames with correct priorities |
+| SPF | Single record, under 10 lookups, proper policy |
+| DKIM | Records exist for all sending services |
+| DMARC | Policy defined, reporting enabled |
+| Root Domain | A/AAAA records (not CNAME) |
+| CNAMEs | All targets resolve (no dangling) |
+| TTLs | Reasonable values (300-86400) |
+| CAA | Authorized CAs specified |
+| Nameservers | Correct at registrar, consistent responses |
+| TXT Formatting | Proper quoting, no truncation |
+
+Run these checks regularly—at least monthly, or before any DNS changes.
+
+**Next step:** Run a global DNS check with ReviewMyDNS to audit your configuration now.
     `
   },
   {
     slug: "dns-history-debugging",
-    title: "How to Use DNS History to Debug Outages and Track Changes",
-    description: "Learn how DNS history tracking helps you debug outages, identify unauthorized changes, and maintain a reliable audit trail.",
-    publishedDate: "2024-11-15",
+    title: "How to Use DNS History to Debug Outages and Detect Unauthorized Changes",
+    description: "Master DNS troubleshooting with historical data. Learn how to use DNS history to debug outages, detect hijacking, identify unauthorized changes, and maintain audit trails for compliance.",
+    publishedDate: "2024-12-23",
     author: "ReviewMyDNS Team",
     category: "Tutorials",
-    readTime: "9 min read",
+    readTime: "14 min read",
     heroImage: "/blog/dns-history.svg",
     content: `
 ## Introduction
 
-When something breaks, the first question is always "what changed?" DNS history gives you the answer. By tracking DNS record changes over time, you can quickly identify when problems started and how to fix them.
+When something breaks, the first question is always: "What changed?"
 
-## Why DNS History Matters
+For DNS-related issues, the answer is often hidden in history. A record that was modified, a nameserver that was swapped, or an authentication record that was deleted—these changes can cause:
 
-### Debugging Outages
-- **When did the change happen?** Correlate with when issues started
-- **What was the previous value?** Know what to restore
-- **Who made the change?** Identify if it was intentional
+- Website outages,
+- Email delivery failures,
+- Security incidents.
 
-### Security Monitoring
-- **Unauthorized modifications:** Detect DNS hijacking attempts
-- **Subdomain takeover:** Catch orphaned records
+DNS history tracking lets you:
 
-## Common Debugging Scenarios
+1. **Debug faster**: Know exactly when and what changed
+2. **Restore quickly**: See previous working configurations
+3. **Detect threats**: Catch unauthorized modifications
+4. **Prove compliance**: Maintain audit trails
 
-### "The Website Worked Yesterday"
+This guide shows you how to use DNS history effectively for troubleshooting and security monitoring.
 
-1. Query current DNS records
-2. Compare with historical records
-3. Look for changes in A, AAAA, or CNAME records
-4. Check if nameserver records changed
+## Part 1: Why DNS History Matters
 
-### Email Delivery Suddenly Failed
+### The Problem with "It Just Broke"
 
-1. Check MX record history for changes
-2. Review SPF record modifications
-3. Verify DKIM records weren't altered
+DNS issues are frustrating because they often appear suddenly with no obvious cause:
 
-### Intermittent Connectivity Issues
+- "The website was working this morning."
+- "Emails started bouncing an hour ago."
+- "Some users can access the site, others can't."
 
-1. Query DNS from multiple global locations
-2. Compare current results with historical baseline
-3. Look for inconsistencies between DNS servers
+Without history, you're guessing. With history, you can:
 
-## Best Practices for DNS History
+1. Identify the exact moment the problem started
+2. See what the working configuration looked like
+3. Understand if the change was intentional or not
 
-### 1. Document All Planned Changes
-Before making DNS changes, record current values and document why.
+### Common Scenarios Where History Helps
 
-### 2. Set Up Change Notifications
-Configure alerts for any DNS record modifications.
+| Scenario | What History Reveals |
+|----------|---------------------|
+| Website outage | A/CNAME record changed |
+| Email bouncing | MX or SPF record modified |
+| Intermittent access | Inconsistent changes across nameservers |
+| Security incident | Unauthorized record modification |
+| Compliance audit | Full change log with timestamps |
 
-### 3. Maintain Historical Baselines
-Keep snapshots of known-good configurations.
+## Part 2: Debugging Outages with DNS History
 
-### 4. Regular Audit Reviews
-Schedule monthly checks for unexpected changes.
+### Scenario 1: "The Website Was Working Yesterday"
 
-## Creating Your DNS Change Log
+**Symptoms:** Users report the site is down. You check the server—it's running fine.
 
-| Date | Record | Old Value | New Value | Reason |
-|------|--------|-----------|-----------|--------|
-| 2024-01-15 | A @ | 1.2.3.4 | 5.6.7.8 | Server migration |
-| 2024-01-20 | MX | mail.old.com | mail.new.com | Email change |
+**Investigation steps:**
 
-## Conclusion
+1. **Query current A/AAAA records**
+   - Is the IP address correct?
+   - Does it match your server?
 
-DNS history is your time machine for debugging. Start tracking your DNS history today with ReviewMyDNS.
+2. **Compare with historical data**
+   - What was the A record yesterday?
+   - When did it change?
+
+3. **Check CNAME records**
+   - If using a CDN, did the CNAME target change?
+   - Did someone accidentally delete the CNAME?
+
+4. **Examine nameserver records**
+   - Did the NS records change at the registrar?
+   - Are nameservers responding correctly?
+
+**Common root causes:**
+
+- Accidental record deletion
+- IP address update with wrong value
+- DNS provider migration incomplete
+- Domain expired and nameservers removed
+
+**Resolution:** Once you identify what changed, either:
+- Revert to the previous (working) configuration
+- Fix the new configuration if the change was intentional but incorrect
+
+### Scenario 2: "Email Suddenly Stopped Working"
+
+**Symptoms:** Emails are bouncing with "no MX record" or landing in spam. DMARC reports show authentication failures.
+
+**Investigation steps:**
+
+1. **Check MX record history**
+   - Did the mail server hostname change?
+   - Were priorities modified?
+   - Was the MX record deleted?
+
+2. **Review SPF record changes**
+   - Was a new include added that broke the 10-lookup limit?
+   - Was an authorized sender removed?
+   - Was the SPF record accidentally deleted?
+
+3. **Verify DKIM records**
+   - Did someone rotate keys without publishing the new public key?
+   - Was the selector changed?
+
+4. **Examine DMARC history**
+   - Did the policy change from none to reject?
+   - Were reporting addresses modified?
+
+**Common root causes:**
+
+- MX record typo or deletion
+- SPF record exceeding lookup limit after adding new service
+- DKIM key rotation without DNS update
+- DMARC policy tightened before SPF/DKIM were fully configured
+
+### Scenario 3: "Some Users Can Access, Others Can't"
+
+**Symptoms:** Complaints from specific geographic regions or ISPs. Intermittent failures.
+
+**Investigation steps:**
+
+1. **Query from multiple global locations**
+   - Are all locations returning the same answer?
+   - Do some locations show NXDOMAIN or old values?
+
+2. **Compare nameserver responses**
+   - Are all authoritative nameservers in sync?
+   - Did one nameserver get updated but not others?
+
+3. **Check propagation timeline**
+   - Was a recent change made?
+   - Is it still propagating (check TTL)?
+
+4. **Review historical consistency**
+   - Were the records ever consistent?
+   - When did the discrepancy start?
+
+**Common root causes:**
+
+- Zone transfer failure between primary and secondary nameservers
+- Change made on one nameserver without replication
+- Partial DNS provider migration
+- Cached stale records with high TTL
+
+## Part 3: Security Monitoring with DNS History
+
+### Detecting DNS Hijacking
+
+DNS hijacking occurs when an attacker modifies your DNS records to redirect traffic to their servers.
+
+**Warning signs in history:**
+
+1. **Unexpected A/AAAA record changes**
+   - IP address changed to an unknown address
+   - Change happened outside business hours
+   - No corresponding change ticket or documentation
+
+2. **Nameserver modifications**
+   - NS records changed without authorization
+   - New nameservers belong to unknown provider
+
+3. **MX record tampering**
+   - Mail routed to attacker-controlled server
+   - Enables email interception
+
+**How to investigate:**
+
+1. Pull DNS history for the past 30 days
+2. Identify all record changes
+3. Correlate with your change management logs
+4. Flag any changes that weren't authorized
+
+### Detecting Subdomain Takeover Risk
+
+Subdomain takeover happens when a CNAME points to an expired or unclaimed resource.
+
+**What history reveals:**
+
+1. **CNAME targets that stopped resolving**
+   - Target hostname returns NXDOMAIN
+   - Attacker can register the target and control your subdomain
+
+2. **Decommissioned services**
+   - GitHub Pages removed but CNAME remains
+   - S3 bucket deleted but DNS record exists
+   - Azure/Heroku app removed
+
+**Proactive monitoring:**
+
+- Regularly check all CNAME records
+- Verify each target still resolves
+- Compare against service inventory
+- Delete orphaned CNAMEs immediately
+
+### Building an Unauthorized Change Detection System
+
+To catch unauthorized changes automatically:
+
+1. **Baseline your DNS**
+   - Document all current records
+   - Store as your "known good" state
+
+2. **Monitor for changes**
+   - Query records regularly (daily or more)
+   - Compare against baseline
+
+3. **Alert on unexpected changes**
+   - Any change not in baseline triggers review
+   - Correlate with change tickets
+
+4. **Investigate and remediate**
+   - Determine if change was authorized
+   - Revert if unauthorized
+   - Update baseline if legitimate
+
+## Part 4: Building Your DNS Audit Trail
+
+### Why Audit Trails Matter
+
+Organizations need DNS audit trails for:
+
+- **Compliance**: SOC 2, ISO 27001, PCI-DSS require change documentation
+- **Incident response**: Forensic analysis during security incidents
+- **Accountability**: Know who changed what and when
+- **Troubleshooting**: Debug issues faster with historical context
+
+### What to Track
+
+For each DNS record, capture:
+
+| Field | Description |
+|-------|-------------|
+| Timestamp | When the change occurred |
+| Record type | A, AAAA, CNAME, MX, TXT, etc. |
+| Hostname | The name being changed |
+| Old value | Previous record value |
+| New value | New record value |
+| Old TTL | Previous TTL |
+| New TTL | New TTL |
+| Source | How detected (provider logs, monitoring) |
+
+### Sample Change Log Format
+
+\`\`\`
+Date: 2024-12-20 14:32:00 UTC
+Domain: example.com
+Record: A @ 
+Action: Modified
+Old Value: 192.0.2.1 (TTL 3600)
+New Value: 198.51.100.1 (TTL 300)
+Source: Cloudflare API audit log
+Authorized: Yes (Ticket #1234)
+Reason: Server migration to new datacenter
+\`\`\`
+
+### Integrating with Change Management
+
+Link DNS changes to your ticketing system:
+
+1. **Require tickets for changes**
+   - No DNS change without documented approval
+   - Include expected values and rollback plan
+
+2. **Log ticket references**
+   - Each DNS change includes ticket number
+   - Easy to trace authorization
+
+3. **Periodic reconciliation**
+   - Compare DNS history with ticket log
+   - Flag undocumented changes for review
+
+## Part 5: Practical DNS History Workflows
+
+### Workflow 1: Post-Incident Analysis
+
+After an outage:
+
+1. **Establish timeline**
+   - When did users first report issues?
+   - When was the incident resolved?
+
+2. **Pull DNS history for that window**
+   - What records changed during the incident?
+   - What changed just before the incident started?
+
+3. **Identify root cause**
+   - Was a DNS change the cause?
+   - Or did DNS change as part of the resolution?
+
+4. **Document and improve**
+   - Update runbooks with findings
+   - Implement monitoring to prevent recurrence
+
+### Workflow 2: Proactive Security Review
+
+Monthly security audit:
+
+1. **Export all DNS records**
+   - Full zone dump as of today
+
+2. **Compare with previous month**
+   - What changed?
+   - Were all changes authorized?
+
+3. **Validate critical records**
+   - MX, SPF, DKIM, DMARC unchanged?
+   - A records still point to your servers?
+
+4. **Check for orphaned records**
+   - Do all CNAMEs resolve?
+   - Are there old subdomains to remove?
+
+### Workflow 3: Pre-Migration Checklist
+
+Before DNS provider migration:
+
+1. **Export complete zone**
+   - All records, types, and TTLs
+
+2. **Document current state**
+   - Screenshot or export from old provider
+   - This is your rollback reference
+
+3. **Verify after migration**
+   - Compare new provider responses to old
+   - Use history to confirm nothing was lost
+
+4. **Monitor for 72 hours**
+   - Track any propagation issues
+   - Compare global responses to expected values
+
+## How ReviewMyDNS Helps with DNS History
+
+### Global Propagation Snapshots
+
+Query your domain from 50+ locations and see:
+- Current values everywhere
+- Discrepancies between regions
+- TTL information for propagation timing
+
+### Record Comparison
+
+Compare DNS responses between:
+- Different times (before vs after)
+- Different nameservers
+- Different global locations
+
+### Historical Tracking
+
+Track changes over time:
+- Know when records changed
+- See previous values
+- Build your audit trail
+
+### Security Checks
+
+Validate critical records:
+- Email authentication (SPF, DKIM, DMARC)
+- Certificate authorization (CAA)
+- DNSSEC status
+
+## Summary: Your DNS History Best Practices
+
+### For Debugging
+
+1. Always check DNS history first when troubleshooting
+2. Correlate DNS changes with incident timelines
+3. Compare current values with known working state
+4. Query from multiple global locations
+
+### For Security
+
+1. Baseline all DNS records
+2. Monitor for unauthorized changes
+3. Alert on unexpected modifications
+4. Review all changes monthly
+
+### For Compliance
+
+1. Maintain complete change logs
+2. Link changes to authorization tickets
+3. Document who, what, when, and why
+4. Keep historical records for audit periods
+
+DNS history is your debugging superpower. When something breaks, history tells you what changed. When you need to prove compliance, history provides the audit trail. When you suspect an attack, history reveals the evidence.
+
+**Next step:** Start tracking your DNS changes now with ReviewMyDNS—before you need the history.
     `
   }
 ];
