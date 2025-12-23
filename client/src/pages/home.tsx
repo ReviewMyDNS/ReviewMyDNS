@@ -184,8 +184,11 @@ export default function Home() {
               <p className="text-blue-100 text-base md:text-xl mb-3 max-w-2xl mx-auto">
                 Query 50+ DNS servers worldwide in one click. Catch propagation issues, misconfigurations, and email problems before they affect your users.
               </p>
-              <p className="text-blue-300 text-sm mb-6">
-                Free for quick lookups • No sign-up required • Used by DevOps, MSPs, and agencies
+              <p className="text-blue-200 text-sm mb-2">
+                Built for DevOps, SREs, agencies, and email teams who need to verify DNS changes in minutes, not days.
+              </p>
+              <p className="text-blue-300/70 text-xs mb-6">
+                Free for quick lookups • No sign-up required
               </p>
             </div>
             
