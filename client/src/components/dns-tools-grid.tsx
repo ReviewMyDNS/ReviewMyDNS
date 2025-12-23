@@ -7,8 +7,8 @@ import { trackToolClick } from "@/lib/analytics";
 const tools = [
   {
     title: "Bulk DNS Lookup",
-    description: "Check multiple domains at once with comprehensive reporting",
-    benefit: "Perfect for migrations and audits",
+    description: "Check 100+ domains in one batch with exportable results",
+    benefit: "Save hours during migrations and monthly audits",
     icon: List,
     color: "text-blue-600",
     path: "/bulk-lookup",
@@ -16,8 +16,8 @@ const tools = [
   },
   {
     title: "DNS Comparison",
-    description: "Compare DNS records between different providers",
-    benefit: "Validate before and after switching DNS hosts",
+    description: "Side-by-side diff between two nameservers or providers",
+    benefit: "Catch missing records before you switch",
     icon: GitCompare,
     color: "text-green-600",
     path: "/compare",
@@ -25,8 +25,8 @@ const tools = [
   },
   {
     title: "Historical Tracking",
-    description: "Monitor DNS changes over time with detailed logs",
-    benefit: "Catch unauthorized changes and debug outages",
+    description: "See exactly when each record changed—and what it was before",
+    benefit: "Debug outages fast with a clear audit trail",
     icon: History,
     color: "text-purple-600",
     path: "/history",
@@ -34,8 +34,8 @@ const tools = [
   },
   {
     title: "Developer API",
-    description: "Integrate DNS checking into your applications",
-    benefit: "Automate monitoring and alerting",
+    description: "REST API to integrate DNS checks into CI/CD pipelines",
+    benefit: "Block deploys if DNS isn't healthy",
     icon: Code,
     color: "text-orange-600",
     path: "/api-docs",
@@ -43,17 +43,17 @@ const tools = [
   },
   {
     title: "Performance Monitor",
-    description: "Real-time DNS response time monitoring",
-    benefit: "Identify slow resolvers affecting your users",
+    description: "Track DNS response times across all 50+ global servers",
+    benefit: "Find slow resolvers before users complain",
     icon: Zap,
     color: "text-yellow-600",
     path: "/monitor",
     active: true
   },
   {
-    title: "Global Coverage",
-    description: "Check DNS from 50+ servers worldwide",
-    benefit: "See exactly what your users see, everywhere",
+    title: "Global Propagation",
+    description: "Query 50+ servers in one click to see global state",
+    benefit: "Stop wondering 'is it just me?'",
     icon: Globe,
     color: "text-indigo-600",
     path: "/",
@@ -61,8 +61,8 @@ const tools = [
   },
   {
     title: "Security Check",
-    description: "Validate DNS security configurations (DNSSEC, SPF, DMARC, CAA)",
-    benefit: "Prevent email spoofing and SSL issues",
+    description: "Validate SPF, DKIM, DMARC, DNSSEC, and CAA in one scan",
+    benefit: "Fix email deliverability and SSL issues",
     icon: Shield,
     color: "text-red-600",
     path: "/security",
@@ -70,8 +70,8 @@ const tools = [
   },
   {
     title: "DNS Analytics",
-    description: "Comprehensive DNS performance analytics",
-    benefit: "Understand trends and optimize configurations",
+    description: "Trends, performance graphs, and health scores over time",
+    benefit: "Turn DNS data into actionable insights",
     icon: Database,
     color: "text-teal-600",
     path: "/analytics",
