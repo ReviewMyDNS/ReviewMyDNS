@@ -10,7 +10,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { Globe, User, Menu, Lock, BarChart3, Zap, Share2, Copy, Check, RefreshCw, LogOut, Clock, Shield, History, Bell, Users, Server } from "lucide-react";
+import { Globe, User, Menu, Lock, BarChart3, Zap, Share2, Copy, Check, RefreshCw, LogOut, Shield, History, Bell, Users, Server } from "lucide-react";
 import { Link } from "wouter";
 import type { DnsLookupWithResults } from "@shared/schema";
 import { useToast } from "@/hooks/use-toast";

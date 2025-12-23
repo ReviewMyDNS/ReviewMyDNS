@@ -680,6 +680,168 @@ For most websites and applications, Cloudflare offers the best combination of pe
 
 Use ReviewMyDNS to compare DNS performance across providers and verify your configuration after migration.
     `
+  },
+  {
+    slug: "common-dns-misconfigurations",
+    title: "10 Common DNS Misconfigurations and How to Detect Them",
+    description: "Learn to identify and fix the most common DNS configuration mistakes that cause downtime, email delivery failures, and security vulnerabilities.",
+    publishedDate: "2024-11-20",
+    author: "ReviewMyDNS Team",
+    category: "Troubleshooting",
+    readTime: "11 min read",
+    heroImage: "/blog/dns-misconfigurations.svg",
+    content: `
+## Introduction
+
+DNS misconfigurations are one of the leading causes of website outages and email delivery failures. Even experienced administrators make these mistakes. The good news? Most DNS issues follow predictable patterns and can be detected before they cause problems.
+
+## 1. Missing or Incorrect MX Records
+
+**The Problem:** Email doesn't reach your domain, or mail servers reject connections.
+
+**How to Detect:**
+1. Use ReviewMyDNS to query your MX records
+2. Verify each mail server hostname resolves to an IP
+3. Check that priorities are correctly ordered
+
+**Fix:** Ensure MX records point to valid, resolvable hostnames with appropriate priority values.
+
+## 2. SPF Record Too Many Lookups
+
+**The Problem:** Email authentication fails with "SPF PermError."
+
+SPF has a limit of 10 DNS lookups. Each include: counts as a lookup.
+
+**Fix:** Flatten your SPF record or use SPF flattening services.
+
+## 3. CNAME at the Root Domain
+
+**The Problem:** DNS standards don't allow CNAME records at the root domain.
+
+**Fix:** Use A/AAAA records for the root domain, or use a DNS provider that supports ALIAS records.
+
+## 4. Inconsistent DNS Across Nameservers
+
+**The Problem:** Different users see different DNS results.
+
+**How to Detect:** Use ReviewMyDNS to query your domain globally and compare results.
+
+**Fix:** Ensure all authoritative nameservers have identical zone files.
+
+## 5. Dangling CNAME Records (Subdomain Takeover Risk)
+
+**The Problem:** CNAME points to a hostname that no longer exists.
+
+**Security Note:** Dangling CNAMEs can be exploited by attackers to take over your subdomain.
+
+**Fix:** Audit your DNS records regularly and remove pointers to decommissioned services.
+
+## 6. Missing or Invalid DKIM Records
+
+**The Problem:** Emails fail DKIM authentication.
+
+**Fix:** Regenerate and republish DKIM records with the correct selector.
+
+## 7. Excessively High TTL Values
+
+**The Problem:** DNS changes take too long to propagate.
+
+**Fix:** Use 3600 seconds for most records, lower before planned changes.
+
+## 8. Missing CAA Records
+
+**The Problem:** Anyone can potentially obtain SSL certificates for your domain.
+
+**Fix:** Add CAA records specifying authorized certificate authorities.
+
+## 9. Wrong NS Records at Registrar
+
+**The Problem:** Domain points to old or incorrect nameservers.
+
+**Fix:** Update nameserver records at your domain registrar.
+
+## 10. Missing Reverse DNS (PTR) Records
+
+**The Problem:** Email servers reject your outgoing mail as spam.
+
+**Fix:** Contact your hosting provider to configure PTR records.
+
+## Conclusion
+
+DNS misconfigurations are common but preventable. Use ReviewMyDNS to audit your DNS regularly and catch problems before they impact your users.
+    `
+  },
+  {
+    slug: "dns-history-debugging",
+    title: "How to Use DNS History to Debug Outages and Track Changes",
+    description: "Learn how DNS history tracking helps you debug outages, identify unauthorized changes, and maintain a reliable audit trail.",
+    publishedDate: "2024-11-15",
+    author: "ReviewMyDNS Team",
+    category: "Tutorials",
+    readTime: "9 min read",
+    heroImage: "/blog/dns-history.svg",
+    content: `
+## Introduction
+
+When something breaks, the first question is always "what changed?" DNS history gives you the answer. By tracking DNS record changes over time, you can quickly identify when problems started and how to fix them.
+
+## Why DNS History Matters
+
+### Debugging Outages
+- **When did the change happen?** Correlate with when issues started
+- **What was the previous value?** Know what to restore
+- **Who made the change?** Identify if it was intentional
+
+### Security Monitoring
+- **Unauthorized modifications:** Detect DNS hijacking attempts
+- **Subdomain takeover:** Catch orphaned records
+
+## Common Debugging Scenarios
+
+### "The Website Worked Yesterday"
+
+1. Query current DNS records
+2. Compare with historical records
+3. Look for changes in A, AAAA, or CNAME records
+4. Check if nameserver records changed
+
+### Email Delivery Suddenly Failed
+
+1. Check MX record history for changes
+2. Review SPF record modifications
+3. Verify DKIM records weren't altered
+
+### Intermittent Connectivity Issues
+
+1. Query DNS from multiple global locations
+2. Compare current results with historical baseline
+3. Look for inconsistencies between DNS servers
+
+## Best Practices for DNS History
+
+### 1. Document All Planned Changes
+Before making DNS changes, record current values and document why.
+
+### 2. Set Up Change Notifications
+Configure alerts for any DNS record modifications.
+
+### 3. Maintain Historical Baselines
+Keep snapshots of known-good configurations.
+
+### 4. Regular Audit Reviews
+Schedule monthly checks for unexpected changes.
+
+## Creating Your DNS Change Log
+
+| Date | Record | Old Value | New Value | Reason |
+|------|--------|-----------|-----------|--------|
+| 2024-01-15 | A @ | 1.2.3.4 | 5.6.7.8 | Server migration |
+| 2024-01-20 | MX | mail.old.com | mail.new.com | Email change |
+
+## Conclusion
+
+DNS history is your time machine for debugging. Start tracking your DNS history today with ReviewMyDNS.
+    `
   }
 ];
 
