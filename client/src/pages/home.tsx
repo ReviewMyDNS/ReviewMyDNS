@@ -179,13 +179,13 @@ export default function Home() {
           <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
             <div className="text-center mb-8">
               <h1 className="text-3xl md:text-5xl font-bold text-white mb-4 leading-tight">
-                Global DNS Propagation Checker & Health Monitor
+                See Exactly What the World Sees for Your DNS
               </h1>
               <p className="text-blue-100 text-base md:text-xl mb-3 max-w-2xl mx-auto">
-                Check DNS records and propagation status across 50+ worldwide servers. Monitor changes, compare providers, and troubleshoot issues—all in one place.
+                Query 50+ DNS servers worldwide in one click. Catch propagation issues, misconfigurations, and email problems before they affect your users.
               </p>
               <p className="text-blue-300 text-sm mb-6">
-                Trusted by DevOps teams, MSPs, and agencies managing production domains.
+                Free for quick lookups • No sign-up required • Used by DevOps, MSPs, and agencies
               </p>
             </div>
             
@@ -199,7 +199,7 @@ export default function Home() {
               <div className="text-center mt-4">
                 <Link href="/signin?tab=signup" className="text-blue-200 hover:text-white text-sm inline-flex items-center" data-testid="link-hero-signup">
                   <ArrowRight className="h-4 w-4 mr-1" />
-                  Create free account to save domains & track history
+                  Create free account → Save domains, track changes, get alerts
                 </Link>
               </div>
             )}
@@ -214,22 +214,22 @@ export default function Home() {
                 <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
                   <Globe className="h-6 w-6 text-blue-600" />
                 </div>
-                <h3 className="font-semibold text-gray-900 mb-1">Real-Time Global Coverage</h3>
-                <p className="text-sm text-gray-600">Check DNS from 50+ locations worldwide in seconds</p>
+                <h3 className="font-semibold text-gray-900 mb-1">50+ Global Servers</h3>
+                <p className="text-sm text-gray-600">See what users in every region actually resolve</p>
               </div>
               <div className="text-center">
                 <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
                   <History className="h-6 w-6 text-green-600" />
                 </div>
-                <h3 className="font-semibold text-gray-900 mb-1">Historical Tracking</h3>
-                <p className="text-sm text-gray-600">See DNS changes over time with detailed logs</p>
+                <h3 className="font-semibold text-gray-900 mb-1">Change History</h3>
+                <p className="text-sm text-gray-600">Know exactly when and what changed in your DNS</p>
               </div>
               <div className="text-center">
                 <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3">
                   <Bell className="h-6 w-6 text-purple-600" />
                 </div>
-                <h3 className="font-semibold text-gray-900 mb-1">Smart Alerts</h3>
-                <p className="text-sm text-gray-600">Get notified when records drift or SSL expires</p>
+                <h3 className="font-semibold text-gray-900 mb-1">Proactive Alerts</h3>
+                <p className="text-sm text-gray-600">Get notified before problems affect your users</p>
               </div>
             </div>
           </div>
