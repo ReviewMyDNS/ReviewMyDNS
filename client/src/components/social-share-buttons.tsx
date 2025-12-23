@@ -1,16 +1,19 @@
 import { Share2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { trackShareResult } from "@/lib/analytics";
 
 interface SocialShareButtonsProps {
   url: string;
   title: string;
   description?: string;
+  domain?: string;
 }
 
-export function SocialShareButtons({ url, title, description }: SocialShareButtonsProps) {
+export function SocialShareButtons({ url, title, description, domain }: SocialShareButtonsProps) {
   const encodeUrl = encodeURIComponent(url);
   const encodeTitle = encodeURIComponent(title);
   const encodeDesc = encodeURIComponent(description || "");
+  const domainForTracking = domain || new URL(url).hostname;
 
   const shareLinks = [
     {
@@ -42,6 +45,12 @@ export function SocialShareButtons({ url, title, description }: SocialShareButto
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(url);
+    trackShareResult({ domain: domainForTracking, method: 'link' });
+  };
+
+  const handleSocialShare = (name: string, shareUrl: string) => {
+    trackShareResult({ domain: domainForTracking, method: name.toLowerCase() });
+    window.open(shareUrl, "_blank", "width=600,height=400");
   };
 
   return (
@@ -56,7 +65,7 @@ export function SocialShareButtons({ url, title, description }: SocialShareButto
           variant="ghost"
           size="sm"
           className={`${link.color} text-gray-600`}
-          onClick={() => window.open(link.url, "_blank", "width=600,height=400")}
+          onClick={() => handleSocialShare(link.name, link.url)}
           data-testid={`share-${link.name.toLowerCase()}`}
         >
           {link.name}

@@ -15,6 +15,7 @@ import { ChevronRight, Search, Lock, Crown } from "lucide-react";
 import { insertDnsLookupSchema, DNS_RECORD_TYPES, type DnsLookupWithResults } from "@shared/schema";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
+import { trackDnsCheck } from "@/lib/analytics";
 import { z } from "zod";
 import { Link } from "wouter";
 
@@ -67,6 +68,12 @@ export function DnsLookupForm({ onLookupComplete, isLoading, setIsLoading }: Dns
     },
     onSuccess: (data) => {
       onLookupComplete(data);
+      trackDnsCheck({
+        domain: data.domain,
+        recordType: data.recordType,
+        serverCount: data.stats.totalServers,
+        hasErrors: data.stats.unresolvedCount > 0,
+      });
       toast({
         title: "DNS Lookup Complete",
         description: `Found ${data.stats.resolvedCount} of ${data.stats.totalServers} DNS servers responding.`,

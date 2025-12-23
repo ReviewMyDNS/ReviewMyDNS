@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Link, useParams } from "wouter";
 import { Helmet } from "react-helmet-async";
 import { Badge } from "@/components/ui/badge";
@@ -6,11 +7,18 @@ import { Calendar, Clock, User, ArrowLeft, Share2, Twitter, Linkedin } from "luc
 import { Logo } from "@/components/logo";
 import MobileMenu from "@/components/mobile-menu";
 import { getBlogArticle, blogArticles } from "@/data/blog-articles";
+import { trackGuideView } from "@/lib/analytics";
 import NotFound from "./not-found";
 
 export default function BlogArticle() {
   const { slug } = useParams<{ slug: string }>();
   const article = getBlogArticle(slug || "");
+
+  useEffect(() => {
+    if (article) {
+      trackGuideView({ slug: article.slug, category: article.category });
+    }
+  }, [article?.slug]);
 
   if (!article) {
     return <NotFound />;

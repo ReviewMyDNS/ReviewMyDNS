@@ -2,6 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { List, GitCompare, History, Code, Zap, Globe, Shield, Database } from "lucide-react";
 import { Link } from "wouter";
+import { trackToolClick } from "@/lib/analytics";
 
 const tools = [
   {
@@ -106,7 +107,7 @@ export function DnsToolsGrid() {
                   <p className="text-sm text-gray-600 mb-2">{tool.description}</p>
                   <p className="text-xs text-gray-500 italic mb-4">{tool.benefit}</p>
                   {tool.active ? (
-                    <Link href={tool.path}>
+                    <Link href={tool.path} onClick={() => trackToolClick(tool.title.toLowerCase().replace(/\s+/g, '_'))}>
                       <Button variant="ghost" size="sm" className="text-blue-600 hover:text-blue-800 p-0 h-auto font-medium w-full text-left">
                         {tool.title.includes('API') ? 'View Docs' : 'Try Tool'} →
                       </Button>

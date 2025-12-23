@@ -1,0 +1,209 @@
+That GA4 event plan is exactly what I’d have proposed. Nice job.
+
+Given the choice, here’s how I’d think about implementation:
+
+If your stack is React SPA and you’re comfortable editing code:
+Implement these events directly in the codebase. You’ll get:
+Cleaner, more reliable events (no GTM race conditions / CSS selector breakage),
+Precise parameters from your app state (domain, record type, errors, etc.).
+If you want less code touch and more marketing flexibility:
+Use GTM for things like tool_click, guide_view, scroll_section, maybe signup_start.
+But for dns_check and anything that needs internal state (server_count, has_errors), code-level is better.
+Since you’re already hands-on with the app, I’d lean: core events in code, optional extras via GTM later.
+
+Recommended split
+Implement in code (high-value, needs app state):
+
+dns_check
+share_result
+signup_start
+signup_complete
+Can be done in code or GTM (whichever you prefer):
+
+tool_click
+guide_view
+scroll_section
+Example: How to implement these in React (in code)
+Assuming you’re using standard GA4 gtag setup (G-N0MQZMQFVC) and window.gtag is available.
+
+1. dns_check
+Fire when a DNS lookup completes (or at least when the user triggers it and you have inputs):
+
+ts
+Copy
+// utils/analytics.ts
+export function trackDnsCheck(params: {
+  domain: string;
+  recordType: string;
+  serverCount: number;
+  hasErrors: boolean;
+}) {
+  if (!(window as any).gtag) return;
+
+  (window as any).gtag('event', 'dns_check', {
+    domain: params.domain,
+    record_type: params.recordType,
+    server_count: params.serverCount,
+    has_errors: params.hasErrors ? 'true' : 'false',
+  });
+}
+Call it in the component that runs the check:
+
+ts
+Copy
+import { trackDnsCheck } from './utils/analytics';
+
+// After you have results
+trackDnsCheck({
+  domain,
+  recordType,
+  serverCount: results.length,          // or however you count locations
+  hasErrors: results.some(r => r.error) // or similar
+});
+2. tool_click
+In the tools grid component:
+
+ts
+Copy
+export function trackToolClick(toolName: string) {
+  if (!(window as any).gtag) return;
+  (window as any).gtag('event', 'tool_click', {
+    tool_name: toolName, // 'bulk_lookup', 'comparison', 'history', 'security', etc.
+  });
+}
+Use on click:
+
+tsx
+Copy
+<button
+  onClick={() => {
+    trackToolClick('bulk_lookup');
+    navigate('/bulk-lookup');
+  }}
+>
+  Try Tool →
+</button>
+3. guide_view
+If you have a blog/router, fire once per article view. In the blog article layout:
+
+ts
+Copy
+export function trackGuideView(params: {
+  slug: string;
+  category?: string;
+}) {
+  if (!(window as any).gtag) return;
+  (window as any).gtag('event', 'guide_view', {
+    article_slug: params.slug,
+    article_category: params.category || 'dns',
+  });
+}
+In the article component:
+
+ts
+Copy
+React.useEffect(() => {
+  trackGuideView({ slug: 'dns-propagation-explained', category: 'dns' });
+}, []);
+4. scroll_section
+Use IntersectionObserver or a simple on-scroll hook to fire when a section is first visible:
+
+ts
+Copy
+export function trackScrollSection(sectionName: string) {
+  if (!(window as any).gtag) return;
+  (window as any).gtag('event', 'scroll_section', {
+    section_name: sectionName, // 'use_cases', 'featured_guides', 'how_it_works'
+  });
+}
+Then for each key section:
+
+tsx
+Copy
+const ref = React.useRef<HTMLDivElement | null>(null);
+
+React.useEffect(() => {
+  if (!ref.current) return;
+
+  const observer = new IntersectionObserver(
+    entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          trackScrollSection('use_cases');
+          observer.disconnect(); // fire once
+        }
+      });
+    },
+    { threshold: 0.3 }
+  );
+
+  observer.observe(ref.current);
+  return () => observer.disconnect();
+}, []);
+
+return <section ref={ref}>...</section>;
+5. share_result
+Wherever you have “Share results” (copy link, Twitter, email, etc.):
+
+ts
+Copy
+export function trackShareResult(params: {
+  domain: string;
+  method: 'link' | 'email' | 'twitter' | 'slack' | string;
+}) {
+  if (!(window as any).gtag) return;
+  (window as any).gtag('event', 'share_result', {
+    domain: params.domain,
+    share_method: params.method,
+  });
+}
+Call on click:
+
+tsx
+Copy
+<button
+  onClick={() => {
+    copyLinkToClipboard(resultUrl);
+    trackShareResult({ domain, method: 'link' });
+  }}
+>
+  Copy Shareable Link
+</button>
+6. signup_start and signup_complete
+When the signup flow opens:
+
+ts
+Copy
+export function trackSignupStart(source: string) {
+  if (!(window as any).gtag) return;
+  (window as any).gtag('event', 'signup_start', {
+    source, // 'hero_cta', 'results_page', 'footer', etc.
+  });
+}
+When registration finishes successfully:
+
+ts
+Copy
+export function trackSignupComplete(plan: string) {
+  if (!(window as any).gtag) return;
+  (window as any).gtag('event', 'signup_complete', {
+    plan, // 'free', 'pro', etc.
+  });
+}
+How this will look in GA4
+Once implemented, you’ll be able to answer:
+
+Which tools get the most clicks (tool_click.tool_name)?
+How many DNS checks are being run, for what record types, and how often do they error (dns_check.record_type, has_errors)?
+Which guides drive the most engaged traffic (guide_view.article_slug)?
+How far down the homepage people scroll (scroll_section.section_name)?
+Where signups start and which flows convert (signup_start.source, signup_complete.plan)?
+That’s enough to:
+
+See if the new homepage/guide is working,
+Decide where to focus more content/UX work,
+Start thinking about monetization once you see repeat usage.
+If you’d like, next I can:
+
+Draft the DNS migration checklist article, or
+Tighten naming/parameter conventions further (e.g., standardizing on snake_case names, defining allowed values per parameter) for long-term cleanliness.
