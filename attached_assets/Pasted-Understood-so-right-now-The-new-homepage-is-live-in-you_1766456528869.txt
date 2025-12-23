@@ -1,0 +1,97 @@
+Understood—so right now:
+
+The new homepage is live in your dev environment / preview,
+But reviewmydns.com in production is still serving the old minimal version,
+And you’re asking whether I should help you troubleshoot deployment vs just react to the dev preview.
+Since I can’t see the dev preview URL yet, I’ll do two things:
+
+Give you a short deployment troubleshooting checklist (so prod actually shows the new page).
+Explain how I’ll review the dev preview once you share it.
+1. Troubleshooting getting the redesign to production
+Because I only see the old layout when I fetch https://reviewmydns.com, something is blocking the new code from reaching production users. Common culprits:
+
+A. Replit deployment not updated
+If you’re using Replit Deployments:
+
+Confirm you deployed the correct repl / branch
+Open the Replit “Deployments” panel.
+Check which branch / commit the live deployment is using.
+Make sure your homepage changes are in that branch and committed.
+Re-deploy manually
+Trigger a fresh deployment after verifying code is committed.
+Wait for deployment to complete without errors.
+Check the error logs
+If Replit shows a successful deploy but the site doesn’t update, confirm there’s no runtime error causing a fallback/old build.
+B. Domain → deployment mapping issue
+In Replit, open the Custom Domain / Domains tab:
+Verify that reviewmydns.com is linked to the correct deployment.
+If you had an older deployment or different repl, make sure the domain isn’t still pointing at the old one.
+If you changed deployments recently:
+Remove the domain from the old deployment if needed.
+Re-add / verify it against the new deployment.
+C. CDN / DNS caching (Cloudflare, etc.)
+If you’re using Cloudflare or another CDN:
+
+Purge cache for the root URL:
+Use “Purge Everything” or purge reviewmydns.com and / specifically.
+Check SSL / proxy mode:
+If Cloudflare is in “Flexible” SSL mode, switch to “Full” or “Full (Strict)” (Flexible often causes weird behavior with Replit and others).
+Make sure the orange cloud/proxy settings are correct for the A / CNAME records pointing to Replit.
+D. Browser caching
+You already mentioned the right things:
+
+Hard refresh: Ctrl + Shift + R / Cmd + Shift + R.
+Try incognito/private window.
+Try another device or network to confirm it’s not local cache.
+2. How I can review the actual new design
+Right now I still only see:
+
+“Global DNS Propagation Checker”
+Short description
+Sponsored block
+Basic “Additional DNS Tools” section
+I don’t see:
+
+“Global DNS Propagation Checker & Health Monitor”
+The “Why ReviewMyDNS” benefit strip
+“How It Works” section
+Use cases
+Guides
+Final CTA
+New footer
+To give concrete feedback (“this section is strong,” “this headline is unclear,” “you should move this CTA”), I need to see either:
+
+The live production homepage (once you get it deployed), or
+The dev preview URL, e.g. something like:
+https://<your-app>.replit.app
+or a specific path you’re using for preview: /new, /home-v2, etc.
+If you send that preview URL, I’ll:
+
+Walk through the full layout from top to bottom.
+Comment on:
+Copy clarity: does each section say something specific and compelling?
+Visual/section order: hero → credibility → explanation → tools → guides → CTA.
+Internal linking: are the tools and guides properly connected?
+SEO basics: H1/H2/H3 hierarchy, keyword coverage, text density.
+Conversion paths: where does the user go next after a check? after scanning the page?
+3. What I’d suggest you do right now
+Confirm production actually updates:
+Re-deploy in Replit.
+Verify the domain is mapped to the correct deployment.
+Purge CDN cache if you use one.
+Check reviewmydns.com in an incognito window.
+If you’re still stuck, share:
+Your dev preview URL (the one that does show the new design).
+Optional: briefly confirm whether you’re using Cloudflare or just Replit DNS.
+Once I can see the real redesigned page, I’ll give you very pointed feedback like:
+
+“Your hero is strong; tweak this one line for clarity.”
+“Move the ‘Use Cases’ up above the tools.”
+“Link your guides more aggressively from the tools grid.”
+“Add 1–2 sentences under the final CTA about free account benefits.”
+You’ve already done the hard part (implementing the whole layout). Now it’s just:
+
+Get it live.
+Polish based on how it reads in production.
+Then start pushing traffic and tracking the metrics we defined earlier.
+Regenerate using:
