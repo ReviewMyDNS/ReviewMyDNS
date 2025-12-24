@@ -36,6 +36,9 @@ import FaqPage from "@/pages/faq";
 import Blog from "@/pages/blog";
 import BlogArticle from "@/pages/blog-article";
 import SiteAnalytics from "@/pages/site-analytics";
+import Api from "@/pages/api";
+import Terminology from "@/pages/terminology";
+import FaqIndex from "@/pages/faq-index";
 
 function Router() {
   return (
@@ -43,7 +46,9 @@ function Router() {
       <Route path="/" component={Home} />
       <Route path="/r/:shareId" component={SharedResult} />
       <Route path="/tools" component={Tools} />
+      <Route path="/api" component={Api} />
       <Route path="/api-docs" component={ApiDocs} />
+      <Route path="/terminology" component={Terminology} />
       <Route path="/documentation" component={Documentation} />
       <Route path="/bulk-lookup" component={BulkLookup} />
       <Route path="/compare" component={DnsCompare} />
@@ -66,6 +71,7 @@ function Router() {
       <Route path="/widget" component={Widget} />
       <Route path="/guides" component={GuidesIndex} />
       <Route path="/guides/:slug" component={Guide} />
+      <Route path="/faq" component={FaqIndex} />
       <Route path="/faq/:slug" component={FaqPage} />
       <Route path="/blog" component={Blog} />
       <Route path="/blog/:slug" component={BlogArticle} />
