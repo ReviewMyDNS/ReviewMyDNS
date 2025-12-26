@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet-async";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -112,6 +113,15 @@ const pricingTiers = [
 export default function ApiDocs() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-emerald-50 to-blue-50">
+      <Helmet>
+        <title>DNS API Documentation - REST API Reference | ReviewMyDNS</title>
+        <meta name="description" content="Complete DNS API documentation. RESTful endpoints for DNS lookups, propagation checking, and global server queries. Includes code examples and pricing." />
+        <meta name="keywords" content="DNS API, DNS lookup API, REST API DNS, DNS developer API" />
+        <meta property="og:title" content="DNS API Documentation - ReviewMyDNS" />
+        <meta property="og:description" content="RESTful DNS API with global coverage. Full documentation and examples." />
+        <meta property="og:type" content="website" />
+        <link rel="canonical" href="https://reviewmydns.com/api-docs" />
+      </Helmet>
       {/* Header */}
       <header className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

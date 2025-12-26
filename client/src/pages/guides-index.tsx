@@ -14,6 +14,10 @@ export default function GuidesIndex() {
       <Helmet>
         <title>DNS Setup Guides - ReviewMyDNS</title>
         <meta name="description" content="Step-by-step DNS setup guides for all major domain registrars and hosting providers. Learn how to configure DNS records on Cloudflare, GoDaddy, Namecheap, AWS Route 53, and more." />
+        <meta property="og:title" content="DNS Setup Guides - ReviewMyDNS" />
+        <meta property="og:description" content="Step-by-step DNS configuration tutorials for all major providers." />
+        <meta property="og:type" content="website" />
+        <link rel="canonical" href="https://reviewmydns.com/guides" />
       </Helmet>
 
       <header className="bg-white/90 backdrop-blur-md shadow-sm border-b border-gray-200 sticky top-0 z-50">

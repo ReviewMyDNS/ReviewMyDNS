@@ -7,7 +7,14 @@ Allow: /
 # Disallow private/auth pages
 Disallow: /login
 Disallow: /register
-Disallow: /api/
+Disallow: /dashboard
+Disallow: /site-analytics
+
+# Block backend API endpoints (not the /api docs page)
+Disallow: /api/dns/
+Disallow: /api/auth/
+Disallow: /api/user/
+Disallow: /api/stripe/
 
 # Sitemap location
 Sitemap: https://reviewmydns.com/sitemap.xml

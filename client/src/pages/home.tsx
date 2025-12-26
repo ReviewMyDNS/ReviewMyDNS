@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Helmet } from "react-helmet-async";
 import { DnsLookupForm } from "@/components/dns-lookup-form";
 import { PropagationMap } from "@/components/propagation-map";
 import { ResultsTable } from "@/components/results-table";
@@ -96,6 +97,19 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+      <Helmet>
+        <title>DNS Propagation Checker - Global DNS Lookup Tool | ReviewMyDNS</title>
+        <meta name="description" content="Free DNS propagation checker. Query 50+ global DNS servers instantly. Check A, AAAA, MX, TXT, CNAME records. Verify DNS changes are live worldwide." />
+        <meta name="keywords" content="DNS propagation checker, DNS lookup, global DNS check, DNS verification, MX record lookup, A record check" />
+        <meta property="og:title" content="DNS Propagation Checker - ReviewMyDNS" />
+        <meta property="og:description" content="Query 50+ global DNS servers in one click. Verify DNS propagation instantly." />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://reviewmydns.com/" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="DNS Propagation Checker - ReviewMyDNS" />
+        <meta name="twitter:description" content="Query 50+ global DNS servers in one click. Verify DNS propagation instantly." />
+        <link rel="canonical" href="https://reviewmydns.com/" />
+      </Helmet>
       {/* Header */}
       <header className="bg-white/90 backdrop-blur-md shadow-sm border-b border-gray-200 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

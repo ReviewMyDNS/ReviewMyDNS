@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet-async";
 import { DnsToolsGrid } from "@/components/dns-tools-grid";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -105,6 +106,15 @@ const toolCategories = [
 export default function Tools() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+      <Helmet>
+        <title>DNS Tools - Propagation Checker, Security Scan, DNSSEC Validator | ReviewMyDNS</title>
+        <meta name="description" content="Complete DNS toolkit: propagation checker, bulk lookup, DNS comparison, security scanner, DNSSEC validator, and developer API. Free to use." />
+        <meta name="keywords" content="DNS tools, DNS propagation checker, DNSSEC validator, DNS security check, bulk DNS lookup" />
+        <meta property="og:title" content="DNS Tools - ReviewMyDNS" />
+        <meta property="og:description" content="Complete DNS analysis toolkit for developers and IT professionals." />
+        <meta property="og:type" content="website" />
+        <link rel="canonical" href="https://reviewmydns.com/tools" />
+      </Helmet>
       {/* Header */}
       <header className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

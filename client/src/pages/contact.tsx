@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Helmet } from "react-helmet-async";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -34,6 +35,14 @@ export default function Contact() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <Helmet>
+        <title>Contact Enterprise Sales - ReviewMyDNS</title>
+        <meta name="description" content="Contact our sales team for Enterprise DNS monitoring features, custom pricing, and dedicated support." />
+        <meta property="og:title" content="Contact Enterprise Sales - ReviewMyDNS" />
+        <meta property="og:description" content="Get in touch for Enterprise features and custom pricing." />
+        <meta property="og:type" content="website" />
+        <link rel="canonical" href="https://reviewmydns.com/contact" />
+      </Helmet>
       {/* Header */}
       <header className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

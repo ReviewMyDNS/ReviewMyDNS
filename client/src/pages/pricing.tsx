@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Helmet } from "react-helmet-async";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -117,6 +118,15 @@ export default function Pricing() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-purple-50 to-indigo-50">
+      <Helmet>
+        <title>DNS Tool Pricing - Free & Pro Plans | ReviewMyDNS</title>
+        <meta name="description" content="Choose from Free, Pro, Team, or Enterprise DNS monitoring plans. Start free with 50 lookups/day or upgrade for unlimited DNS checks, API access, and team features." />
+        <meta name="keywords" content="DNS tool pricing, DNS monitoring plans, DNS API pricing, DNS checker subscription" />
+        <meta property="og:title" content="DNS Tool Pricing - ReviewMyDNS" />
+        <meta property="og:description" content="Simple, transparent pricing for DNS monitoring. Start free." />
+        <meta property="og:type" content="website" />
+        <link rel="canonical" href="https://reviewmydns.com/pricing" />
+      </Helmet>
       {/* Header */}
       <header className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
