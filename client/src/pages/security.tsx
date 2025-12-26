@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Helmet } from "react-helmet-async";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -135,6 +136,15 @@ export default function Security() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <Helmet>
+        <title>DNS Security Check - Scan SPF, DKIM, DMARC, DNSSEC | ReviewMyDNS</title>
+        <meta name="description" content="Free DNS security assessment. Check DNSSEC, SPF, DKIM, DMARC configuration. Identify vulnerabilities in your domain's DNS security posture." />
+        <meta name="keywords" content="DNS security check, DNSSEC validator, SPF checker, DKIM check, DMARC validator" />
+        <meta property="og:title" content="DNS Security Check - ReviewMyDNS" />
+        <meta property="og:description" content="Comprehensive DNS security assessment for your domain." />
+        <meta property="og:type" content="website" />
+        <link rel="canonical" href="https://reviewmydns.com/security" />
+      </Helmet>
       {/* Header */}
       <header className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

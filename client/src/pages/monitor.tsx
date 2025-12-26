@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Helmet } from "react-helmet-async";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -51,6 +52,15 @@ export default function Monitor() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <Helmet>
+        <title>DNS Response Time Monitor - Real-Time Performance | ReviewMyDNS</title>
+        <meta name="description" content="Monitor DNS response times in real-time across global servers. Track performance, detect slow resolvers, and get alerts for DNS issues." />
+        <meta name="keywords" content="DNS monitor, DNS response time, real-time DNS monitoring, DNS performance" />
+        <meta property="og:title" content="DNS Response Time Monitor - ReviewMyDNS" />
+        <meta property="og:description" content="Real-time DNS performance monitoring across global servers." />
+        <meta property="og:type" content="website" />
+        <link rel="canonical" href="https://reviewmydns.com/monitor" />
+      </Helmet>
       {/* Header */}
       <header className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

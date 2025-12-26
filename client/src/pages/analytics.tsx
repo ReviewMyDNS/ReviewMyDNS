@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Helmet } from "react-helmet-async";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -13,6 +14,15 @@ export default function Analytics() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <Helmet>
+        <title>DNS Analytics Dashboard - Performance Insights | ReviewMyDNS</title>
+        <meta name="description" content="DNS analytics dashboard with performance metrics, response time tracking, and geographic analysis for all your monitored domains." />
+        <meta name="keywords" content="DNS analytics, DNS performance dashboard, DNS monitoring, response time tracking" />
+        <meta property="og:title" content="DNS Analytics Dashboard - ReviewMyDNS" />
+        <meta property="og:description" content="Comprehensive DNS performance insights and reporting." />
+        <meta property="og:type" content="website" />
+        <link rel="canonical" href="https://reviewmydns.com/analytics" />
+      </Helmet>
       {/* Header */}
       <header className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

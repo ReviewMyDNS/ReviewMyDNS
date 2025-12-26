@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Helmet } from "react-helmet-async";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -66,6 +67,15 @@ export default function HistoryPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <Helmet>
+        <title>DNS History Tracking - Monitor Record Changes | ReviewMyDNS</title>
+        <meta name="description" content="Track DNS record changes over time. See when records changed, identify trends, and maintain a complete audit trail of your DNS configuration." />
+        <meta name="keywords" content="DNS history, DNS change tracking, DNS audit log, record history" />
+        <meta property="og:title" content="DNS History Tracking - ReviewMyDNS" />
+        <meta property="og:description" content="Monitor DNS record changes over time." />
+        <meta property="og:type" content="website" />
+        <link rel="canonical" href="https://reviewmydns.com/history" />
+      </Helmet>
       {/* Header */}
       <header className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

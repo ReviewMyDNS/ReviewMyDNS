@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Helmet } from "react-helmet-async";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -78,6 +79,15 @@ export default function DNSSEC() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <Helmet>
+        <title>DNSSEC Validator - Check DNSSEC Status & Chain of Trust | ReviewMyDNS</title>
+        <meta name="description" content="Validate DNSSEC implementation for any domain. Check DS records, DNSKEY, RRSIG, and verify the complete chain of trust." />
+        <meta name="keywords" content="DNSSEC validator, DNSSEC checker, DS record check, DNSKEY validation, chain of trust" />
+        <meta property="og:title" content="DNSSEC Validator - ReviewMyDNS" />
+        <meta property="og:description" content="Validate DNSSEC implementation and chain of trust." />
+        <meta property="og:type" content="website" />
+        <link rel="canonical" href="https://reviewmydns.com/dnssec" />
+      </Helmet>
       {/* Header */}
       <header className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

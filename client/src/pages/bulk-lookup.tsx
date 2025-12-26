@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Helmet } from "react-helmet-async";
 import { useMutation } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -133,6 +134,15 @@ export default function BulkLookup() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <Helmet>
+        <title>Bulk DNS Lookup - Check Multiple Domains at Once | ReviewMyDNS</title>
+        <meta name="description" content="Bulk DNS lookup tool to check hundreds of domains simultaneously. Perfect for IT admins, domain portfolio managers, and security professionals." />
+        <meta name="keywords" content="bulk DNS lookup, mass DNS check, multiple domain lookup, DNS batch query" />
+        <meta property="og:title" content="Bulk DNS Lookup - ReviewMyDNS" />
+        <meta property="og:description" content="Check DNS records for multiple domains at once." />
+        <meta property="og:type" content="website" />
+        <link rel="canonical" href="https://reviewmydns.com/bulk-lookup" />
+      </Helmet>
       {/* Header */}
       <header className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

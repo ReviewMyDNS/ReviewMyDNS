@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Helmet } from "react-helmet-async";
 import { useMutation } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -153,6 +154,15 @@ export default function DnsCompare() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <Helmet>
+        <title>Compare DNS Providers - Google vs Cloudflare vs OpenDNS | ReviewMyDNS</title>
+        <meta name="description" content="Compare DNS resolution across Google DNS, Cloudflare, OpenDNS, and Quad9. Identify caching differences and propagation issues." />
+        <meta name="keywords" content="compare DNS providers, DNS comparison, Google DNS vs Cloudflare, DNS resolver comparison" />
+        <meta property="og:title" content="Compare DNS Providers - ReviewMyDNS" />
+        <meta property="og:description" content="Test DNS resolution across major providers." />
+        <meta property="og:type" content="website" />
+        <link rel="canonical" href="https://reviewmydns.com/compare" />
+      </Helmet>
       {/* Header */}
       <header className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
