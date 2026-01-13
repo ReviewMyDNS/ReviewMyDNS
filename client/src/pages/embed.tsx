@@ -2,7 +2,7 @@ import { useState } from "react";
 import { DnsLookupForm } from "@/components/dns-lookup-form";
 import { PropagationMap } from "@/components/propagation-map";
 import { ResultsTable } from "@/components/results-table";
-import type { DnsLookupWithResults } from "@shared/schema";
+import type { DnsLookupWithResults, DnsResult, DnsServer } from "@shared/schema";
 
 // Minimal embeddable DNS checker (no header/footer for iframe)
 export default function Embed() {
@@ -36,10 +36,10 @@ export default function Embed() {
         <DnsLookupForm onLookupComplete={handleLookupComplete} isLoading={isLoading} setIsLoading={setIsLoading} />
 
         {/* Results */}
-        {lookupResults && (
+        {lookupResults && lookupResults.results && (
           <div className="mt-6 space-y-6">
-            <PropagationMap results={lookupResults.results || []} />
-            <ResultsTable results={lookupResults} />
+            <PropagationMap results={lookupResults.results} />
+            <ResultsTable results={lookupResults.results} />
           </div>
         )}
 

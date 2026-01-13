@@ -39,6 +39,11 @@ import SiteAnalytics from "@/pages/site-analytics";
 import Api from "@/pages/api";
 import Terminology from "@/pages/terminology";
 import FaqIndex from "@/pages/faq-index";
+import ErrorsIndex from "@/pages/errors-index";
+import DnsErrorPage from "@/pages/dns-error";
+import PlatformsIndex from "@/pages/platforms-index";
+import PlatformDnsPage from "@/pages/platform-dns";
+import IsDown from "@/pages/is-down";
 
 function Router() {
   return (
@@ -76,6 +81,12 @@ function Router() {
       <Route path="/blog" component={Blog} />
       <Route path="/blog/:slug" component={BlogArticle} />
       <Route path="/site-analytics" component={SiteAnalytics} />
+      <Route path="/errors" component={ErrorsIndex} />
+      <Route path="/errors/:slug" component={DnsErrorPage} />
+      <Route path="/dns-for" component={PlatformsIndex} />
+      <Route path="/dns-for/:slug" component={PlatformDnsPage} />
+      <Route path="/is-down" component={IsDown} />
+      <Route path="/is-down/:domain" component={IsDown} />
       <Route component={NotFound} />
     </Switch>
   );

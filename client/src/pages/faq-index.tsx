@@ -41,6 +41,46 @@ export default function FaqIndex() {
         <meta property="og:description" content="Answers to common DNS questions about propagation, records, and email configuration." />
         <meta property="og:type" content="website" />
         <link rel="canonical" href="https://reviewmydns.com/faq" />
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "Why is my DNS not updating after 24 hours?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "DNS propagation can take longer than expected due to high TTL values, ISP caching, or issues with authoritative nameservers. Use a global DNS checker to verify propagation status."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "How do I check if DNS has propagated?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Use a DNS propagation checker like ReviewMyDNS that queries multiple DNS servers worldwide to see if your records have updated globally."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "What's the difference between A, CNAME, and MX records?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "A records point a domain to an IP address. CNAME records create aliases pointing to other domains. MX records specify mail servers for email delivery."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "How long does DNS propagation take?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "DNS propagation typically takes 15 minutes to 48 hours, depending on TTL settings. Most changes complete within a few hours."
+                }
+              }
+            ]
+          })}
+        </script>
       </Helmet>
 
       <header className="bg-white/90 backdrop-blur-md shadow-sm border-b border-gray-200 sticky top-0 z-50">

@@ -12,6 +12,7 @@ import { Link } from "wouter";
 import type { DnsLookupWithResults } from "@shared/schema";
 import { useToast } from "@/hooks/use-toast";
 import { Logo } from "@/components/logo";
+import { SocialShare } from "@/components/social-share";
 
 export default function SharedResult() {
   const [, params] = useRoute("/r/:shareId");
@@ -181,6 +182,14 @@ export default function SharedResult() {
                   {lookupResults.stats.unresolvedCount} Failed
                 </Badge>
               </div>
+            </div>
+            
+            <div className="mt-4 pt-4 border-t border-gray-200">
+              <SocialShare 
+                url={shareUrl}
+                title={`${lookupResults.stats.resolvedCount}/${lookupResults.stats.totalServers} servers resolved`}
+                domain={lookupResults.domain}
+              />
             </div>
           </div>
         </section>

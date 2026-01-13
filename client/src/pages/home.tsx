@@ -109,6 +109,63 @@ export default function Home() {
         <meta name="twitter:title" content="DNS Propagation Checker - ReviewMyDNS" />
         <meta name="twitter:description" content="Query 50+ global DNS servers in one click. Verify DNS propagation instantly." />
         <link rel="canonical" href="https://reviewmydns.com/" />
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "WebApplication",
+            "name": "ReviewMyDNS",
+            "description": "Free DNS propagation checker. Query 50+ global DNS servers instantly.",
+            "url": "https://reviewmydns.com",
+            "applicationCategory": "DeveloperApplication",
+            "operatingSystem": "Web",
+            "offers": {
+              "@type": "Offer",
+              "price": "0",
+              "priceCurrency": "USD"
+            },
+            "featureList": [
+              "Global DNS propagation checking",
+              "50+ worldwide DNS servers",
+              "A, AAAA, MX, TXT, CNAME record support",
+              "Shareable results",
+              "Performance analytics"
+            ]
+          })}
+        </script>
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "HowTo",
+            "name": "How to Check DNS Propagation",
+            "description": "Step-by-step guide to check if your DNS changes have propagated worldwide",
+            "step": [
+              {
+                "@type": "HowToStep",
+                "position": 1,
+                "name": "Enter Your Domain",
+                "text": "Type your domain name (e.g., example.com) into the search field"
+              },
+              {
+                "@type": "HowToStep",
+                "position": 2,
+                "name": "Select Record Type",
+                "text": "Choose the DNS record type you want to check (A, AAAA, MX, TXT, CNAME, etc.)"
+              },
+              {
+                "@type": "HowToStep",
+                "position": 3,
+                "name": "Run the Check",
+                "text": "Click 'Check DNS' to query 50+ global DNS servers"
+              },
+              {
+                "@type": "HowToStep",
+                "position": 4,
+                "name": "Review Results",
+                "text": "View propagation status on the world map and detailed results table"
+              }
+            ]
+          })}
+        </script>
       </Helmet>
       {/* Header */}
       <header className="bg-white/90 backdrop-blur-md shadow-sm border-b border-gray-200 sticky top-0 z-50">

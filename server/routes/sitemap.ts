@@ -30,6 +30,50 @@ const blogSlugs = [
   'how-to-read-dns-records',
 ];
 
+// DNS error slugs for programmatic SEO
+const dnsErrorSlugs = [
+  'nxdomain',
+  'servfail',
+  'refused',
+  'timeout',
+  'noerror-empty',
+  'formerr',
+  'notimpl',
+  'cname-loop',
+  'dnssec-validation-failed',
+  'network-unreachable',
+  'connection-refused',
+  'truncated-response',
+  'soa-mismatch',
+  'ttl-expired',
+  'lame-delegation',
+  'missing-glue',
+  'spf-permerror',
+  'dkim-signature-invalid',
+  'dmarc-failure',
+  'ptr-missing',
+];
+
+// Platform DNS guide slugs
+const platformDnsSlugs = [
+  'wordpress',
+  'shopify',
+  'squarespace',
+  'wix',
+  'webflow',
+  'ghost',
+  'vercel',
+  'netlify',
+  'github-pages',
+  'heroku',
+  'render',
+  'digitalocean',
+  'aws',
+  'google-cloud',
+  'azure',
+  'hubspot',
+];
+
 // Provider guide slugs for programmatic SEO (synced with client/src/data/provider-guides.ts)
 const providerGuideSlugs = [
   'cloudflare-dns-setup',
@@ -90,6 +134,10 @@ router.get('/sitemap.xml', (req, res) => {
     // Embed tools
     { loc: '/widget', priority: '0.5', changefreq: 'monthly' },
     { loc: '/embed', priority: '0.5', changefreq: 'monthly' },
+    // New programmatic SEO pages
+    { loc: '/errors', priority: '0.9', changefreq: 'weekly' },
+    { loc: '/dns-for', priority: '0.9', changefreq: 'weekly' },
+    { loc: '/is-down', priority: '0.9', changefreq: 'daily' },
   ];
 
   // Add programmatic provider guide pages
@@ -121,6 +169,24 @@ router.get('/sitemap.xml', (req, res) => {
   blogSlugs.forEach(slug => {
     urls.push({
       loc: `/blog/${slug}`,
+      priority: '0.8',
+      changefreq: 'monthly'
+    });
+  });
+
+  // Add DNS error pages
+  dnsErrorSlugs.forEach(slug => {
+    urls.push({
+      loc: `/errors/${slug}`,
+      priority: '0.8',
+      changefreq: 'monthly'
+    });
+  });
+
+  // Add platform DNS guide pages
+  platformDnsSlugs.forEach(slug => {
+    urls.push({
+      loc: `/dns-for/${slug}`,
       priority: '0.8',
       changefreq: 'monthly'
     });
