@@ -294,3 +294,87 @@ export const insertAnalyticsEventSchema = createInsertSchema(analyticsEvents).pi
 
 export type InsertAnalyticsEvent = z.infer<typeof insertAnalyticsEventSchema>;
 export type AnalyticsEvent = typeof analyticsEvents.$inferSelect;
+
+// DNS Monitors for alerting
+export const dnsMonitors = pgTable("dns_monitors", {
+  id: serial("id").primaryKey(),
+  userId: varchar("user_id").notNull(),
+  domain: text("domain").notNull(),
+  recordType: text("record_type").notNull(),
+  expectedValue: text("expected_value"),
+  checkInterval: integer("check_interval").default(3600), // seconds
+  emailAlert: boolean("email_alert").default(true),
+  lastChecked: timestamp("last_checked"),
+  lastStatus: text("last_status"), // 'ok', 'changed', 'error'
+  lastResponse: text("last_response"),
+  active: boolean("active").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+}, (table) => ({
+  userIdIdx: index("monitor_user_id_idx").on(table.userId),
+  domainIdx: index("monitor_domain_idx").on(table.domain),
+}));
+
+export const insertDnsMonitorSchema = createInsertSchema(dnsMonitors).pick({
+  userId: true,
+  domain: true,
+  recordType: true,
+  expectedValue: true,
+  checkInterval: true,
+  emailAlert: true,
+});
+
+export type InsertDnsMonitor = z.infer<typeof insertDnsMonitorSchema>;
+export type DnsMonitor = typeof dnsMonitors.$inferSelect;
+
+// API Keys for developer access
+export const apiKeys = pgTable("api_keys", {
+  id: serial("id").primaryKey(),
+  userId: varchar("user_id").notNull(),
+  name: varchar("name", { length: 100 }).notNull(),
+  keyHash: varchar("key_hash", { length: 64 }).notNull(),
+  keyPrefix: varchar("key_prefix", { length: 8 }).notNull(), // First 8 chars for display
+  lastUsed: timestamp("last_used"),
+  usageCount: integer("usage_count").default(0),
+  rateLimit: integer("rate_limit").default(100), // requests per hour
+  active: boolean("active").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+}, (table) => ({
+  userIdIdx: index("api_key_user_id_idx").on(table.userId),
+  keyHashIdx: index("api_key_hash_idx").on(table.keyHash),
+}));
+
+export const insertApiKeySchema = createInsertSchema(apiKeys).pick({
+  userId: true,
+  name: true,
+  keyHash: true,
+  keyPrefix: true,
+  rateLimit: true,
+});
+
+export type InsertApiKey = z.infer<typeof insertApiKeySchema>;
+export type ApiKey = typeof apiKeys.$inferSelect;
+
+// Bulk lookup jobs
+export const bulkLookups = pgTable("bulk_lookups", {
+  id: serial("id").primaryKey(),
+  userId: varchar("user_id").notNull(),
+  status: text("status").notNull().default("pending"), // pending, processing, completed, failed
+  totalDomains: integer("total_domains").notNull(),
+  completedDomains: integer("completed_domains").default(0),
+  recordType: text("record_type").notNull(),
+  resultsJson: jsonb("results_json"),
+  createdAt: timestamp("created_at").defaultNow(),
+  completedAt: timestamp("completed_at"),
+}, (table) => ({
+  userIdIdx: index("bulk_user_id_idx").on(table.userId),
+  statusIdx: index("bulk_status_idx").on(table.status),
+}));
+
+export const insertBulkLookupSchema = createInsertSchema(bulkLookups).pick({
+  userId: true,
+  totalDomains: true,
+  recordType: true,
+});
+
+export type InsertBulkLookup = z.infer<typeof insertBulkLookupSchema>;
+export type BulkLookup = typeof bulkLookups.$inferSelect;
