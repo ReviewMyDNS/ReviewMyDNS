@@ -10,7 +10,11 @@
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-      gtag('config', 'G-N0MQZMQFVC');
+      gtag('config', 'G-N0MQZMQFVC', {
+        'send_page_view': true,
+        'cookie_flags': 'SameSite=None;Secure'
+      });
+      console.log('[GA4] Tracking initialized for G-N0MQZMQFVC');
     </script>
     
     <!-- Primary SEO -->

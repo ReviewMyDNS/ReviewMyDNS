@@ -21,6 +21,8 @@ import { useMutation } from "@tanstack/react-query";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { EmailCapturePopup } from "@/components/email-capture-popup";
 import { useAuth } from "@/hooks/useAuth";
+import { DnsInsights } from "@/components/dns-insights";
+import { AdSlot } from "@/components/ad-slot";
 
 // Mobile-optimized home page
 export default function Home() {
@@ -514,6 +516,9 @@ export default function Home() {
                 </TooltipProvider>
               </div>
             </div>
+
+            {/* AI-Powered DNS Insights */}
+            <DnsInsights results={lookupResults} />
 
             {/* Interactive World Map */}
             <Card className="mb-8">
