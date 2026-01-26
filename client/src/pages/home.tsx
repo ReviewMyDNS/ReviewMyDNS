@@ -24,6 +24,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { DnsInsights } from "@/components/dns-insights";
 import { AdSlot } from "@/components/ad-slot";
 import { LiveActivity } from "@/components/live-activity";
+import { ExitIntentPopup } from "@/components/exit-intent-popup";
 
 // Mobile-optimized home page
 export default function Home() {
@@ -990,6 +991,7 @@ export default function Home() {
         </footer>
       </main>
       <EmailCapturePopup triggerOnLookup={!!lookupResults} />
+      <ExitIntentPopup hasUsedTool={!!lookupResults} />
     </div>
   );
 }
