@@ -7,7 +7,11 @@ import { useMutation } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 
-export function EmailCapturePopup() {
+interface EmailCapturePopupProps {
+  triggerOnLookup?: boolean;
+}
+
+export function EmailCapturePopup({ triggerOnLookup = false }: EmailCapturePopupProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [email, setEmail] = useState("");
   const { toast } = useToast();
@@ -19,15 +23,19 @@ export function EmailCapturePopup() {
     const hasCaptured = localStorage.getItem("emailCaptured");
     
     if (!hasSeenPopup && !hasDismissed && !hasCaptured) {
-      // Show popup after 15 seconds
-      const timer = setTimeout(() => {
+      // Show popup after first lookup OR after 30 seconds (whichever comes first)
+      if (triggerOnLookup) {
         setIsOpen(true);
         localStorage.setItem("emailPopupSeen", "true");
-      }, 15000);
-
-      return () => clearTimeout(timer);
+      } else {
+        const timer = setTimeout(() => {
+          setIsOpen(true);
+          localStorage.setItem("emailPopupSeen", "true");
+        }, 30000); // Increased to 30s - less annoying
+        return () => clearTimeout(timer);
+      }
     }
-  }, []);
+  }, [triggerOnLookup]);
 
   const emailCaptureMutation = useMutation({
     mutationFn: async (email: string) => {

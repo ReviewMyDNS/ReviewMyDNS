@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -43,6 +43,15 @@ interface UsageStats {
 export function DnsLookupForm({ onLookupComplete, isLoading, setIsLoading }: DnsLookupFormProps) {
   const [isAdvancedOpen, setIsAdvancedOpen] = useState(false);
   const { toast } = useToast();
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  // Auto-focus the input on mount
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      inputRef.current?.focus();
+    }, 500);
+    return () => clearTimeout(timer);
+  }, []);
 
   // Fetch usage stats to check allowed record types
   const { data: usageStats } = useQuery<UsageStats>({
@@ -114,6 +123,10 @@ export function DnsLookupForm({ onLookupComplete, isLoading, setIsLoading }: Dns
                           placeholder="Enter domain (e.g., example.com)"
                           className="text-lg h-12"
                           {...field}
+                          ref={(e) => {
+                            field.ref(e);
+                            (inputRef as any).current = e;
+                          }}
                         />
                       </FormControl>
                       <FormMessage />

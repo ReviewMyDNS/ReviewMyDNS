@@ -23,6 +23,7 @@ import { EmailCapturePopup } from "@/components/email-capture-popup";
 import { useAuth } from "@/hooks/useAuth";
 import { DnsInsights } from "@/components/dns-insights";
 import { AdSlot } from "@/components/ad-slot";
+import { LiveActivity } from "@/components/live-activity";
 
 // Mobile-optimized home page
 export default function Home() {
@@ -270,6 +271,33 @@ export default function Home() {
               isLoading={isLoading}
               setIsLoading={setIsLoading}
             />
+
+            {/* Quick Demo Buttons */}
+            <div className="flex flex-wrap justify-center gap-2 mt-4">
+              <span className="text-blue-200 text-sm mr-2">Try it now:</span>
+              {['google.com', 'github.com', 'cloudflare.com'].map((domain) => (
+                <Button
+                  key={domain}
+                  variant="outline"
+                  size="sm"
+                  className="bg-white/10 border-white/20 text-white hover:bg-white/20 text-xs"
+                  onClick={() => {
+                    const form = document.querySelector('input[placeholder*="domain"]') as HTMLInputElement;
+                    if (form) {
+                      form.value = domain;
+                      form.dispatchEvent(new Event('input', { bubbles: true }));
+                    }
+                    const submitBtn = document.querySelector('button[type="submit"]') as HTMLButtonElement;
+                    if (submitBtn) submitBtn.click();
+                  }}
+                >
+                  {domain}
+                </Button>
+              ))}
+            </div>
+            
+            {/* Live Activity Counter - Social Proof */}
+            <LiveActivity />
             
             {!isAuthenticated && (
               <div className="text-center mt-4">
@@ -961,7 +989,7 @@ export default function Home() {
           </div>
         </footer>
       </main>
-      <EmailCapturePopup />
+      <EmailCapturePopup triggerOnLookup={!!lookupResults} />
     </div>
   );
 }
