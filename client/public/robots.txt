@@ -4,20 +4,17 @@
 User-agent: *
 Allow: /
 
-# Disallow private/auth pages
-Disallow: /login
-Disallow: /register
+# Disallow private pages only
 Disallow: /dashboard
 Disallow: /site-analytics
 
-# Block backend API endpoints (not the /api docs page)
+# Block backend API endpoints (not the /api-docs page)
 Disallow: /api/dns/
 Disallow: /api/auth/
 Disallow: /api/user/
 Disallow: /api/stripe/
+Disallow: /api/analytics/
+Disallow: /api/email-capture
 
 # Sitemap location
 Sitemap: https://reviewmydns.com/sitemap.xml
-
-# Crawl delay (be nice to small servers)
-Crawl-delay: 1
