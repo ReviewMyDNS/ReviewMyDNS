@@ -22,8 +22,8 @@ export default function TxtRecordChecker() {
   return (
     <>
       <Helmet>
-        <title>Free TXT Record Checker - Verify SPF, DKIM, DMARC Records | ReviewMyDNS</title>
-        <meta name="description" content="Free TXT record checker tool. Verify SPF, DKIM, DMARC, and other TXT DNS records across 50+ global servers. Test email authentication and domain verification instantly." />
+        <title>Free TXT Record Checker (2026) - Verify SPF, DKIM, DMARC | ReviewMyDNS</title>
+        <meta name="description" content="Check TXT records across 50+ servers. Verify SPF, DKIM, DMARC email authentication records are configured correctly. Instant results for any domain." />
         <meta name="keywords" content="txt record checker, check txt records, spf lookup, dkim checker, dmarc verification, dns txt records" />
         <link rel="canonical" href="https://reviewmydns.com/txt-record-checker" />
       </Helmet>

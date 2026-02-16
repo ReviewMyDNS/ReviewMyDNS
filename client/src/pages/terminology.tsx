@@ -223,8 +223,8 @@ export default function Terminology() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
       <Helmet>
-        <title>DNS Terminology Glossary - What is A Record, CNAME, MX, TTL? | ReviewMyDNS</title>
-        <meta name="description" content="Complete DNS terminology glossary. Learn what A records, CNAME, MX, TXT, TTL, SPF, DKIM, DMARC, and other DNS terms mean with clear definitions and examples." />
+        <title>DNS Glossary (2026) - A Record, CNAME, MX, TTL Explained Simply | ReviewMyDNS</title>
+        <meta name="description" content="Plain-English DNS glossary. Learn what A records, CNAME, MX, TXT, TTL, SPF, DKIM, and DMARC mean with real examples. Perfect for beginners and IT professionals." />
         <meta name="keywords" content="DNS terminology, what is A record, what is CNAME, what is MX record, DNS glossary, TTL meaning, SPF explained, DKIM explained" />
         <meta property="og:title" content="DNS Terminology Glossary - ReviewMyDNS" />
         <meta property="og:description" content="Complete DNS terminology glossary with clear definitions and examples." />

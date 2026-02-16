@@ -22,8 +22,8 @@ export default function MxRecordLookup() {
   return (
     <>
       <Helmet>
-        <title>Free MX Record Lookup Tool - Check Email DNS Records | ReviewMyDNS</title>
-        <meta name="description" content="Free MX record lookup tool. Check mail server DNS records across 50+ global servers. Verify email routing, troubleshoot delivery issues, and test MX configuration instantly." />
+        <title>Free MX Record Lookup (2026) - Check Mail Server DNS Instantly | ReviewMyDNS</title>
+        <meta name="description" content="Look up MX records across 50+ global servers in seconds. Troubleshoot email delivery issues, verify mail server configuration, and check email routing for any domain." />
         <meta name="keywords" content="mx record lookup, check mx records, mail server dns, email dns lookup, mx record checker, verify email dns" />
         <link rel="canonical" href="https://reviewmydns.com/mx-record-lookup" />
       </Helmet>

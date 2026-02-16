@@ -102,8 +102,8 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
       <Helmet>
-        <title>DNS Propagation Checker - Global DNS Lookup Tool | ReviewMyDNS</title>
-        <meta name="description" content="Free DNS propagation checker. Query 50+ global DNS servers instantly. Check A, AAAA, MX, TXT, CNAME records. Verify DNS changes are live worldwide." />
+        <title>Free DNS Propagation Checker (2026) - Check 50+ Servers Instantly | ReviewMyDNS</title>
+        <meta name="description" content="Check DNS propagation across 50+ global servers in seconds. Free tool to verify A, MX, CNAME, TXT records are live worldwide. Used by 10K+ DevOps teams." />
         <meta name="keywords" content="DNS propagation checker, DNS lookup, global DNS check, DNS verification, MX record lookup, A record check" />
         <meta property="og:title" content="DNS Propagation Checker - ReviewMyDNS" />
         <meta property="og:description" content="Query 50+ global DNS servers in one click. Verify DNS propagation instantly." />

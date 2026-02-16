@@ -142,6 +142,18 @@ export default function BulkLookup() {
         <meta property="og:description" content="Check DNS records for multiple domains at once." />
         <meta property="og:type" content="website" />
         <link rel="canonical" href="https://reviewmydns.com/bulk-lookup" />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          "mainEntity": [
+            { "@type": "Question", "name": "How many domains can I check at once with bulk DNS lookup?", "acceptedAnswer": { "@type": "Answer", "text": "Our bulk DNS lookup tool supports up to 100 domains per batch on Pro plans. Enter one domain per line in the input field, select the record type you want to query, and click Start Bulk Lookup. Results are processed sequentially with real-time progress updates for each domain." } },
+            { "@type": "Question", "name": "What record types does bulk DNS lookup support?", "acceptedAnswer": { "@type": "Answer", "text": "Bulk DNS lookup supports all major record types: A (IPv4 addresses), AAAA (IPv6 addresses), CNAME (canonical names), MX (mail exchange servers), NS (nameservers), TXT (text records for SPF, DKIM, verification), and SOA (start of authority). Each batch query checks one record type across all domains." } },
+            { "@type": "Question", "name": "Can I export bulk DNS lookup results?", "acceptedAnswer": { "@type": "Answer", "text": "Yes, after completing a bulk lookup, click the Export CSV button to download a comprehensive report. The CSV includes domain name, record type, status (resolved/failed), number of responding servers, total servers tested, average response time, and coverage percentage for each domain." } },
+            { "@type": "Question", "name": "Who uses bulk DNS lookup tools?", "acceptedAnswer": { "@type": "Answer", "text": "Bulk DNS lookup tools are commonly used by IT administrators auditing corporate domain portfolios, web agencies managing client domains, security professionals conducting DNS audits, domain investors analyzing large domain portfolios, and DevOps teams verifying DNS migrations across multiple services." } },
+            { "@type": "Question", "name": "Is bulk DNS lookup free?", "acceptedAnswer": { "@type": "Answer", "text": "Bulk DNS lookup is available on our Pro plan. Individual DNS lookups are free with 50 queries per day on the free tier. The Pro plan provides unlimited individual lookups and access to bulk lookup, DNS monitoring, comparison tools, and CSV export functionality." } },
+            { "@type": "Question", "name": "How accurate is the bulk DNS lookup?", "acceptedAnswer": { "@type": "Answer", "text": "Our bulk DNS lookup queries 20+ authoritative and recursive DNS servers worldwide for each domain, providing a comprehensive view of DNS resolution. Results show how many servers successfully resolved each domain, the average response time, and any failures. This multi-server approach ensures accurate, real-world results rather than checking a single resolver." } }
+          ]
+        }) }} />
       </Helmet>
       {/* Header */}
       <header className="bg-white shadow-sm border-b border-gray-200">
@@ -346,6 +358,123 @@ export default function BulkLookup() {
         </div>
       </main>
       </PlanGate>
+
+      {/* SEO Educational Content */}
+      <section className="bg-white border-t border-gray-200">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <h2 className="text-3xl font-bold text-gray-900 mb-6">How Bulk DNS Lookup Works</h2>
+          <div className="text-gray-700 space-y-4 mb-8">
+            <p>
+              Bulk DNS lookup automates the process of querying DNS records for multiple domains simultaneously. Instead of manually checking one domain at a time, you can enter up to 100 domains and our system will query each one against 20+ DNS servers worldwide. For each domain, the tool performs a full DNS resolution, records the responses from each server, measures response times, and calculates the propagation coverage percentage.
+            </p>
+            <p>
+              The process works sequentially to avoid overwhelming DNS servers and to comply with rate limits. As each domain is resolved, you see real-time status updates showing pending, resolved, or failed states. Once complete, all results can be exported as a CSV file for further analysis in spreadsheet software, reporting tools, or automated workflows.
+            </p>
+            <p>
+              Under the hood, bulk DNS lookup uses the same resolution infrastructure as our single-domain DNS propagation checker. Each query is distributed across authoritative and recursive DNS servers across North America, Europe, Asia-Pacific, and other regions. This gives you a true global view of DNS health, not just what a single local resolver reports.
+            </p>
+          </div>
+
+          <h2 className="text-3xl font-bold text-gray-900 mb-6">Best Practices for Bulk DNS Auditing</h2>
+          <div className="space-y-4 mb-8">
+            <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+              <h3 className="font-semibold text-gray-900 mb-2">Start with A Records</h3>
+              <p className="text-gray-700">Begin your audit by checking A records across all domains. This confirms that every domain resolves to an IP address. Domains returning zero resolved servers may be expired, parked, or misconfigured.</p>
+            </div>
+            <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+              <h3 className="font-semibold text-gray-900 mb-2">Check MX Records Separately</h3>
+              <p className="text-gray-700">Run a separate batch for MX records to verify email configuration. Missing or incorrect MX records are a common cause of email delivery failures. Compare results against your expected mail server configuration.</p>
+            </div>
+            <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+              <h3 className="font-semibold text-gray-900 mb-2">Verify TXT Records for Security</h3>
+              <p className="text-gray-700">TXT record audits reveal SPF, DKIM, and DMARC configurations. Missing email authentication records make domains vulnerable to spoofing. Run TXT checks to identify domains lacking proper email security.</p>
+            </div>
+            <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+              <h3 className="font-semibold text-gray-900 mb-2">Export and Compare Over Time</h3>
+              <p className="text-gray-700">Export CSV results regularly and compare them to previous audits. This helps detect unauthorized DNS changes, expired records, or configuration drift that could indicate a security compromise or administrative error.</p>
+            </div>
+            <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+              <h3 className="font-semibold text-gray-900 mb-2">Monitor Response Times</h3>
+              <p className="text-gray-700">Average response times above 500ms may indicate DNS performance issues. Consistently slow responses could mean your DNS provider is overloaded, your domain has too many records, or there are network routing problems.</p>
+            </div>
+          </div>
+
+          <h2 className="text-3xl font-bold text-gray-900 mb-6">Use Cases for Bulk DNS Checking</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <Card>
+              <CardContent className="p-6">
+                <h3 className="font-semibold text-gray-900 mb-2">IT Administrators</h3>
+                <p className="text-gray-700 text-sm">Manage corporate domain portfolios by auditing DNS records across all company domains. Verify that internal services, email, and web properties resolve correctly. Detect unauthorized DNS changes that could indicate a security breach. Schedule regular audits to maintain DNS hygiene across your organization.</p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardContent className="p-6">
+                <h3 className="font-semibold text-gray-900 mb-2">Web Agencies</h3>
+                <p className="text-gray-700 text-sm">Agencies managing DNS for dozens of client domains can verify all configurations in minutes instead of hours. After a DNS migration or hosting change, bulk check confirms all domains propagated correctly. Use CSV exports to provide clients with DNS health reports as part of managed services.</p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardContent className="p-6">
+                <h3 className="font-semibold text-gray-900 mb-2">Security Teams</h3>
+                <p className="text-gray-700 text-sm">Conduct DNS audits to find misconfigured records, dangling CNAME entries pointing to decommissioned services, or domains with missing email authentication (SPF/DKIM/DMARC). Bulk DNS checks are essential for identifying subdomain takeover vulnerabilities across large domain portfolios.</p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardContent className="p-6">
+                <h3 className="font-semibold text-gray-900 mb-2">Domain Investors</h3>
+                <p className="text-gray-700 text-sm">Monitor large domain portfolios to ensure all domains remain active and properly configured. Identify domains that have stopped resolving (potentially expired or seized). Verify parking page DNS is correctly configured for monetized domains in your portfolio.</p>
+              </CardContent>
+            </Card>
+          </div>
+
+          <h2 className="text-3xl font-bold text-gray-900 mb-6">Frequently Asked Questions</h2>
+          <div className="space-y-4 mb-8">
+            <div className="bg-white p-4 rounded-lg border border-gray-200">
+              <h3 className="font-semibold text-gray-900 mb-2">How many domains can I check at once?</h3>
+              <p className="text-gray-700">Our bulk DNS lookup supports up to 100 domains per batch on Pro plans. Enter one domain per line and select the record type you want to query. Results are processed sequentially with real-time progress updates.</p>
+            </div>
+            <div className="bg-white p-4 rounded-lg border border-gray-200">
+              <h3 className="font-semibold text-gray-900 mb-2">What record types does bulk lookup support?</h3>
+              <p className="text-gray-700">All major DNS record types: A, AAAA, CNAME, MX, NS, TXT, and SOA. Each batch checks one record type across all domains. Run separate batches for different record types.</p>
+            </div>
+            <div className="bg-white p-4 rounded-lg border border-gray-200">
+              <h3 className="font-semibold text-gray-900 mb-2">Can I export the results?</h3>
+              <p className="text-gray-700">Yes, click "Export CSV" after the lookup completes. The CSV includes domain name, record type, status, server counts, average response time, and coverage percentage.</p>
+            </div>
+            <div className="bg-white p-4 rounded-lg border border-gray-200">
+              <h3 className="font-semibold text-gray-900 mb-2">What does coverage percentage mean?</h3>
+              <p className="text-gray-700">Coverage shows what percentage of queried DNS servers successfully resolved the domain. 100% means all servers returned results. Lower percentages may indicate propagation issues, regional outages, or misconfigured DNS.</p>
+            </div>
+            <div className="bg-white p-4 rounded-lg border border-gray-200">
+              <h3 className="font-semibold text-gray-900 mb-2">Why did some domains fail?</h3>
+              <p className="text-gray-700">Domains may fail due to: expired domain registration, incorrect nameserver delegation, DNS provider outages, or the domain not having the requested record type configured. Check failed domains individually for more details.</p>
+            </div>
+            <div className="bg-white p-4 rounded-lg border border-gray-200">
+              <h3 className="font-semibold text-gray-900 mb-2">How is this different from the single DNS checker?</h3>
+              <p className="text-gray-700">The single DNS checker provides detailed propagation results from 50+ servers for one domain with a visual map. Bulk lookup checks multiple domains against 20+ servers with summary statistics, optimized for auditing large domain portfolios efficiently.</p>
+            </div>
+          </div>
+
+          <h2 className="text-3xl font-bold text-gray-900 mb-6">Related DNS Tools</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+              <h3 className="font-semibold text-gray-900 mb-2">DNS Propagation Checker</h3>
+              <p className="text-sm text-gray-600 mb-2">Check detailed propagation for a single domain across 50+ global servers with an interactive map.</p>
+              <Link href="/dns-propagation-checker" className="text-blue-600 hover:underline text-sm">Check Propagation →</Link>
+            </div>
+            <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+              <h3 className="font-semibold text-gray-900 mb-2">Compare DNS Providers</h3>
+              <p className="text-sm text-gray-600 mb-2">See how Google DNS, Cloudflare, OpenDNS, and Quad9 resolve your domains differently.</p>
+              <Link href="/compare" className="text-blue-600 hover:underline text-sm">Compare Providers →</Link>
+            </div>
+            <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+              <h3 className="font-semibold text-gray-900 mb-2">DNS Setup Guides</h3>
+              <p className="text-sm text-gray-600 mb-2">Step-by-step guides for configuring DNS on GoDaddy, Cloudflare, Namecheap, and more.</p>
+              <Link href="/guides" className="text-blue-600 hover:underline text-sm">Browse Guides →</Link>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

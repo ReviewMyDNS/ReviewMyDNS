@@ -47,6 +47,22 @@ export default function FaqPage() {
         
         {/* Canonical URL */}
         <link rel="canonical" href={`https://reviewmydns.com/faq/${faq.slug}`} />
+        
+        {/* FAQ Structured Data */}
+        {faq.faqs && faq.faqs.length > 0 && (
+          <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": faq.faqs.map((item: { question: string; answer: string }) => ({
+              "@type": "Question",
+              "name": item.question,
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": item.answer
+              }
+            }))
+          }) }} />
+        )}
       </Helmet>
 
       {/* Header */}
@@ -146,6 +162,41 @@ export default function FaqPage() {
           </div>
         </section>
 
+        {/* Related Resources */}
+        <section className="mb-12">
+          <h2 className="text-3xl font-bold text-gray-900 mb-6">Related Resources</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <Card className="hover:shadow-md transition-shadow">
+              <CardContent className="p-6">
+                <h3 className="font-semibold text-gray-900 mb-2">DNS Propagation Checker</h3>
+                <p className="text-gray-600 text-sm mb-3">Verify your DNS changes have propagated across 50+ global servers in real-time.</p>
+                <Link href="/dns-propagation-checker" className="text-blue-600 hover:underline text-sm font-medium">Check DNS Propagation →</Link>
+              </CardContent>
+            </Card>
+            <Card className="hover:shadow-md transition-shadow">
+              <CardContent className="p-6">
+                <h3 className="font-semibold text-gray-900 mb-2">DNS Setup Guides</h3>
+                <p className="text-gray-600 text-sm mb-3">Step-by-step guides for configuring DNS on GoDaddy, Cloudflare, Namecheap, and more.</p>
+                <Link href="/guides" className="text-blue-600 hover:underline text-sm font-medium">Browse All Guides →</Link>
+              </CardContent>
+            </Card>
+            <Card className="hover:shadow-md transition-shadow">
+              <CardContent className="p-6">
+                <h3 className="font-semibold text-gray-900 mb-2">Compare DNS Providers</h3>
+                <p className="text-gray-600 text-sm mb-3">Compare how Google DNS, Cloudflare, OpenDNS, and Quad9 resolve your domain.</p>
+                <Link href="/compare" className="text-blue-600 hover:underline text-sm font-medium">Compare Providers →</Link>
+              </CardContent>
+            </Card>
+            <Card className="hover:shadow-md transition-shadow">
+              <CardContent className="p-6">
+                <h3 className="font-semibold text-gray-900 mb-2">DNSSEC Validator</h3>
+                <p className="text-gray-600 text-sm mb-3">Check if DNSSEC is properly configured and the chain of trust is valid for your domain.</p>
+                <Link href="/dnssec" className="text-blue-600 hover:underline text-sm font-medium">Validate DNSSEC →</Link>
+              </CardContent>
+            </Card>
+          </div>
+        </section>
+
         {/* Final CTA */}
         <Card className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
           <CardContent className="p-8 text-center">
@@ -166,7 +217,7 @@ export default function FaqPage() {
       <footer className="bg-gray-800 text-white mt-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="text-center text-gray-300 text-sm">
-            © 2025 ReviewMyDNS. All rights reserved.
+            © 2026 ReviewMyDNS. All rights reserved.
           </div>
         </div>
       </footer>

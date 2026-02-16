@@ -107,8 +107,8 @@ export default function Tools() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
       <Helmet>
-        <title>DNS Tools - Propagation Checker, Security Scan, DNSSEC Validator | ReviewMyDNS</title>
-        <meta name="description" content="Complete DNS toolkit: propagation checker, bulk lookup, DNS comparison, security scanner, DNSSEC validator, and developer API. Free to use." />
+        <title>Free DNS Tools (2026) - Propagation Checker, Security Scan & More | ReviewMyDNS</title>
+        <meta name="description" content="10+ free DNS tools: propagation checker, bulk lookup, provider comparison, security scanner, DNSSEC validator, MX lookup, and developer API. No signup required." />
         <meta name="keywords" content="DNS tools, DNS propagation checker, DNSSEC validator, DNS security check, bulk DNS lookup" />
         <meta property="og:title" content="DNS Tools - ReviewMyDNS" />
         <meta property="og:description" content="Complete DNS analysis toolkit for developers and IT professionals." />

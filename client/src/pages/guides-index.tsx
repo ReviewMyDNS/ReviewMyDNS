@@ -12,8 +12,8 @@ export default function GuidesIndex() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
       <Helmet>
-        <title>DNS Setup Guides - ReviewMyDNS</title>
-        <meta name="description" content="Step-by-step DNS setup guides for all major domain registrars and hosting providers. Learn how to configure DNS records on Cloudflare, GoDaddy, Namecheap, AWS Route 53, and more." />
+        <title>DNS Setup Guides (2026) - GoDaddy, Cloudflare & More | ReviewMyDNS</title>
+        <meta name="description" content="40+ step-by-step DNS setup guides for every major provider. Configure A, MX, CNAME, TXT records on GoDaddy, Cloudflare, Namecheap, AWS Route 53, and more." />
         <meta property="og:title" content="DNS Setup Guides - ReviewMyDNS" />
         <meta property="og:description" content="Step-by-step DNS configuration tutorials for all major providers." />
         <meta property="og:type" content="website" />

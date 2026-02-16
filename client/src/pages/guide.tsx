@@ -47,6 +47,22 @@ export default function Guide() {
         
         {/* Canonical URL */}
         <link rel="canonical" href={`https://reviewmydns.com/guides/${guide.slug}`} />
+        
+        {/* FAQ Structured Data */}
+        {guide.faq && guide.faq.length > 0 && (
+          <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": guide.faq.map((item: { question: string; answer: string }) => ({
+              "@type": "Question",
+              "name": item.question,
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": item.answer
+              }
+            }))
+          }) }} />
+        )}
       </Helmet>
 
       {/* Header */}
@@ -223,6 +239,17 @@ export default function Guide() {
               </Card>
             ))}
           </div>
+          <Card className="mt-6 bg-blue-50 border-blue-200">
+            <CardContent className="p-4">
+              <p className="text-sm text-blue-900">
+                Still having issues? Use our{" "}
+                <Link href="/dns-propagation-checker" className="text-blue-600 hover:underline font-medium">
+                  DNS Propagation Checker
+                </Link>{" "}
+                to verify your DNS changes have propagated across 50+ global servers.
+              </p>
+            </CardContent>
+          </Card>
         </section>
 
         {/* FAQ */}
@@ -239,6 +266,41 @@ export default function Guide() {
                 </CardContent>
               </Card>
             ))}
+          </div>
+        </section>
+
+        {/* Related Guides */}
+        <section className="mb-12">
+          <h2 className="text-3xl font-bold text-gray-900 mb-6">Related Guides and Tools</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <Card className="hover:shadow-md transition-shadow">
+              <CardContent className="p-6">
+                <h3 className="font-semibold text-gray-900 mb-2">DNS Propagation Checker</h3>
+                <p className="text-gray-600 text-sm mb-3">Verify your DNS changes have propagated across 50+ global servers after updating records.</p>
+                <Link href="/dns-propagation-checker" className="text-blue-600 hover:underline text-sm font-medium">Check DNS Propagation →</Link>
+              </CardContent>
+            </Card>
+            <Card className="hover:shadow-md transition-shadow">
+              <CardContent className="p-6">
+                <h3 className="font-semibold text-gray-900 mb-2">Compare DNS Providers</h3>
+                <p className="text-gray-600 text-sm mb-3">Test how Google DNS, Cloudflare, OpenDNS, and Quad9 resolve your domain differently.</p>
+                <Link href="/compare" className="text-blue-600 hover:underline text-sm font-medium">Compare Providers →</Link>
+              </CardContent>
+            </Card>
+            <Card className="hover:shadow-md transition-shadow">
+              <CardContent className="p-6">
+                <h3 className="font-semibold text-gray-900 mb-2">DNSSEC Validator</h3>
+                <p className="text-gray-600 text-sm mb-3">Check if DNSSEC is properly configured and the chain of trust is valid for your domain.</p>
+                <Link href="/dnssec" className="text-blue-600 hover:underline text-sm font-medium">Validate DNSSEC →</Link>
+              </CardContent>
+            </Card>
+            <Card className="hover:shadow-md transition-shadow">
+              <CardContent className="p-6">
+                <h3 className="font-semibold text-gray-900 mb-2">All DNS Setup Guides</h3>
+                <p className="text-gray-600 text-sm mb-3">Browse step-by-step DNS setup guides for GoDaddy, Cloudflare, Namecheap, and more providers.</p>
+                <Link href="/guides" className="text-blue-600 hover:underline text-sm font-medium">Browse All Guides →</Link>
+              </CardContent>
+            </Card>
           </div>
         </section>
 
@@ -262,7 +324,7 @@ export default function Guide() {
       <footer className="bg-gray-800 text-white mt-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="text-center text-gray-300 text-sm">
-            © 2025 ReviewMyDNS. All rights reserved.
+            © 2026 ReviewMyDNS. All rights reserved.
           </div>
         </div>
       </footer>
