@@ -100,6 +100,20 @@ const providerGuideSlugs = [
   'dnsimple-dns-setup',
   'linode-dns-setup',
   'digitalocean-dns-setup',
+  'hostinger-dns-setup',
+  'dreamhost-dns-setup',
+  'ionos-dns-setup',
+  'ovhcloud-dns-setup',
+  'gandi-dns-setup',
+  'wix-dns-setup',
+  'squarespace-dns-setup',
+  'shopify-dns-setup',
+  'netlify-dns-setup',
+  'vercel-dns-setup',
+  'dns-not-propagating-fix',
+  'email-going-to-spam-dns-fix',
+  'ssl-certificate-dns-errors',
+  'subdomain-not-working-dns',
 ];
 
 router.get('/sitemap.xml', (req, res) => {
