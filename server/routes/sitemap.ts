@@ -128,6 +128,8 @@ router.get('/sitemap.xml', (req, res) => {
     { loc: '/contact', priority: '0.6', changefreq: 'monthly' },
     // SEO landing pages
     { loc: '/dns-propagation-checker', priority: '0.9', changefreq: 'weekly' },
+    { loc: '/how-long-does-dns-propagation-take', priority: '0.8', changefreq: 'monthly' },
+    { loc: '/dns-not-propagating', priority: '0.8', changefreq: 'monthly' },
     { loc: '/mx-record-lookup', priority: '0.8', changefreq: 'weekly' },
     { loc: '/txt-record-checker', priority: '0.8', changefreq: 'weekly' },
     // Developer resources
@@ -152,6 +154,11 @@ router.get('/sitemap.xml', (req, res) => {
     { loc: '/errors', priority: '0.9', changefreq: 'weekly' },
     { loc: '/dns-for', priority: '0.9', changefreq: 'weekly' },
     { loc: '/is-down', priority: '0.9', changefreq: 'daily' },
+    { loc: '/google-workspace-mx-not-working', priority: '0.8', changefreq: 'monthly' },
+    { loc: '/domain-not-working-after-transfer', priority: '0.8', changefreq: 'monthly' },
+    { loc: '/check-godaddy-dns', priority: '0.7', changefreq: 'monthly' },
+    { loc: '/check-cloudflare-dns', priority: '0.7', changefreq: 'monthly' },
+    { loc: '/check-namecheap-dns', priority: '0.7', changefreq: 'monthly' },
   ];
 
   // Add programmatic provider guide pages

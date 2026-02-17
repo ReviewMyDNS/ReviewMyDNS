@@ -26,6 +26,7 @@ import LogoPreview from "@/pages/logo-preview";
 import LogoOptions from "@/pages/logo-options";
 import NotFound from "@/pages/not-found";
 import DnsPropagationChecker from "@/pages/dns-propagation-checker";
+import DnsPropagationTime from "@/pages/dns-propagation-time";
 import MxRecordLookup from "@/pages/mx-record-lookup";
 import TxtRecordChecker from "@/pages/txt-record-checker";
 import Embed from "@/pages/embed";
@@ -44,6 +45,12 @@ import DnsErrorPage from "@/pages/dns-error";
 import PlatformsIndex from "@/pages/platforms-index";
 import PlatformDnsPage from "@/pages/platform-dns";
 import IsDown from "@/pages/is-down";
+import DnsNotPropagating from "@/pages/dns-not-propagating";
+import GoogleWorkspaceMxNotWorking from "@/pages/google-workspace-mx-not-working";
+import DomainNotWorkingAfterTransfer from "@/pages/domain-not-working-after-transfer";
+import CheckGodaddyDns from "@/pages/check-godaddy-dns";
+import CheckCloudflareDns from "@/pages/check-cloudflare-dns";
+import CheckNamecheapDns from "@/pages/check-namecheap-dns";
 
 function Router() {
   return (
@@ -70,6 +77,8 @@ function Router() {
       <Route path="/logo-preview" component={LogoPreview} />
       <Route path="/logo-options" component={LogoOptions} />
       <Route path="/dns-propagation-checker" component={DnsPropagationChecker} />
+      <Route path="/dns-not-propagating" component={DnsNotPropagating} />
+      <Route path="/how-long-does-dns-propagation-take" component={DnsPropagationTime} />
       <Route path="/mx-record-lookup" component={MxRecordLookup} />
       <Route path="/txt-record-checker" component={TxtRecordChecker} />
       <Route path="/embed" component={Embed} />
@@ -85,6 +94,11 @@ function Router() {
       <Route path="/errors/:slug" component={DnsErrorPage} />
       <Route path="/dns-for" component={PlatformsIndex} />
       <Route path="/dns-for/:slug" component={PlatformDnsPage} />
+      <Route path="/google-workspace-mx-not-working" component={GoogleWorkspaceMxNotWorking} />
+      <Route path="/domain-not-working-after-transfer" component={DomainNotWorkingAfterTransfer} />
+      <Route path="/check-godaddy-dns" component={CheckGodaddyDns} />
+      <Route path="/check-cloudflare-dns" component={CheckCloudflareDns} />
+      <Route path="/check-namecheap-dns" component={CheckNamecheapDns} />
       <Route path="/is-down" component={IsDown} />
       <Route path="/is-down/:domain" component={IsDown} />
       <Route component={NotFound} />

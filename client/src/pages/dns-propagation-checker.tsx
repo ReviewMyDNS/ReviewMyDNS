@@ -355,21 +355,38 @@ export default function DnsPropagationChecker() {
             </div>
 
             <h2 className="text-3xl font-bold mb-6 mt-12">Related DNS Tools and Guides</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+              <div className="bg-white p-4 rounded-lg border border-gray-200">
+                <h3 className="font-semibold text-gray-900 mb-2">How Long Does DNS Propagation Take?</h3>
+                <p className="text-sm text-gray-600 mb-2">Complete guide to DNS propagation times by record type, TTL settings, and provider.</p>
+                <Link href="/how-long-does-dns-propagation-take" className="text-blue-600 hover:underline text-sm">Read Guide →</Link>
+              </div>
+              <div className="bg-white p-4 rounded-lg border border-gray-200">
+                <h3 className="font-semibold text-gray-900 mb-2">DNS Not Propagating? Fix It Now</h3>
+                <p className="text-sm text-gray-600 mb-2">Step-by-step troubleshooting when DNS changes aren't updating globally.</p>
+                <Link href="/dns-not-propagating" className="text-blue-600 hover:underline text-sm">Troubleshoot →</Link>
+              </div>
+              <div className="bg-white p-4 rounded-lg border border-gray-200">
+                <h3 className="font-semibold text-gray-900 mb-2">Google Workspace MX Issues</h3>
+                <p className="text-sm text-gray-600 mb-2">Fix Google Workspace email delivery by verifying MX, SPF, and DKIM records.</p>
+                <Link href="/google-workspace-mx-not-working" className="text-blue-600 hover:underline text-sm">Fix Email →</Link>
+              </div>
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="bg-white p-4 rounded-lg border border-gray-200">
-                <h3 className="font-semibold text-gray-900 mb-2">GoDaddy DNS Setup</h3>
-                <p className="text-sm text-gray-600 mb-2">Step-by-step guide to configuring DNS records on GoDaddy, including A records, CNAME, and MX setup.</p>
-                <Link href="/guides/godaddy-dns-setup" className="text-blue-600 hover:underline text-sm">Read Guide →</Link>
+                <h3 className="font-semibold text-gray-900 mb-2">Check GoDaddy DNS</h3>
+                <p className="text-sm text-gray-600 mb-2">Verify DNS propagation for domains managed by GoDaddy.</p>
+                <Link href="/check-godaddy-dns" className="text-blue-600 hover:underline text-sm">Check Now →</Link>
               </div>
               <div className="bg-white p-4 rounded-lg border border-gray-200">
-                <h3 className="font-semibold text-gray-900 mb-2">Cloudflare DNS Setup</h3>
-                <p className="text-sm text-gray-600 mb-2">Configure DNS on Cloudflare with proxy, SSL, and performance features. Includes DNSSEC activation.</p>
-                <Link href="/guides/cloudflare-dns-setup" className="text-blue-600 hover:underline text-sm">Read Guide →</Link>
+                <h3 className="font-semibold text-gray-900 mb-2">Check Cloudflare DNS</h3>
+                <p className="text-sm text-gray-600 mb-2">Verify DNS propagation for domains using Cloudflare DNS.</p>
+                <Link href="/check-cloudflare-dns" className="text-blue-600 hover:underline text-sm">Check Now →</Link>
               </div>
               <div className="bg-white p-4 rounded-lg border border-gray-200">
-                <h3 className="font-semibold text-gray-900 mb-2">Why DNS Not Updating?</h3>
-                <p className="text-sm text-gray-600 mb-2">Troubleshoot DNS changes that are not propagating within 24 hours, including common causes and fixes.</p>
-                <Link href="/faq/why-dns-not-updating-24-hours" className="text-blue-600 hover:underline text-sm">Read FAQ →</Link>
+                <h3 className="font-semibold text-gray-900 mb-2">Domain Not Working After Transfer?</h3>
+                <p className="text-sm text-gray-600 mb-2">Fix DNS issues after transferring your domain to a new registrar.</p>
+                <Link href="/domain-not-working-after-transfer" className="text-blue-600 hover:underline text-sm">Fix Now →</Link>
               </div>
             </div>
           </div>
