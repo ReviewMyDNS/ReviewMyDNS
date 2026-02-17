@@ -159,6 +159,15 @@ router.get('/sitemap.xml', (req, res) => {
     { loc: '/check-godaddy-dns', priority: '0.7', changefreq: 'monthly' },
     { loc: '/check-cloudflare-dns', priority: '0.7', changefreq: 'monthly' },
     { loc: '/check-namecheap-dns', priority: '0.7', changefreq: 'monthly' },
+    { loc: '/what-is-ttl-in-dns', priority: '0.9', changefreq: 'monthly' },
+    { loc: '/dns-record-types-explained', priority: '0.9', changefreq: 'monthly' },
+    { loc: '/a-record-vs-cname', priority: '0.8', changefreq: 'monthly' },
+    { loc: '/what-is-dns-cache', priority: '0.8', changefreq: 'monthly' },
+    { loc: '/how-to-check-nameservers', priority: '0.8', changefreq: 'monthly' },
+    { loc: '/how-to-flush-dns-cache', priority: '0.8', changefreq: 'monthly' },
+    { loc: '/how-to-lower-ttl-before-migration', priority: '0.8', changefreq: 'monthly' },
+    { loc: '/why-mx-record-not-working', priority: '0.8', changefreq: 'monthly' },
+    { loc: '/spf-dkim-dmarc-explained', priority: '0.8', changefreq: 'monthly' },
   ];
 
   // Add programmatic provider guide pages

@@ -34,12 +34,15 @@ Preferred communication style: Simple, everyday language.
 ### Core Features
 - **DNS Resolution Service**: Custom resolver querying multiple DNS servers, supporting major DNS record types, measuring response times, and handling failures.
 - **Interactive Components**: Advanced DNS lookup form, detailed results table, performance charts, and a propagation map.
+- **DNS Diagnostic Mode**: Auto-interprets DNS results with actionable insights - detects Google Workspace/Microsoft 365 MX misconfigurations, Cloudflare proxy detection, SPF/DKIM/DMARC validation, nameserver analysis, propagation consistency checks, and performance recommendations. Component: `dns-insights.tsx`.
+- **Sticky Tool Features**: Mismatch highlighter (`mismatch-highlighter.tsx`) shows inconsistent DNS responses across servers. Feedback widget (`feedback-widget.tsx`) with Yes/No engagement buttons and localStorage persistence.
 - **Shareable Results**: Unique shareable result pages with social sharing meta tags.
 - **Traffic Acquisition**: SEO landing pages, embeddable widgets, and email capture popup.
-- **Programmatic SEO**: Dynamic routing for provider-specific DNS setup guides with SEO optimization.
+- **Programmatic SEO**: Dynamic routing for provider-specific DNS setup guides with SEO optimization. 135+ indexed URLs in sitemap.
+- **Topical Authority Content**: 16+ supporting content pages building SEO clusters around DNS fundamentals (TTL, record types, A vs CNAME, DNS cache, nameservers, flush DNS cache, TTL migration, MX troubleshooting, SPF/DKIM/DMARC) plus high-intent panic query pages.
 - **Results Action Buttons**: Refresh, Share, Export (coming soon), and Monitor (coming soon).
 - **Revenue Optimization**: Paywall system with `PlanGate` component for tier-based access control to premium features like bulk DNS lookup, performance analytics, historical tracking, DNS monitoring, and developer API.
-- **SEO Optimization**: Comprehensive meta tags, structured data (JSON-LD), `robots.txt`, dynamic `sitemap.xml`, and content optimization.
+- **SEO Optimization**: Comprehensive meta tags, structured data (JSON-LD with FAQPage), `robots.txt`, dynamic `sitemap.xml`, and content optimization.
 
 ## External Dependencies
 

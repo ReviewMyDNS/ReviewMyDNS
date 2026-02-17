@@ -51,6 +51,15 @@ import DomainNotWorkingAfterTransfer from "@/pages/domain-not-working-after-tran
 import CheckGodaddyDns from "@/pages/check-godaddy-dns";
 import CheckCloudflareDns from "@/pages/check-cloudflare-dns";
 import CheckNamecheapDns from "@/pages/check-namecheap-dns";
+import WhatIsTtl from "@/pages/what-is-ttl";
+import DnsRecordTypes from "@/pages/dns-record-types";
+import ARecordVsCname from "@/pages/a-record-vs-cname";
+import WhatIsDnsCache from "@/pages/what-is-dns-cache";
+import HowToCheckNameservers from "@/pages/how-to-check-nameservers";
+import HowToFlushDnsCache from "@/pages/how-to-flush-dns-cache";
+import HowToLowerTtl from "@/pages/how-to-lower-ttl";
+import WhyMxNotWorking from "@/pages/why-mx-not-working";
+import SpfDkimDmarc from "@/pages/spf-dkim-dmarc";
 
 function Router() {
   return (
@@ -99,6 +108,15 @@ function Router() {
       <Route path="/check-godaddy-dns" component={CheckGodaddyDns} />
       <Route path="/check-cloudflare-dns" component={CheckCloudflareDns} />
       <Route path="/check-namecheap-dns" component={CheckNamecheapDns} />
+      <Route path="/what-is-ttl-in-dns" component={WhatIsTtl} />
+      <Route path="/dns-record-types-explained" component={DnsRecordTypes} />
+      <Route path="/a-record-vs-cname" component={ARecordVsCname} />
+      <Route path="/what-is-dns-cache" component={WhatIsDnsCache} />
+      <Route path="/how-to-check-nameservers" component={HowToCheckNameservers} />
+      <Route path="/how-to-flush-dns-cache" component={HowToFlushDnsCache} />
+      <Route path="/how-to-lower-ttl-before-migration" component={HowToLowerTtl} />
+      <Route path="/why-mx-record-not-working" component={WhyMxNotWorking} />
+      <Route path="/spf-dkim-dmarc-explained" component={SpfDkimDmarc} />
       <Route path="/is-down" component={IsDown} />
       <Route path="/is-down/:domain" component={IsDown} />
       <Route component={NotFound} />

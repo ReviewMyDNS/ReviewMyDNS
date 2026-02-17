@@ -3,6 +3,9 @@ import { DnsLookupForm } from "@/components/dns-lookup-form";
 import { PropagationMap } from "@/components/propagation-map";
 import { ResultsTable } from "@/components/results-table";
 import { PerformanceChart } from "@/components/performance-chart";
+import { DnsInsights } from "@/components/dns-insights";
+import { MismatchHighlighter } from "@/components/mismatch-highlighter";
+import { FeedbackWidget } from "@/components/feedback-widget";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Globe, CheckCircle2, Clock, Shield } from "lucide-react";
@@ -137,15 +140,28 @@ export default function DnsPropagationChecker() {
         {/* Results Section */}
         {lookupResults && (
           <>
+            <section className="pb-4 px-4 sm:px-6 lg:px-8">
+              <div className="max-w-7xl mx-auto">
+                <DnsInsights results={lookupResults} />
+                <MismatchHighlighter results={lookupResults.results} />
+              </div>
+            </section>
+
             <section className="pb-8 px-4 sm:px-6 lg:px-8">
               <div className="max-w-7xl mx-auto">
                 <PropagationMap results={lookupResults.results || []} />
               </div>
             </section>
 
-            <section className="pb-12 px-4 sm:px-6 lg:px-8">
+            <section className="pb-8 px-4 sm:px-6 lg:px-8">
               <div className="max-w-7xl mx-auto">
                 <ResultsTable results={lookupResults} />
+              </div>
+            </section>
+
+            <section className="pb-12 px-4 sm:px-6 lg:px-8">
+              <div className="max-w-7xl mx-auto">
+                <FeedbackWidget domain={lookupResults.domain} recordType={lookupResults.recordType} />
               </div>
             </section>
           </>
@@ -387,6 +403,42 @@ export default function DnsPropagationChecker() {
                 <h3 className="font-semibold text-gray-900 mb-2">Domain Not Working After Transfer?</h3>
                 <p className="text-sm text-gray-600 mb-2">Fix DNS issues after transferring your domain to a new registrar.</p>
                 <Link href="/domain-not-working-after-transfer" className="text-blue-600 hover:underline text-sm">Fix Now →</Link>
+              </div>
+            </div>
+
+            <h2 className="text-3xl font-bold mb-6 mt-12">Learn DNS Fundamentals</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+              <div className="bg-white p-4 rounded-lg border border-gray-200">
+                <h3 className="font-semibold text-gray-900 mb-2">What is TTL in DNS?</h3>
+                <p className="text-sm text-gray-600 mb-2">Understand how TTL controls caching and affects propagation speed.</p>
+                <Link href="/what-is-ttl-in-dns" className="text-blue-600 hover:underline text-sm">Learn More →</Link>
+              </div>
+              <div className="bg-white p-4 rounded-lg border border-gray-200">
+                <h3 className="font-semibold text-gray-900 mb-2">DNS Record Types Explained</h3>
+                <p className="text-sm text-gray-600 mb-2">Complete guide to A, AAAA, CNAME, MX, TXT, NS, and other record types.</p>
+                <Link href="/dns-record-types-explained" className="text-blue-600 hover:underline text-sm">Read Guide →</Link>
+              </div>
+              <div className="bg-white p-4 rounded-lg border border-gray-200">
+                <h3 className="font-semibold text-gray-900 mb-2">A Record vs CNAME</h3>
+                <p className="text-sm text-gray-600 mb-2">When to use A records vs CNAME records and the key differences.</p>
+                <Link href="/a-record-vs-cname" className="text-blue-600 hover:underline text-sm">Compare →</Link>
+              </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="bg-white p-4 rounded-lg border border-gray-200">
+                <h3 className="font-semibold text-gray-900 mb-2">How to Flush DNS Cache</h3>
+                <p className="text-sm text-gray-600 mb-2">Clear your DNS cache on Windows, Mac, Linux, and browsers.</p>
+                <Link href="/how-to-flush-dns-cache" className="text-blue-600 hover:underline text-sm">View Commands →</Link>
+              </div>
+              <div className="bg-white p-4 rounded-lg border border-gray-200">
+                <h3 className="font-semibold text-gray-900 mb-2">SPF, DKIM & DMARC Explained</h3>
+                <p className="text-sm text-gray-600 mb-2">Email authentication guide to protect against spoofing and improve deliverability.</p>
+                <Link href="/spf-dkim-dmarc-explained" className="text-blue-600 hover:underline text-sm">Read Guide →</Link>
+              </div>
+              <div className="bg-white p-4 rounded-lg border border-gray-200">
+                <h3 className="font-semibold text-gray-900 mb-2">Lower TTL Before Migration</h3>
+                <p className="text-sm text-gray-600 mb-2">Step-by-step guide to preparing your DNS for a smooth migration.</p>
+                <Link href="/how-to-lower-ttl-before-migration" className="text-blue-600 hover:underline text-sm">Read Guide →</Link>
               </div>
             </div>
           </div>

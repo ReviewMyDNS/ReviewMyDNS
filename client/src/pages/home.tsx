@@ -22,6 +22,8 @@ import { apiRequest, queryClient } from "@/lib/queryClient";
 import { EmailCapturePopup } from "@/components/email-capture-popup";
 import { useAuth } from "@/hooks/useAuth";
 import { DnsInsights } from "@/components/dns-insights";
+import { MismatchHighlighter } from "@/components/mismatch-highlighter";
+import { FeedbackWidget } from "@/components/feedback-widget";
 import { AdSlot } from "@/components/ad-slot";
 import { LiveActivity } from "@/components/live-activity";
 import { ExitIntentPopup } from "@/components/exit-intent-popup";
@@ -549,6 +551,9 @@ export default function Home() {
             {/* AI-Powered DNS Insights */}
             <DnsInsights results={lookupResults} />
 
+            {/* DNS Value Consistency Check */}
+            <MismatchHighlighter results={lookupResults.results} />
+
             {/* Interactive World Map */}
             <Card className="mb-8">
               <CardHeader>
@@ -685,6 +690,11 @@ export default function Home() {
                 <PerformanceChart results={lookupResults.results} />
               </CardContent>
             </Card>
+
+            {/* Feedback Widget */}
+            <div className="mt-6">
+              <FeedbackWidget domain={lookupResults.domain} recordType={lookupResults.recordType} />
+            </div>
           </section>
         )}
 
