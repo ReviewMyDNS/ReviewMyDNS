@@ -64,7 +64,7 @@ app.use((req, res, next) => {
   });
 
   app.use((req: Request, res: Response, next: NextFunction) => {
-    if (req.path.startsWith('/api') || req.path.startsWith('/assets') || req.path.includes('.')) {
+    if ((req.path.startsWith('/api') && !req.path.startsWith('/api-docs')) || req.path.startsWith('/assets') || req.path.includes('.')) {
       return next();
     }
     const canonicalPath = req.path.replace(/\/+$/, '') || '';
