@@ -4,6 +4,7 @@ import path from "path";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import { startCleanupJob } from "./rate-limiter";
+import { getPageMeta, buildSsrContent } from "./seo-metadata";
 
 const app = express();
 
@@ -69,6 +70,7 @@ app.use((req, res, next) => {
     const canonicalPath = req.path.replace(/\/+$/, '') || '';
     const canonicalUrl = `https://reviewmydns.com${canonicalPath}`;
     const canonicalTag = `<link rel="canonical" href="${canonicalUrl}" />`;
+    const meta = getPageMeta(req.path);
 
     const originalEnd = res.end;
     const originalSend = res.send;
@@ -78,6 +80,9 @@ app.use((req, res, next) => {
         content = content.replace('</head>', `${canonicalTag}\n</head>`);
       }
       content = content.replace('%%OG_URL%%', canonicalUrl);
+      content = content.replace('%%PAGE_TITLE%%', meta.title);
+      content = content.replace('%%PAGE_DESC%%', meta.description);
+      content = content.replace('%%SSR_CONTENT%%', buildSsrContent(meta.h1));
       return content;
     };
 
@@ -114,11 +119,15 @@ app.use((req, res, next) => {
     app.use("*", (req, res) => {
       const canonicalPath = req.originalUrl.split('?')[0].replace(/\/+$/, '') || '';
       const canonicalUrl = `https://reviewmydns.com${canonicalPath}`;
+      const meta = getPageMeta(req.originalUrl);
       let html = fs.readFileSync(path.resolve(distPath, "index.html"), "utf-8");
       if (!html.includes('rel="canonical"')) {
         html = html.replace('</head>', `<link rel="canonical" href="${canonicalUrl}" />\n</head>`);
       }
       html = html.replace('%%OG_URL%%', canonicalUrl);
+      html = html.replace('%%PAGE_TITLE%%', meta.title);
+      html = html.replace('%%PAGE_DESC%%', meta.description);
+      html = html.replace('%%SSR_CONTENT%%', buildSsrContent(meta.h1));
       res.status(200).set({ "Content-Type": "text/html" }).send(html);
     });
   }
