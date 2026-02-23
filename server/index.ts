@@ -73,16 +73,24 @@ app.use((req, res, next) => {
     const originalEnd = res.end;
     const originalSend = res.send;
 
+    const injectSeo = (content: string) => {
+      if (!content.includes('rel="canonical"')) {
+        content = content.replace('</head>', `${canonicalTag}\n</head>`);
+      }
+      content = content.replace('%%OG_URL%%', canonicalUrl);
+      return content;
+    };
+
     res.send = function (body: any) {
-      if (typeof body === 'string' && body.includes('</head>') && !body.includes('rel="canonical"')) {
-        body = body.replace('</head>', `${canonicalTag}\n</head>`);
+      if (typeof body === 'string' && body.includes('</head>')) {
+        body = injectSeo(body);
       }
       return originalSend.call(this, body);
     };
 
     res.end = function (chunk?: any, ...args: any[]) {
-      if (typeof chunk === 'string' && chunk.includes('</head>') && !chunk.includes('rel="canonical"')) {
-        chunk = chunk.replace('</head>', `${canonicalTag}\n</head>`);
+      if (typeof chunk === 'string' && chunk.includes('</head>')) {
+        chunk = injectSeo(chunk);
       }
       return originalEnd.call(this, chunk, ...args);
     } as any;
@@ -110,6 +118,7 @@ app.use((req, res, next) => {
       if (!html.includes('rel="canonical"')) {
         html = html.replace('</head>', `<link rel="canonical" href="${canonicalUrl}" />\n</head>`);
       }
+      html = html.replace('%%OG_URL%%', canonicalUrl);
       res.status(200).set({ "Content-Type": "text/html" }).send(html);
     });
   }
