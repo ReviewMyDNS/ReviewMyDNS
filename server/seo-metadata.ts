@@ -129,12 +129,12 @@ const PAGE_META: Record<string, PageMeta> = {
     h1: 'ReviewMyDNS Pricing Plans',
   },
   '/tools': {
-    title: 'DNS Tools - ReviewMyDNS',
+    title: 'Free DNS Tools and Lookup Utilities - ReviewMyDNS',
     description: 'Free DNS tools including propagation checker, MX lookup, TXT checker, bulk DNS lookup, DNSSEC validator, and performance analytics.',
     h1: 'DNS Tools',
   },
   '/blog': {
-    title: 'Blog - ReviewMyDNS',
+    title: 'DNS Blog - Guides, Tutorials and Best Practices',
     description: 'DNS guides, tutorials, and best practices from ReviewMyDNS. Learn about DNS management, troubleshooting, and email authentication.',
     h1: 'ReviewMyDNS Blog',
   },
@@ -144,12 +144,12 @@ const PAGE_META: Record<string, PageMeta> = {
     h1: 'DNS Setup Guides',
   },
   '/faq': {
-    title: 'FAQ - ReviewMyDNS',
+    title: 'DNS Frequently Asked Questions (FAQ) - ReviewMyDNS',
     description: 'Frequently asked questions about DNS propagation, record types, nameservers, email authentication, and ReviewMyDNS tools.',
     h1: 'Frequently Asked Questions',
   },
   '/contact': {
-    title: 'Contact Us - ReviewMyDNS',
+    title: 'Contact ReviewMyDNS - Support and Feedback',
     description: 'Contact the ReviewMyDNS team for support, feedback, partnership inquiries, or business collaboration opportunities.',
     h1: 'Contact Us',
   },
@@ -194,12 +194,12 @@ const PAGE_META: Record<string, PageMeta> = {
     h1: 'DNS Lookup History',
   },
   '/monitor': {
-    title: 'DNS Monitoring - ReviewMyDNS',
+    title: 'DNS Monitoring and Change Alerts - ReviewMyDNS',
     description: 'Monitor DNS records for unexpected changes with automated alerts. Get notified when DNS records are modified or servers go down.',
     h1: 'DNS Monitoring',
   },
   '/analytics': {
-    title: 'DNS Analytics - ReviewMyDNS',
+    title: 'DNS Performance Analytics Dashboard - ReviewMyDNS',
     description: 'DNS performance analytics dashboard. Track response times, server uptime, and resolution patterns across global DNS infrastructure.',
     h1: 'DNS Analytics',
   },
@@ -280,6 +280,26 @@ export function getPageMeta(urlPath: string): PageMeta {
   return DEFAULT_META;
 }
 
-export function buildSsrContent(h1: string): string {
-  return `${NAV_LINKS}<h1>${h1}</h1><p>ReviewMyDNS is a free DNS propagation checker that queries 50+ global DNS servers to verify your DNS records. Check A, AAAA, MX, CNAME, TXT, NS, and SOA records instantly. Identify propagation issues, misconfigurations, and performance problems with detailed diagnostics.</p>${CONTENT_LINKS}${GUIDE_LINKS}${TROUBLESHOOTING_GUIDE_LINKS}${FAQ_LINKS}${ERROR_LINKS}${DNSFOR_LINKS}${BLOG_LINKS}${PROVIDER_LINKS}`;
+export function buildSsrContent(h1: string, urlPath: string = '/'): string {
+  const cleanPath = urlPath.split('?')[0].replace(/\/+$/, '') || '/';
+  const intro = `<p>ReviewMyDNS is a free DNS propagation checker that queries 50+ global DNS servers to verify your DNS records. Check A, AAAA, MX, CNAME, TXT, NS, and SOA records instantly.</p>`;
+
+  let sectionLinks = '';
+  if (cleanPath === '/' || cleanPath === '/dns-propagation-checker' || cleanPath === '/tools') {
+    sectionLinks = `${CONTENT_LINKS}${GUIDE_LINKS}${FAQ_LINKS}${ERROR_LINKS}${DNSFOR_LINKS}${BLOG_LINKS}${PROVIDER_LINKS}`;
+  } else if (cleanPath.startsWith('/guides')) {
+    sectionLinks = `${GUIDE_LINKS}${TROUBLESHOOTING_GUIDE_LINKS}${CONTENT_LINKS}${PROVIDER_LINKS}`;
+  } else if (cleanPath.startsWith('/faq')) {
+    sectionLinks = `${FAQ_LINKS}${CONTENT_LINKS}${ERROR_LINKS}${TROUBLESHOOTING_GUIDE_LINKS}`;
+  } else if (cleanPath.startsWith('/errors')) {
+    sectionLinks = `${ERROR_LINKS}${TROUBLESHOOTING_GUIDE_LINKS}${FAQ_LINKS}${CONTENT_LINKS}`;
+  } else if (cleanPath.startsWith('/dns-for')) {
+    sectionLinks = `${DNSFOR_LINKS}${GUIDE_LINKS}${CONTENT_LINKS}${PROVIDER_LINKS}`;
+  } else if (cleanPath.startsWith('/blog')) {
+    sectionLinks = `${BLOG_LINKS}${CONTENT_LINKS}${GUIDE_LINKS}${FAQ_LINKS}`;
+  } else {
+    sectionLinks = `${CONTENT_LINKS}${GUIDE_LINKS}${FAQ_LINKS}${ERROR_LINKS}${DNSFOR_LINKS}${BLOG_LINKS}${PROVIDER_LINKS}`;
+  }
+
+  return `${NAV_LINKS}<h1>${h1}</h1>${intro}${sectionLinks}`;
 }
