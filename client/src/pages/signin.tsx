@@ -12,6 +12,7 @@ import { Link } from "wouter";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { Logo } from "@/components/logo";
+import { Helmet } from "react-helmet-async";
 
 export default function SignIn() {
   const [location, setLocation] = useLocation();
@@ -103,6 +104,12 @@ export default function SignIn() {
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center">
+      <Helmet>
+        <title>Sign In - ReviewMyDNS</title>
+        <meta name="description" content="Sign in or create an account to access premium DNS tools including bulk lookup, monitoring, analytics, and API access." />
+        <link rel="canonical" href="https://reviewmydns.com/signin" />
+        <meta name="robots" content="noindex, nofollow" />
+      </Helmet>
       {/* Header */}
       <div className="absolute top-0 left-0 right-0 bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

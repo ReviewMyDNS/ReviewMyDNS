@@ -4,9 +4,15 @@
 User-agent: *
 Allow: /
 
-# Disallow private pages only
+# Disallow private/auth pages
 Disallow: /dashboard
 Disallow: /site-analytics
+Disallow: /signin
+Disallow: /subscribe
+
+# Block URLs with query parameters (prevent duplicate content)
+Disallow: /*?domain=
+Disallow: /*?tab=
 
 # Block backend API endpoints (not the /api-docs page)
 Disallow: /api/dns/
