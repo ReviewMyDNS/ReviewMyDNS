@@ -60,6 +60,34 @@ app.use((req, res, next) => {
     throw err;
   });
 
+  app.use((req: Request, res: Response, next: NextFunction) => {
+    if (req.path.startsWith('/api') || req.path.startsWith('/assets') || req.path.includes('.')) {
+      return next();
+    }
+    const canonicalPath = req.path.replace(/\/+$/, '') || '';
+    const canonicalUrl = `https://reviewmydns.com${canonicalPath}`;
+    const canonicalTag = `<link rel="canonical" href="${canonicalUrl}" />`;
+
+    const originalEnd = res.end;
+    const originalSend = res.send;
+
+    res.send = function (body: any) {
+      if (typeof body === 'string' && body.includes('</head>') && !body.includes('rel="canonical"')) {
+        body = body.replace('</head>', `${canonicalTag}\n</head>`);
+      }
+      return originalSend.call(this, body);
+    };
+
+    res.end = function (chunk?: any, ...args: any[]) {
+      if (typeof chunk === 'string' && chunk.includes('</head>') && !chunk.includes('rel="canonical"')) {
+        chunk = chunk.replace('</head>', `${canonicalTag}\n</head>`);
+      }
+      return originalEnd.call(this, chunk, ...args);
+    } as any;
+
+    next();
+  });
+
   // importantly only setup vite in development and after
   // setting up all the other routes so the catch-all route
   // doesn't interfere with the other routes
