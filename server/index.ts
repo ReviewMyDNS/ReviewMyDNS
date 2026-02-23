@@ -115,12 +115,13 @@ app.use((req, res, next) => {
         `Could not find the build directory: ${distPath}, make sure to build the client first`,
       );
     }
-    app.use(express.static(distPath));
+    app.use(express.static(distPath, { index: false }));
+    const htmlTemplate = fs.readFileSync(path.resolve(distPath, "index.html"), "utf-8");
     app.use("*", (req, res) => {
       const canonicalPath = req.originalUrl.split('?')[0].replace(/\/+$/, '') || '';
       const canonicalUrl = `https://reviewmydns.com${canonicalPath}`;
       const meta = getPageMeta(req.originalUrl);
-      let html = fs.readFileSync(path.resolve(distPath, "index.html"), "utf-8");
+      let html = htmlTemplate;
       if (!html.includes('rel="canonical"')) {
         html = html.replace('</head>', `<link rel="canonical" href="${canonicalUrl}" />\n</head>`);
       }
