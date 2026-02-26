@@ -82,7 +82,7 @@ app.use((req, res, next) => {
       content = content.replace('%%OG_URL%%', canonicalUrl);
       content = content.replace('%%PAGE_TITLE%%', meta.title);
       content = content.replace('%%PAGE_DESC%%', meta.description);
-      content = content.replace('%%SSR_CONTENT%%', buildSsrContent(meta.h1, req.path));
+      content = content.replace('%%SSR_CONTENT%%', buildSsrContent(meta.h1, req.path, meta.description));
       return content;
     };
 
@@ -128,7 +128,7 @@ app.use((req, res, next) => {
       html = html.replace('%%OG_URL%%', canonicalUrl);
       html = html.replace('%%PAGE_TITLE%%', meta.title);
       html = html.replace('%%PAGE_DESC%%', meta.description);
-      html = html.replace('%%SSR_CONTENT%%', buildSsrContent(meta.h1, req.originalUrl));
+      html = html.replace('%%SSR_CONTENT%%', buildSsrContent(meta.h1, req.originalUrl, meta.description));
       res.status(200).set({ "Content-Type": "text/html" }).send(html);
     });
   }

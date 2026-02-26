@@ -305,9 +305,10 @@ export function getPageMeta(urlPath: string): PageMeta {
   return DEFAULT_META;
 }
 
-export function buildSsrContent(h1: string, urlPath: string = '/'): string {
+export function buildSsrContent(h1: string, urlPath: string = '/', description?: string): string {
   const cleanPath = urlPath.split('?')[0].replace(/\/+$/, '') || '/';
   const intro = `<p>ReviewMyDNS is a free DNS propagation checker that queries 50+ global DNS servers to verify your DNS records. Check A, AAAA, MX, CNAME, TXT, NS, and SOA records instantly.</p>`;
+  const pageDesc = description ? `<p>${description}</p>` : '';
 
   let sectionLinks = '';
   if (cleanPath === '/' || cleanPath === '/dns-propagation-checker' || cleanPath === '/tools') {
@@ -326,5 +327,5 @@ export function buildSsrContent(h1: string, urlPath: string = '/'): string {
     sectionLinks = `${CONTENT_LINKS}${GUIDE_LINKS}${TROUBLESHOOTING_GUIDE_LINKS}${FAQ_LINKS}${ERROR_LINKS}${DNSFOR_LINKS}${BLOG_LINKS}${PROVIDER_LINKS}`;
   }
 
-  return `${NAV_LINKS}<h1>${h1}</h1>${intro}${sectionLinks}`;
+  return `${NAV_LINKS}<h1>${h1}</h1>${pageDesc}${intro}${sectionLinks}`;
 }
