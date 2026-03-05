@@ -971,6 +971,7 @@ export default function Home() {
                   <li><a href="mailto:info@reviewmydns.com" className="text-gray-400 hover:text-white text-sm" data-testid="link-footer-contact">Contact</a></li>
                   <li><Link href="/privacy" className="text-gray-400 hover:text-white text-sm" data-testid="link-footer-privacy">Privacy</Link></li>
                   <li><Link href="/terms" className="text-gray-400 hover:text-white text-sm" data-testid="link-footer-terms">Terms</Link></li>
+                  <li><Link href="/link-to-us" className="text-gray-400 hover:text-white text-sm" data-testid="link-footer-linkto">Link to Us</Link></li>
                 </ul>
               </div>
               
