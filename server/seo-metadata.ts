@@ -218,6 +218,11 @@ const PAGE_META: Record<string, PageMeta> = {
     description: 'Free embeddable DNS lookup widget for websites. Let your visitors check DNS records directly from your site with our lightweight tool.',
     h1: 'DNS Lookup Widget',
   },
+  '/link-to-us': {
+    title: 'Link to ReviewMyDNS - Badges, Assets & Embed Codes',
+    description: 'Link to ReviewMyDNS from your website or blog. Download badges, grab HTML or Markdown embed codes, and help spread free DNS tools.',
+    h1: 'Link to ReviewMyDNS',
+  },
   '/dns-for': {
     title: 'DNS Setup Guides by Platform - ReviewMyDNS',
     description: 'Platform-specific DNS setup guides for WordPress, Shopify, Vercel, Netlify, AWS, and more. Configure custom domains step by step.',

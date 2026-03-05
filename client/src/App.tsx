@@ -60,6 +60,8 @@ import HowToFlushDnsCache from "@/pages/how-to-flush-dns-cache";
 import HowToLowerTtl from "@/pages/how-to-lower-ttl";
 import WhyMxNotWorking from "@/pages/why-mx-not-working";
 import SpfDkimDmarc from "@/pages/spf-dkim-dmarc";
+import LinkToUs from "@/pages/link-to-us";
+import BacklinkGuide from "@/pages/backlink-guide";
 
 function Router() {
   return (
@@ -119,6 +121,8 @@ function Router() {
       <Route path="/spf-dkim-dmarc-explained" component={SpfDkimDmarc} />
       <Route path="/is-down" component={IsDown} />
       <Route path="/is-down/:domain" component={IsDown} />
+      <Route path="/link-to-us" component={LinkToUs} />
+      <Route path="/backlink-guide" component={BacklinkGuide} />
       <Route component={NotFound} />
     </Switch>
   );
