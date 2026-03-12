@@ -223,6 +223,16 @@ const PAGE_META: Record<string, PageMeta> = {
     description: 'Link to ReviewMyDNS from your website or blog. Download badges, grab HTML or Markdown embed codes, and help spread free DNS tools.',
     h1: 'Link to ReviewMyDNS',
   },
+  '/subscribe': {
+    title: 'Upgrade Your Plan - ReviewMyDNS Pro',
+    description: 'Upgrade to ReviewMyDNS Pro for unlimited DNS lookups, bulk checking, historical tracking, and DNS monitoring.',
+    h1: 'Upgrade Your Plan',
+  },
+  '/documentation': {
+    title: 'DNS Documentation & Record Type Reference - ReviewMyDNS',
+    description: 'Complete DNS record type reference for A, AAAA, MX, CNAME, TXT, NS, SOA records, plus API documentation for ReviewMyDNS developers.',
+    h1: 'DNS Documentation',
+  },
   '/about': {
     title: 'About ReviewMyDNS - Free DNS Propagation Checker',
     description: 'ReviewMyDNS is a free DNS propagation checker querying 50+ global servers. Learn about our mission to make DNS troubleshooting accessible to everyone.',

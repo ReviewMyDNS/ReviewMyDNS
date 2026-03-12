@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet-async";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -99,6 +100,10 @@ const troubleshootingGuide = [
 export default function Documentation() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-cyan-50 to-blue-50">
+      <Helmet>
+        <title>DNS Documentation & Record Type Reference - ReviewMyDNS</title>
+        <meta name="description" content="Complete DNS record type reference and API documentation for ReviewMyDNS. Learn about A, AAAA, MX, CNAME, TXT, NS, SOA, and other DNS record types." />
+      </Helmet>
       {/* Header */}
       <header className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

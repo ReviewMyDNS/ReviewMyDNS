@@ -18,6 +18,20 @@ app.get('/health', (_req, res) => {
   res.status(200).json({ status: 'ok' });
 });
 
+// 301 redirects for old/alternate URL aliases to canonical pages
+const REDIRECTS: Record<string, string> = {
+  '/what-is-dns-ttl':         '/what-is-ttl-in-dns',
+  '/what-is-an-mx-record':    '/mx-record-lookup',
+  '/a-vs-cname-records':      '/a-record-vs-cname',
+  '/dns-cache-explained':     '/what-is-dns-cache',
+  '/what-is-a-nameserver':    '/how-to-check-nameservers',
+  '/flush-dns-cache':         '/how-to-flush-dns-cache',
+  '/ttl-migration-guide':     '/how-to-lower-ttl-before-migration',
+};
+Object.entries(REDIRECTS).forEach(([from, to]) => {
+  app.get(from, (_req, res) => res.redirect(301, to));
+});
+
 // Stripe webhook needs raw body for signature verification
 // Apply express.raw() to webhook route BEFORE express.json()
 app.post('/api/stripe/webhook', express.raw({ type: 'application/json' }), (req, res, next) => {
