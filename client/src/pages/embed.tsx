@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Helmet } from "react-helmet-async";
 import { DnsLookupForm } from "@/components/dns-lookup-form";
 import { PropagationMap } from "@/components/propagation-map";
 import { ResultsTable } from "@/components/results-table";
@@ -15,6 +16,10 @@ export default function Embed() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 p-4">
+      <Helmet>
+        <title>DNS Propagation Checker Widget - ReviewMyDNS</title>
+        <meta name="robots" content="noindex, follow" />
+      </Helmet>
       <div className="max-w-4xl mx-auto">
         {/* Compact header */}
         <div className="text-center mb-6">

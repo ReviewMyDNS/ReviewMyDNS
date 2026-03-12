@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { Helmet } from "react-helmet-async";
 import { useRoute } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import { PropagationMap } from "@/components/propagation-map";
@@ -25,46 +26,12 @@ export default function SharedResult() {
     enabled: !!shareId,
   });
 
-  // Update meta tags for SEO and social sharing
-  useEffect(() => {
-    if (lookupResults) {
-      const title = `DNS Results: ${lookupResults.domain} (${lookupResults.recordType}) - ReviewMyDNS`;
-      const description = `${lookupResults.stats.resolvedCount} of ${lookupResults.stats.totalServers} DNS servers resolved successfully. Average response time: ${lookupResults.stats.averageResponseTime.toFixed(0)}ms. Global coverage: ${lookupResults.stats.globalCoverage.toFixed(1)}%`;
-      
-      // Update page title
-      document.title = title;
-      
-      // Update or create meta tags
-      const updateMeta = (name: string, content: string) => {
-        let meta = document.querySelector(`meta[name="${name}"]`) || 
-                   document.querySelector(`meta[property="${name}"]`);
-        if (!meta) {
-          meta = document.createElement('meta');
-          if (name.startsWith('og:') || name.startsWith('twitter:')) {
-            meta.setAttribute('property', name);
-          } else {
-            meta.setAttribute('name', name);
-          }
-          document.head.appendChild(meta);
-        }
-        meta.setAttribute('content', content);
-      };
-      
-      // Update standard meta tags
-      updateMeta('description', description);
-      
-      // Update Open Graph tags for social sharing
-      updateMeta('og:title', title);
-      updateMeta('og:description', description);
-      updateMeta('og:type', 'website');
-      updateMeta('og:url', shareUrl);
-      
-      // Update Twitter Card tags
-      updateMeta('twitter:card', 'summary_large_image');
-      updateMeta('twitter:title', title);
-      updateMeta('twitter:description', description);
-    }
-  }, [lookupResults, shareUrl]);
+  const dynamicTitle = lookupResults
+    ? `DNS Results: ${lookupResults.domain} (${lookupResults.recordType}) - ReviewMyDNS`
+    : 'Shared DNS Results - ReviewMyDNS';
+  const dynamicDescription = lookupResults
+    ? `${lookupResults.stats.resolvedCount} of ${lookupResults.stats.totalServers} DNS servers resolved successfully. Average response time: ${lookupResults.stats.averageResponseTime.toFixed(0)}ms. Global coverage: ${lookupResults.stats.globalCoverage.toFixed(1)}%`
+    : 'View shared DNS propagation results from ReviewMyDNS.';
 
   const handleShare = async () => {
     try {
@@ -88,40 +55,60 @@ export default function SharedResult() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full mx-auto mb-4" />
-          <p className="text-gray-600">Loading DNS results...</p>
+      <>
+        <Helmet><title>Loading DNS Results - ReviewMyDNS</title></Helmet>
+        <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+          <div className="text-center">
+            <div className="animate-spin w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full mx-auto mb-4" />
+            <p className="text-gray-600">Loading DNS results...</p>
+          </div>
         </div>
-      </div>
+      </>
     );
   }
 
   if (error || !lookupResults) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <Card className="max-w-md w-full mx-4">
-          <CardHeader>
-            <CardTitle>Results Not Found</CardTitle>
-            <CardDescription>
-              This shared DNS result doesn't exist or may have expired.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Link href="/">
-              <Button className="w-full">
-                <Globe className="h-4 w-4 mr-2" />
-                Check Your DNS
-              </Button>
-            </Link>
-          </CardContent>
-        </Card>
-      </div>
+      <>
+        <Helmet>
+          <title>DNS Results Not Found - ReviewMyDNS</title>
+          <meta name="robots" content="noindex, follow" />
+        </Helmet>
+        <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+          <Card className="max-w-md w-full mx-4">
+            <CardHeader>
+              <CardTitle>Results Not Found</CardTitle>
+              <CardDescription>
+                This shared DNS result doesn't exist or may have expired.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Link href="/">
+                <Button className="w-full">
+                  <Globe className="h-4 w-4 mr-2" />
+                  Check Your DNS
+                </Button>
+              </Link>
+            </CardContent>
+          </Card>
+        </div>
+      </>
     );
   }
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <Helmet>
+        <title>{dynamicTitle}</title>
+        <meta name="description" content={dynamicDescription} />
+        <meta property="og:title" content={dynamicTitle} />
+        <meta property="og:description" content={dynamicDescription} />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={shareUrl} />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={dynamicTitle} />
+        <meta name="twitter:description" content={dynamicDescription} />
+      </Helmet>
       {/* Header */}
       <header className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

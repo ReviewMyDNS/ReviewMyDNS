@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet-async";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Code2, Copy, CheckCircle2 } from "lucide-react";
@@ -40,6 +41,10 @@ export default function Widget() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+      <Helmet>
+        <title>DNS Lookup Widget for Your Website - ReviewMyDNS</title>
+        <meta name="description" content="Free embeddable DNS lookup widget for websites. Let your visitors check DNS records directly from your site with our lightweight tool." />
+      </Helmet>
       {/* Header */}
       <header className="bg-white/90 backdrop-blur-md shadow-sm border-b border-gray-200 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
