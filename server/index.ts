@@ -93,12 +93,12 @@ app.use((req, res, next) => {
       return originalSend.call(this, body);
     };
 
-    res.end = function (chunk?: any, ...args: any[]) {
+    res.end = (function (this: any, chunk?: any, ...args: any[]) {
       if (typeof chunk === 'string' && chunk.includes('</head>')) {
         chunk = injectSeo(chunk);
       }
-      return originalEnd.call(this, chunk, ...args);
-    } as any;
+      return (originalEnd as any).apply(this, [chunk, ...args]);
+    }) as any;
 
     next();
   });

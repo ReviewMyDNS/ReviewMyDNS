@@ -2,7 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { performDnsLookup } from "./services/dns-resolver";
-import { insertDnsLookupSchema, signupSchema, signinSchema, users, PLAN_LIMITS, insertEmailCaptureSchema } from "@shared/schema";
+import { insertDnsLookupSchema, signupSchema, signinSchema, users, PLAN_LIMITS, insertEmailCaptureSchema, type User } from "@shared/schema";
 import { ZodError } from "zod";
 import { createSessionMiddleware, requireAuth, optionalAuth, hashPassword, verifyPassword, sanitizeUser } from "./auth";
 import { getPlanTier } from "./middleware/plan-guard";
@@ -141,7 +141,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   app.get('/api/auth/user', requireAuth, async (req, res) => {
-    res.json({ user: sanitizeUser(req.user!) });
+    res.json({ user: sanitizeUser(req.user as User) });
   });
 
   // Get usage stats for current user/anonymous session

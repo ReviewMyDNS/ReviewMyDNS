@@ -143,7 +143,7 @@ export default function HowToFlushDnsCache() {
 
             <section className="pb-12 px-4 sm:px-6 lg:px-8">
               <div className="max-w-7xl mx-auto">
-                <ResultsTable results={lookupResults} />
+                <ResultsTable results={lookupResults.results} />
               </div>
             </section>
           </>

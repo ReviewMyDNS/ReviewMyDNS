@@ -241,6 +241,14 @@ const DEFAULT_META: PageMeta = {
   h1: 'ReviewMyDNS - DNS Lookup Tool',
 };
 
+const ACRONYMS = new Set(['dns', 'mx', 'spf', 'dkim', 'dmarc', 'ttl', 'ns', 'txt', 'soa', 'ptr', 'cname', 'aaaa', 'aws', 'api', 'ssl', 'tls', 'ip', 'url', 'isp', 'cdn', 'dnssec', 'faq']);
+
+function slugToTitle(slug: string): string {
+  return slug.replace(/-/g, ' ').split(' ').map(w =>
+    ACRONYMS.has(w.toLowerCase()) ? w.toUpperCase() : w.charAt(0).toUpperCase() + w.slice(1)
+  ).join(' ');
+}
+
 export function getPageMeta(urlPath: string): PageMeta {
   const cleanPath = urlPath.split('?')[0].replace(/\/+$/, '') || '/';
 
@@ -250,7 +258,7 @@ export function getPageMeta(urlPath: string): PageMeta {
 
   if (cleanPath.startsWith('/guides/')) {
     const slug = cleanPath.replace('/guides/', '');
-    const name = slug.replace(/-/g, ' ').split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+    const name = slugToTitle(slug);
     return {
       title: `${name} - DNS Setup Guide | ReviewMyDNS`,
       description: `Complete ${name.toLowerCase()} guide with step-by-step instructions. Configure A, CNAME, MX, and TXT records for your domain correctly.`,
@@ -260,7 +268,7 @@ export function getPageMeta(urlPath: string): PageMeta {
 
   if (cleanPath.startsWith('/faq/')) {
     const slug = cleanPath.replace('/faq/', '');
-    const name = slug.replace(/-/g, ' ').split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+    const name = slugToTitle(slug);
     return {
       title: `${name} - DNS FAQ | ReviewMyDNS`,
       description: `Get a detailed answer to ${name.toLowerCase()} along with step-by-step troubleshooting instructions and related DNS resources.`,
@@ -280,7 +288,7 @@ export function getPageMeta(urlPath: string): PageMeta {
 
   if (cleanPath.startsWith('/dns-for/')) {
     const slug = cleanPath.replace('/dns-for/', '');
-    const name = slug.replace(/-/g, ' ').split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+    const name = slugToTitle(slug);
     return {
       title: `DNS Setup for ${name} - Complete Guide | ReviewMyDNS`,
       description: `Configure DNS records for ${name} with our complete setup guide. Includes A record, CNAME, and custom domain configuration steps.`,
@@ -290,7 +298,7 @@ export function getPageMeta(urlPath: string): PageMeta {
 
   if (cleanPath.startsWith('/blog/')) {
     const slug = cleanPath.replace('/blog/', '');
-    const name = slug.replace(/-/g, ' ').split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+    const name = slugToTitle(slug);
     return {
       title: `${name} - ReviewMyDNS Blog`,
       description: `Read our in-depth article on ${name.toLowerCase()}. Expert DNS advice, practical examples, and actionable tips for domain administrators.`,

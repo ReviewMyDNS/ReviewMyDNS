@@ -155,7 +155,7 @@ export default function DnsPropagationChecker() {
 
             <section className="pb-8 px-4 sm:px-6 lg:px-8">
               <div className="max-w-7xl mx-auto">
-                <ResultsTable results={lookupResults} />
+                <ResultsTable results={lookupResults.results} />
               </div>
             </section>
 
