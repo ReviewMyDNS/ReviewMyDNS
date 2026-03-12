@@ -223,6 +223,21 @@ const PAGE_META: Record<string, PageMeta> = {
     description: 'Link to ReviewMyDNS from your website or blog. Download badges, grab HTML or Markdown embed codes, and help spread free DNS tools.',
     h1: 'Link to ReviewMyDNS',
   },
+  '/about': {
+    title: 'About ReviewMyDNS - Free DNS Propagation Checker',
+    description: 'ReviewMyDNS is a free DNS propagation checker querying 50+ global servers. Learn about our mission to make DNS troubleshooting accessible to everyone.',
+    h1: 'About ReviewMyDNS',
+  },
+  '/privacy': {
+    title: 'Privacy Policy - ReviewMyDNS',
+    description: 'ReviewMyDNS privacy policy. Learn how we collect, use, and protect your data when using our free DNS propagation checker.',
+    h1: 'Privacy Policy',
+  },
+  '/terms': {
+    title: 'Terms of Service - ReviewMyDNS',
+    description: 'ReviewMyDNS terms of service. Read the terms governing use of our free DNS propagation checker and related services.',
+    h1: 'Terms of Service',
+  },
   '/dns-for': {
     title: 'DNS Setup Guides by Platform - ReviewMyDNS',
     description: 'Platform-specific DNS setup guides for WordPress, Shopify, Vercel, Netlify, AWS, and more. Configure custom domains step by step.',

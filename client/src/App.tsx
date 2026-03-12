@@ -62,6 +62,9 @@ import WhyMxNotWorking from "@/pages/why-mx-not-working";
 import SpfDkimDmarc from "@/pages/spf-dkim-dmarc";
 import LinkToUs from "@/pages/link-to-us";
 import BacklinkGuide from "@/pages/backlink-guide";
+import About from "@/pages/about";
+import Privacy from "@/pages/privacy";
+import Terms from "@/pages/terms";
 
 function Router() {
   return (
@@ -123,6 +126,9 @@ function Router() {
       <Route path="/is-down/:domain" component={IsDown} />
       <Route path="/link-to-us" component={LinkToUs} />
       <Route path="/backlink-guide" component={BacklinkGuide} />
+      <Route path="/about" component={About} />
+      <Route path="/privacy" component={Privacy} />
+      <Route path="/terms" component={Terms} />
       <Route component={NotFound} />
     </Switch>
   );

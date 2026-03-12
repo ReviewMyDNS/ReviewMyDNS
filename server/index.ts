@@ -13,6 +13,11 @@ if (process.env.NODE_ENV === 'production') {
   app.set('trust proxy', 1);
 }
 
+// Health check endpoint - responds immediately before full app setup
+app.get('/health', (_req, res) => {
+  res.status(200).json({ status: 'ok' });
+});
+
 // Stripe webhook needs raw body for signature verification
 // Apply express.raw() to webhook route BEFORE express.json()
 app.post('/api/stripe/webhook', express.raw({ type: 'application/json' }), (req, res, next) => {

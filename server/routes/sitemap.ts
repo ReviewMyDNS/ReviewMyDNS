@@ -151,6 +151,7 @@ router.get('/sitemap.xml', (req, res) => {
     { loc: '/widget', priority: '0.5', changefreq: 'monthly' },
     { loc: '/embed', priority: '0.5', changefreq: 'monthly' },
     { loc: '/link-to-us', priority: '0.4', changefreq: 'monthly' },
+    { loc: '/about', priority: '0.5', changefreq: 'monthly' },
     // New programmatic SEO pages
     { loc: '/errors', priority: '0.9', changefreq: 'weekly' },
     { loc: '/dns-for', priority: '0.9', changefreq: 'weekly' },

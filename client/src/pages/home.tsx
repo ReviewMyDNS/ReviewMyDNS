@@ -991,7 +991,7 @@ export default function Home() {
             
             <div className="flex flex-col md:flex-row justify-between items-center">
               <div className="text-gray-400 text-sm">
-                © 2025 ReviewMyDNS. All rights reserved.
+                © 2026 ReviewMyDNS. All rights reserved.
               </div>
               <div className="flex space-x-6 mt-4 md:mt-0">
                 <Link href="/privacy" className="text-gray-400 hover:text-white text-sm" data-testid="link-footer-privacy-bottom">Privacy Policy</Link>
