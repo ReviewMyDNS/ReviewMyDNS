@@ -35,7 +35,7 @@ export default function Dashboard() {
     
     if (sessionId && authUser && !isVerifying) {
       setIsVerifying(true);
-      fetch(`/api/stripe/verify-session/${sessionId}`)
+      fetch(`/api/stripe/verify-session/${sessionId}`, { credentials: 'include' })
         .then(res => res.json())
         .then(data => {
           if (data.success) {

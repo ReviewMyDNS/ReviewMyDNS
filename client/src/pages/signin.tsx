@@ -26,10 +26,13 @@ export default function SignIn() {
   const [activeTab, setActiveTab] = useState("signin");
   const [error, setError] = useState("");
 
-  // Check URL params to determine which tab to show
+  // Check URL params to determine which tab to show and where to redirect after login
+  const urlParams = new URLSearchParams(location.split('?')[1] || '');
+  const redirectTo = urlParams.get('redirect') || '/dashboard';
+
   useEffect(() => {
-    const urlParams = new URLSearchParams(location.split('?')[1] || '');
-    const tab = urlParams.get('tab');
+    const params = new URLSearchParams(location.split('?')[1] || '');
+    const tab = params.get('tab');
     if (tab === 'signup') {
       setActiveTab('signup');
     }
@@ -47,7 +50,7 @@ export default function SignIn() {
         title: "Welcome back!",
         description: "You've successfully signed in.",
       });
-      setLocation("/dashboard");
+      window.location.href = redirectTo;
     },
     onError: (error: any) => {
       const message = error.message || "Failed to sign in";
@@ -72,7 +75,7 @@ export default function SignIn() {
         title: "Account created!",
         description: "Welcome to ReviewMyDNS.",
       });
-      setLocation("/dashboard");
+      window.location.href = redirectTo;
     },
     onError: (error: any) => {
       const message = error.message || "Failed to create account";

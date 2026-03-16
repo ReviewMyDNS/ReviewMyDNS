@@ -525,7 +525,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         const plan = session.metadata?.plan;
 
         if (userId && session.subscription) {
-          console.log(`[Stripe Webhook] Updating subscription for user ${userId} to plan ${plan}`);
+          console.log(`[Stripe Webhook] Activating subscription for user ${userId}, plan ${plan}`);
           
           await storage.updateUserStripeInfo(
             userId,
@@ -533,22 +533,60 @@ export async function registerRoutes(app: Express): Promise<Server> {
             session.subscription as string
           );
 
-          const user = await storage.getUser(userId);
-          if (user) {
-            await db
-              .update(users)
-              .set({
-                subscriptionPlan: plan,
-                subscriptionStatus: 'active',
-                updatedAt: new Date(),
-              })
-              .where(eq(users.id, userId));
-            
-            // Track subscription event
-            const priceAmount = plan === 'enterprise' ? 99 : plan === 'team' ? 49 : 19;
-            const clientId = extractClientId(req.headers.cookie);
-            trackSubscription(clientId, userId, plan, priceAmount).catch(console.error);
-          }
+          await db
+            .update(users)
+            .set({
+              subscriptionPlan: plan,
+              subscriptionStatus: 'active',
+              updatedAt: new Date(),
+            })
+            .where(eq(users.id, userId));
+          
+          const priceAmount = plan === 'enterprise' ? 149 : plan === 'team' ? 59 : 19;
+          const clientId = extractClientId(req.headers.cookie);
+          trackSubscription(clientId, userId, plan, priceAmount).catch(console.error);
+        }
+      }
+
+      if (event.type === 'customer.subscription.deleted') {
+        const subscription = event.data.object as any;
+        const [affectedUser] = await db
+          .select()
+          .from(users)
+          .where(eq(users.stripeSubscriptionId, subscription.id))
+          .limit(1);
+
+        if (affectedUser) {
+          console.log(`[Stripe Webhook] Subscription cancelled for user ${affectedUser.id}`);
+          await db
+            .update(users)
+            .set({
+              subscriptionPlan: null,
+              subscriptionStatus: 'cancelled',
+              updatedAt: new Date(),
+            })
+            .where(eq(users.id, affectedUser.id));
+        }
+      }
+
+      if (event.type === 'invoice.payment_failed') {
+        const invoice = event.data.object as any;
+        const customerId = invoice.customer as string;
+        const [affectedUser] = await db
+          .select()
+          .from(users)
+          .where(eq(users.stripeCustomerId, customerId))
+          .limit(1);
+
+        if (affectedUser) {
+          console.log(`[Stripe Webhook] Payment failed for user ${affectedUser.id}`);
+          await db
+            .update(users)
+            .set({
+              subscriptionStatus: 'past_due',
+              updatedAt: new Date(),
+            })
+            .where(eq(users.id, affectedUser.id));
         }
       }
 
