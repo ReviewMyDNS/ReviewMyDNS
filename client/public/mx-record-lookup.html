@@ -1,0 +1,39 @@
+<h1>MX Record Lookup</h1>
+<p>Find and verify Mail Exchange (MX) records for any domain to ensure proper email delivery.</p>
+
+<h2>How to Read MX Records</h2>
+<p>An MX record tells email servers where to send mail for a domain. It has two main parts:</p>
+<ul>
+    <li><strong>Hostname/Value:</strong> The address of the mail server (e.g., <code>aspmx.l.google.com</code>).</li>
+    <li><strong>Priority:</strong> A number that indicates the order in which servers should be used. Mail is sent to the server with the lowest priority number first. If that server isn't available, the next lowest is tried.</li>
+</ul>
+
+<h2>Common MX Record Mistakes</h2>
+<h3>Pointing to an IP Address</h3>
+<p>MX records must always point to a hostname, never directly to an IP address. If your mail server is at a specific IP, you must create an A record pointing a hostname to that IP, and then point your MX record to that hostname.</p>
+<h3>Pointing to a CNAME</h3>
+<p>The DNS specification (RFC 1034, RFC 2181) forbids pointing an MX record to a CNAME alias. This can cause unexpected behavior and delivery failures. Always use an A record.</p>
+<h3>Incorrect Priority Numbers</h3>
+<p>Using the same priority for primary and backup mail servers can lead to unpredictable mail flow. Ensure your primary server has the lowest priority number (e.g., 10) and backup servers have higher numbers (e.g., 20, 30).</p>
+
+<h2>MX Records for Popular Email Providers</h2>
+<h3>Google Workspace</h3>
+<p>If you use Google Workspace for email, your MX records should be:</p>
+<ul>
+    <li><code>ASPMX.L.GOOGLE.COM</code> (Priority: 1)</li>
+    <li><code>ALT1.ASPMX.L.GOOGLE.COM</code> (Priority: 5)</li>
+    <li><code>ALT2.ASPMX.L.GOOGLE.COM</code> (Priority: 5)</li>
+    <li><code>ALT3.ASPMX.L.GOOGLE.COM</code> (Priority: 10)</li>
+    <li><code>ALT4.ASPMX.L.GOOGLE.COM</code> (Priority: 10)</li>
+</ul>
+<h3>Microsoft 365 (Office 365)</h3>
+<p>Microsoft 365 uses a unique MX record format based on your domain. You can find the exact value in your Microsoft 365 admin center. It will look like this:</p>
+<ul>
+    <li><code>your-domain-key.mail.protection.outlook.com</code> (Priority: 0)</li>
+</ul>
+
+<h2>Frequently Asked Questions (FAQ)</h2>
+<h3>How many MX records can a domain have?</h3>
+<p>A domain can have multiple MX records. This is a common practice to provide redundancy. If the primary mail server (lowest priority) is down, sending servers will try the next one in the list.</p>
+<h3>What does the priority number mean?</h3>
+<p>The priority number dictates the order of preference. A lower number means a higher priority. Mail will always be delivered to the available mail server with the lowest priority number first.</p>

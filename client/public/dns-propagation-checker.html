@@ -1,0 +1,110 @@
+<h1>Free DNS Propagation Checker</h1>
+<p>Check DNS propagation across 50+ global servers instantly. See how your domain's DNS records are propagating across the world in real-time. Get instant insights into your A, AAAA, CNAME, MX, and TXT records from various locations worldwide.</p>
+
+<h2>What is DNS Propagation?</h2>
+<p>DNS propagation is the time it takes for DNS changes to update across the internet. When you update your domain's DNS records (e.g., changing your website's IP address), it can take anywhere from a few minutes to 72 hours for the changes to be reflected globally. This delay is due to DNS servers caching records to improve performance.</p>
+
+<h2>How to Check DNS Propagation</h2>
+<ol>
+    <li><strong>Enter your domain name:</strong> Type your domain (e.g., example.com) into the search box.</li>
+    <li><strong>Select the record type:</strong> Choose the DNS record type you want to check (A, AAAA, CNAME, MX, TXT).</li>
+    <li><strong>Click "Check DNS":</strong> Our tool will query servers worldwide and display the results.</li>
+</ol>
+
+<h2>Why Use Our DNS Checker?</h2>
+<ul>
+    <li><strong>Global Coverage:</strong> Check DNS from 50+ servers across North America, Europe, Asia, and Australia.</li>
+    <li><strong>Real-Time Results:</strong> Get immediate, up-to-the-second results without any caching from our side.</li>
+    <li><strong>Easy to Use:</strong> A simple and intuitive interface designed for both beginners and experts.</li>
+    <li><strong>Multiple Record Types:</strong> We support all major DNS record types, including A, AAAA, CNAME, MX, and TXT.</li>
+</ul>
+
+<h2>Understanding DNS Propagation Times</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Record Type</th>
+            <th>Typical Propagation Time</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>A / AAAA</td>
+            <td>5 minutes to 48 hours</td>
+        </tr>
+        <tr>
+            <td>CNAME</td>
+            <td>5 minutes to 48 hours</td>
+        </tr>
+        <tr>
+            <td>MX</td>
+            <td>5 minutes to 48 hours</td>
+        </tr>
+        <tr>
+            <td>TXT</td>
+            <td>5 minutes to 48 hours</td>
+        </tr>
+    </tbody>
+</table>
+
+<h2>DNS Propagation by Provider</h2>
+<p>While propagation is a global process, some providers have faster update mechanisms.</p>
+<h3>Cloudflare</h3>
+<p>Cloudflare is known for its fast DNS updates, often propagating within minutes due to its global network and low TTLs.</p>
+<h3>GoDaddy</h3>
+<p>GoDaddy's DNS changes can sometimes take a few hours to start propagating.</p>
+<h3>Namecheap</h3>
+<p>Namecheap typically sees propagation begin within 30 minutes for most records.</p>
+<h3>AWS Route 53 / Google Cloud DNS</h3>
+<p>Both AWS and Google offer fast propagation, often completing within a few minutes across their respective networks.</p>
+
+<h2>Common DNS Propagation Issues</h2>
+    <h3>High TTL (Time to Live)</h3>
+    <p>If the TTL for your DNS records is set too high, DNS resolvers will cache them for longer, delaying propagation. Lowering the TTL 24-48 hours before a planned change can help speed things up.</p>
+    <h3>ISP DNS Cache</h3>
+    <p>Your Internet Service Provider (ISP) caches DNS records to speed up browsing. Sometimes, their cache can be slow to update. You can try switching to a public DNS resolver like Google's (8.8.8.8) or Cloudflare's (1.1.1.1) to see if you get a more up-to-date response.</p>
+    <h3>Local DNS Cache</h3>
+    <p>Your own computer also has a DNS cache. You may need to clear it to see the latest changes. Here's how:</p>
+    <ul>
+        <li><strong>Windows:</strong> Open Command Prompt and run <code>ipconfig /flushdns</code></li>
+        <li><strong>macOS:</strong> Open Terminal and run <code>sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder</code></li>
+        <li><strong>Linux:</strong> The command varies by distribution. For systems using systemd-resolved, run <code>sudo systemd-resolve --flush-caches</code>.</li>
+    </ul>
+    <h3>Wrong Nameservers</h3>
+    <p>Ensure your domain registrar is pointing to the correct nameservers for your DNS hosting provider. An incorrect nameserver configuration is a common reason for DNS changes not to propagate.</p>
+    <h3>Conflicting DNS Records</h3>
+    <p>A CNAME record cannot coexist with other records for the same hostname (except for DNSSEC records like RRSIG and NSEC). For example, you cannot have a CNAME and a TXT record for 'www.example.com'. This is a common misconfiguration that can cause resolution to fail.</p>
+
+<h2>DNS Record Types Explained</h2>
+    <h3>A Record</h3>
+    <p>The 'A' record, or Address record, maps a domain name to an IPv4 address (e.g., 192.0.2.1). It's the most common type of DNS record and is essential for pointing a domain to a web server.</p>
+    <h3>AAAA Record</h3>
+    <p>Similar to the A record, the 'AAAA' record maps a domain name to an IPv6 address (e.g., 2001:0db8:85a3:0000:0000:8a2e:0370:7334). This is the next-generation standard for IP addresses.</p>
+    <h3>CNAME Record</h3>
+    <p>The 'CNAME' record, or Canonical Name record, forwards one domain or subdomain to another. For example, you can point 'www.example.com' to 'example.com'.</p>
+    <h3>MX Record</h3>
+    <p>The 'MX' record, or Mail Exchanger record, directs email to a mail server. It specifies which server is responsible for accepting emails on behalf of a domain.</p>
+    <h3>TXT Record</h3>
+    <p>The 'TXT' record, or Text record, lets you store arbitrary text information. It's often used for verifying domain ownership (e.g., for Google Search Console) and for email security protocols like SPF and DKIM.</p>
+
+<h2>Competitor Comparison</h2>
+<p>While there are other tools available, ReviewMyDNS offers a unique combination of features:</p>
+<ul>
+    <li><strong>vs. DNSChecker.org:</strong> We provide a more intuitive user interface and a more detailed map visualization, making it easier to see your propagation status at a glance.</li>
+    <li><strong>vs. whatsmydns.net:</strong> Our tool includes additional diagnostic information and tips for troubleshooting common issues, making it a more comprehensive resource for developers and IT professionals.</li>
+    <li><strong>More Servers:</strong> We query a larger, more geographically diverse set of servers to give you the most accurate possible picture of your global DNS propagation.</li>
+</ul>
+
+<h2>How It Works: A Technical Explanation</h2>
+<p>Our DNS propagation checker is built on a globally distributed network of resolvers. When you enter a domain, our system initiates a series of real-time DNS lookups from each of these nodes. Unlike a standard DNS query that might hit a local cache, our resolvers are configured to directly query the authoritative DNS servers for the specified domain. This process bypasses intermediate caches, providing a true, real-time view of how your DNS records are seen from different parts of the world. The results are then aggregated and displayed on our map, giving you an instant and accurate snapshot of your propagation status.</p>
+
+
+<h2>Frequently Asked Questions (FAQ)</h2>
+<h3>Can I speed up DNS propagation?</h3>
+<p>You cannot directly speed up propagation itself, as it depends on global DNS resolvers respecting TTLs. However, you can prepare for a change by lowering the TTL on your DNS records 24-48 hours in advance. A lower TTL (e.g., 300 seconds) tells resolvers to check for updates more frequently, which can make the propagation *appear* faster once you make the change.</p>
+
+<h3>Why do different tools show different results?</h3>
+<p>Results can vary because different tools query different sets of DNS servers in different locations. Some servers might be slower to update their cache than others. That's why it's important to use a tool like ours with a large, geographically diverse set of servers to get a comprehensive picture.</p>
+
+<h3>What does a 'Propagated' or 'Not Propagated' status mean?</h3>
+<p>'Propagated' (often shown with a green checkmark) means a specific server has successfully retrieved the new DNS record you set. 'Not Propagated' (a red 'X') means the server is still returning the old record or no record at all. The goal is to see all green checkmarks across the globe.</p>

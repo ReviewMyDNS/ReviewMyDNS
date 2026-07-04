@@ -172,6 +172,22 @@ export const faqGuides: FaqGuide[] = [
       {
         question: "Can I transfer nameservers without transferring domain?",
         answer: "Yes. Registrar and nameservers are separate. Your domain stays at current registrar (GoDaddy), but you point it to different nameservers (Cloudflare, Route53, etc.). This is common and doesn't affect domain ownership."
+      },
+      {
+        question: "What happens to my website and email when I change nameservers?",
+        answer: "If you add all DNS records to the new provider before changing nameservers, the transition is seamless — website and email continue working throughout the 24-48 hour propagation window because resolvers serve cached copies of the old nameserver responses. If you change nameservers before setting up records at the new provider, all services stop working for any user whose resolver picks up the new nameservers before the records are added there."
+      },
+      {
+        question: "How do I export DNS records before changing nameservers?",
+        answer: "Most DNS providers offer a zone file export in BIND format. In Cloudflare, go to DNS > Settings > Export Zone. GoDaddy and Namecheap offer export options in DNS Management. If your provider doesn't export, manually document all records: type, hostname, value, TTL, and priority for MX records. Screenshot your entire DNS management panel before making any changes."
+      },
+      {
+        question: "Can two different nameservers point to the same domain?",
+        answer: "Yes, redundancy requires it — every domain should have at least two nameservers. All nameservers for a domain must host identical copies of the DNS zone. If ns1 and ns2 have different records, some users get answers from ns1 and others from ns2, causing inconsistent behavior. Your DNS provider synchronizes all its nameservers automatically when you save a record."
+      },
+      {
+        question: "Why does WHOIS show different nameservers than my DNS checker?",
+        answer: "WHOIS and DNS can temporarily differ during a nameserver change. The registrar updates WHOIS immediately, but the change must be submitted to the TLD registry (.com, .net) and propagate globally — taking 24-48 hours. During propagation, WHOIS shows the new nameservers while DNS queries still return old nameservers from cached TLD zone data. This inconsistency is normal and resolves when propagation completes."
       }
     ]
   },
@@ -213,6 +229,22 @@ export const faqGuides: FaqGuide[] = [
       {
         question: "Why are some users seeing old DNS after I changed it?",
         answer: "Different levels of caching: 1) Your computer cache (flush locally), 2) ISP DNS cache (they control), 3) Resolver cache (third-party), 4) Browser cache. Some caches might hold old record longer than TTL. Full propagation takes longer than just TTL expiration."
+      },
+      {
+        question: "Can browsers cache DNS separately from the OS?",
+        answer: "Yes. Chrome has its own built-in DNS cache independent of the operating system. View and clear it at chrome://net-internals/#dns using the Flush host cache button. Firefox also has its own DNS cache. Always flush both your OS cache and browser cache when testing DNS changes locally — flushing only one may leave stale data in the other."
+      },
+      {
+        question: "What is negative DNS caching?",
+        answer: "When a resolver gets an NXDOMAIN response (record not found), it caches that negative result. The duration is controlled by the negative TTL in the zone's SOA record, typically 1800-3600 seconds. If you add a new DNS record and some users still see NXDOMAIN, their resolver cached the NXDOMAIN before you added the record. This expires on its own once the negative TTL passes."
+      },
+      {
+        question: "Does switching to Cloudflare DNS (1.1.1.1) clear my DNS cache?",
+        answer: "No. Switching your device to use Cloudflare's resolver (1.1.1.1) means future queries go to Cloudflare instead of your ISP's resolver, but it does not clear your local OS or browser cache. Those caches keep serving old results until they expire. After switching resolvers, also flush your OS DNS cache (ipconfig /flushdns on Windows, sudo dscacheutil -flushcache on Mac) to force fresh queries through the new resolver."
+      },
+      {
+        question: "What happens to DNS caching during a website migration?",
+        answer: "During a migration, users hit different servers based on what IP their resolver has cached. Users who queried your domain recently see the old server IP. Users querying for the first time after your change see the new server. This split traffic can persist for the full original TTL duration. Plan for simultaneous traffic to both old and new servers during migration, and keep the old server running until the TTL expires across all resolvers."
       }
     ]
   },
@@ -254,6 +286,22 @@ export const faqGuides: FaqGuide[] = [
       {
         question: "How often do I need to check my nameservers?",
         answer: "Rarely. Nameservers set once during domain setup. Only check if domain stops working. Nameservers shouldn't need changes unless you switch DNS providers or hosting. Check annually as sanity check during security review."
+      },
+      {
+        question: "How do I find nameservers for a domain I don't own?",
+        answer: "Use a WHOIS lookup tool or run 'whois domain.com' in a terminal. WHOIS records are public for most domains. You can also run 'dig NS domain.com' to query NS records directly from DNS without needing WHOIS access. These methods show the authoritative nameservers of any publicly registered domain."
+      },
+      {
+        question: "What is the difference between NS records at my registrar and NS records in my DNS zone?",
+        answer: "Two places have NS records. At your registrar, NS records tell the TLD registry (.com, .net) which servers are authoritative for your domain — this controls delegation globally. In your DNS zone file, NS records list those same authoritative servers. Both must match. If they diverge after an incomplete nameserver change, DNS resolution fails for the domain."
+      },
+      {
+        question: "How do I verify my nameservers have propagated globally?",
+        answer: "Use the ReviewMyDNS propagation checker and select NS as the record type. It queries 50+ global servers and shows which have your new nameservers and which still show old ones. You can also run 'dig NS yourdomain.com @8.8.8.8' for Google's view and '@1.1.1.1' for Cloudflare's view. Full propagation takes 24-48 hours."
+      },
+      {
+        question: "Why do Cloudflare nameservers look different for every account?",
+        answer: "Cloudflare assigns each customer account a unique pair of nameservers rather than sharing generic names. The format varies — examples include alice.ns.cloudflare.com and bob.ns.cloudflare.com, or other first names. This lets Cloudflare optimize routing and load balancing per customer. Your assigned pair is shown during domain setup in the Cloudflare dashboard and remains constant for your account."
       }
     ]
   },
