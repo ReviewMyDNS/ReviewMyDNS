@@ -6,6 +6,51 @@ import { setupVite, serveStatic, log } from "./vite";
 import { startCleanupJob } from "./rate-limiter";
 import { getPageMeta, buildSsrContent } from "./seo-metadata";
 
+// ── E-E-A-T Schema Markup ─────────────────────────────────────────────────
+const RYMD_BASE_URL = 'https://reviewmydns.com';
+
+const RYMD_ORG_SCHEMA = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  '@id': `${RYMD_BASE_URL}/#organization`,
+  name: 'ReviewMyDNS',
+  url: RYMD_BASE_URL,
+  description: 'Free DNS lookup, propagation checking, and diagnostic tools',
+  sameAs: [],
+});
+
+const RYMD_PERSON_SCHEMA = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'Todd Isom',
+  jobTitle: 'Network Engineer & DNS Specialist',
+  worksFor: { '@id': `${RYMD_BASE_URL}/#organization` },
+  knowsAbout: ['DNS', 'network infrastructure', 'domain management'],
+});
+
+function buildRymdBreadcrumbs(urlPath: string): string {
+  const segments = urlPath.split('/').filter(Boolean);
+  const items: object[] = [{ '@type': 'ListItem', position: 1, name: 'Home', item: `${RYMD_BASE_URL}/` }];
+  let accumulated = '';
+  for (let i = 0; i < segments.length; i++) {
+    accumulated += '/' + segments[i];
+    const label = segments[i].replace(/-/g, ' ').replace(/\b\w/g, (c: string) => c.toUpperCase());
+    items.push({ '@type': 'ListItem', position: i + 2, name: label, item: RYMD_BASE_URL + accumulated });
+  }
+  return JSON.stringify({ '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: items });
+}
+
+function buildRymdSchemas(urlPath: string): string {
+  const scripts = [
+    `<script type="application/ld+json">${RYMD_ORG_SCHEMA}</script>`,
+    `<script type="application/ld+json">${buildRymdBreadcrumbs(urlPath)}</script>`,
+  ];
+  if (urlPath === '/about') {
+    scripts.push(`<script type="application/ld+json">${RYMD_PERSON_SCHEMA}</script>`);
+  }
+  return scripts.join('\n  ');
+}
+
 const app = express();
 
 // Trust proxy for production (required for secure cookies behind reverse proxy)
@@ -27,6 +72,7 @@ const REDIRECTS: Record<string, string> = {
   '/what-is-a-nameserver':    '/how-to-check-nameservers',
   '/flush-dns-cache':         '/how-to-flush-dns-cache',
   '/ttl-migration-guide':     '/how-to-lower-ttl-before-migration',
+  '/embed':                   '/widget',
 };
 Object.entries(REDIRECTS).forEach(([from, to]) => {
   app.get(from, (_req, res) => res.redirect(301, to));
@@ -86,7 +132,7 @@ app.use((req, res, next) => {
     if ((req.path.startsWith('/api') && !req.path.startsWith('/api-docs')) || req.path.startsWith('/assets') || req.path.includes('.')) {
       return next();
     }
-    const canonicalPath = req.path.replace(/\/+$/, '') || '';
+    const canonicalPath = req.originalUrl.replace(/\/+$/, '') || '';
     const canonicalUrl = `https://reviewmydns.com${canonicalPath}`;
     const canonicalTag = `<link rel="canonical" href="${canonicalUrl}" />`;
     const meta = getPageMeta(req.path);
@@ -97,6 +143,10 @@ app.use((req, res, next) => {
     const injectSeo = (content: string) => {
       if (!content.includes('rel="canonical"')) {
         content = content.replace('</head>', `${canonicalTag}\n</head>`);
+      }
+      // Inject E-E-A-T schemas (only if not already injected by catch-all)
+      if (!content.includes('application/ld+json')) {
+        content = content.replace('</head>', `  ${buildRymdSchemas(req.path)}\n</head>`);
       }
       content = content.replace('%%OG_URL%%', canonicalUrl);
       content = content.replace('%%PAGE_TITLE%%', meta.title);
@@ -135,15 +185,36 @@ app.use((req, res, next) => {
       );
     }
     app.use(express.static(distPath, { index: false }));
+
     const htmlTemplate = fs.readFileSync(path.resolve(distPath, "index.html"), "utf-8");
+
+    app.get("/dns-propagation-checker", (req, res) => {
+      res.status(200).set({ "Content-Type": "text/html" }).send(htmlTemplate);
+    });
+
+    app.get("/mx-record-lookup", (req, res) => {
+      res.status(200).set({ "Content-Type": "text/html" }).send(htmlTemplate);
+    });
+
+    app.get("/widget", (req, res) => {
+      const html = fs.readFileSync(path.resolve(distPath, "widget.html"), "utf-8");
+      res.status(200).set({ "Content-Type": "text/html" }).send(html);
+    });
+
+    app.get("/blog/cloudflare-vs-route53", (_req, res) => {
+      res.status(410).send("<!DOCTYPE html><html><head><title>410 Gone</title></head><body><h1>410 Gone</h1><p>This page has been permanently removed.</p></body></html>");
+    });
+
     app.use("*", (req, res) => {
-      const canonicalPath = req.originalUrl.split('?')[0].replace(/\/+$/, '') || '';
-      const canonicalUrl = `https://reviewmydns.com${canonicalPath}`;
+      const urlPath = req.originalUrl.split('?')[0].replace(/\/+$/, '') || '/';
+      const canonicalUrl = `https://reviewmydns.com${urlPath}`;
       const meta = getPageMeta(req.originalUrl);
       let html = htmlTemplate;
       if (!html.includes('rel="canonical"')) {
         html = html.replace('</head>', `<link rel="canonical" href="${canonicalUrl}" />\n</head>`);
       }
+      // Inject E-E-A-T schemas
+      html = html.replace('</head>', `  ${buildRymdSchemas(urlPath)}\n</head>`);
       html = html.replace('%%OG_URL%%', canonicalUrl);
       html = html.replace('%%PAGE_TITLE%%', meta.title);
       html = html.replace('%%PAGE_DESC%%', meta.description);
